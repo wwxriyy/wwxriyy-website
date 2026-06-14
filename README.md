@@ -2,6 +2,8 @@
 
 Clean Django bio site for `wwxriyy.com`.
 
+Production path: `/opt/wwxriyy-bio`.
+
 ## Local Run
 
 ```bash
