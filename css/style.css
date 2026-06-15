@@ -315,20 +315,25 @@ h3 {
 }
 
 .links a:nth-child(2) .brand-icon {
-  filter: invert(100%) drop-shadow(0 0 8px rgba(255, 255, 255, 0.12));
+  filter: invert(100%) drop-shadow(1px 0 0 rgba(37, 244, 238, 0.75))
+    drop-shadow(-1px 0 0 rgba(254, 44, 85, 0.7));
 }
 
 .links a:nth-child(3) .brand-icon {
+  filter: invert(100%) drop-shadow(0 0 8px rgba(255, 255, 255, 0.12));
+}
+
+.links a:nth-child(4) .brand-icon {
   filter: invert(54%) sepia(94%) saturate(1384%) hue-rotate(166deg) brightness(101%) contrast(94%)
     drop-shadow(0 0 8px rgba(34, 158, 217, 0.18));
 }
 
-.links a:nth-child(4) .brand-icon {
+.links a:nth-child(5) .brand-icon {
   filter: invert(51%) sepia(89%) saturate(505%) hue-rotate(88deg) brightness(101%) contrast(90%)
     drop-shadow(0 0 8px rgba(29, 185, 84, 0.18));
 }
 
-.links a:nth-child(5) .brand-icon {
+.links a:nth-child(6) .brand-icon {
   filter: invert(43%) sepia(95%) saturate(1059%) hue-rotate(217deg) brightness(100%) contrast(92%)
     drop-shadow(0 0 8px rgba(88, 101, 242, 0.18));
 }
@@ -379,6 +384,7 @@ h3 {
 }
 
 .links a {
+  position: relative;
   min-height: 42px;
   padding: 9px 10px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -406,21 +412,71 @@ h3 {
 @media (max-width: 720px) {
   .shell {
     place-items: start center;
-    padding: 12px;
+    padding: 10px;
   }
 
   .hero {
-    min-height: 250px;
+    min-height: 168px;
+    padding: 22px 14px 16px;
+  }
+
+  .terminal-top {
+    height: 36px;
+    padding: 0 14px;
+  }
+
+  .path {
+    font-size: clamp(1.62rem, 7vw, 2.18rem);
+    line-height: 1.26;
+  }
+
+  .bio-grid {
+    gap: 10px;
+    padding: 0 10px 10px;
   }
 
   .bio-grid,
-  .stack-groups,
-  .links nav {
+  .stack-groups {
     grid-template-columns: 1fr;
   }
 
   .panel {
-    padding: 15px;
+    padding: 14px;
+  }
+
+  .identity {
+    font-size: 1.05rem;
+    line-height: 1.48;
+  }
+
+  .about,
+  .project-line p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .stack-groups {
+    gap: 16px;
+  }
+
+  .links nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .links a {
+    justify-content: center;
+    min-height: 50px;
+    padding: 8px;
+  }
+
+  .links a span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }
 
