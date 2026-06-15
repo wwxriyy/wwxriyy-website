@@ -460,23 +460,20 @@ h3 {
   }
 
   .links nav {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
   }
 
   .links a {
-    justify-content: center;
+    justify-content: flex-start;
     min-height: 50px;
     padding: 8px;
+    gap: 8px;
   }
 
   .links a span {
-    position: absolute;
-    width: 1px;
-    height: 1px;
     overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 
