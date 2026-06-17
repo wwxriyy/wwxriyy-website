@@ -80,8 +80,11 @@
             </div>
           </article>
 
-          <article class="panel project">
-            <h2><span class="prompt">></span> Active project</h2>
+          <details class="panel project collapsible-panel" data-mobile-collapsible open>
+            <summary class="panel-summary">
+              <h2><span class="prompt">></span> Active project</h2>
+              <span class="chevron" aria-hidden="true"></span>
+            </summary>
             <div class="project-line">
               <div class="project-icons" aria-hidden="true">
                 <img class="brand-icon" src="{% static 'assets/icons/cpp.svg' %}" alt="" />
@@ -96,10 +99,13 @@
                 fully sourced.
               </p>
             </div>
-          </article>
+          </details>
 
-          <article class="panel links">
-            <h2><span class="prompt">#</span> Links</h2>
+          <details class="panel links collapsible-panel" data-mobile-collapsible open>
+            <summary class="panel-summary">
+              <h2><span class="prompt">#</span> Links</h2>
+              <span class="chevron" aria-hidden="true"></span>
+            </summary>
             <nav aria-label="Social links">
               <a href="https://instagram.com/wwxriyy" target="_blank" rel="noreferrer" aria-label="Instagram">
                 <img class="brand-icon" src="{% static 'assets/icons/instagram.svg' %}" alt="" />
@@ -126,7 +132,7 @@
                 <span>Discord</span>
               </a>
             </nav>
-          </article>
+          </details>
         </section>
       </section>
     </main>

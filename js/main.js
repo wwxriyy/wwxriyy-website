@@ -1,5 +1,7 @@
 const canvas = document.querySelector("#starfield");
 const ctx = canvas.getContext("2d");
+const mobilePanels = document.querySelectorAll("[data-mobile-collapsible]");
+const mobilePanelQuery = window.matchMedia("(max-width: 720px)");
 
 let stars = [];
 let shootingStars = [];
@@ -60,12 +62,12 @@ function draw() {
       star.x = randomBetween(0, width);
     }
 
-    const alpha = 0.28 + Math.abs(Math.sin(star.phase)) * 0.72;
+    const alpha = 0.16 + Math.abs(Math.sin(star.phase)) * 0.42;
     ctx.beginPath();
     ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(222, 247, 255, ${alpha})`;
-    ctx.shadowColor = "rgba(107, 220, 255, 0.65)";
-    ctx.shadowBlur = 10;
+    ctx.fillStyle = `rgba(198, 212, 222, ${alpha})`;
+    ctx.shadowColor = "rgba(89, 201, 238, 0.3)";
+    ctx.shadowBlur = 7;
     ctx.fill();
   }
 
@@ -80,22 +82,45 @@ function draw() {
       comet.x - comet.vx * comet.length * 0.12,
       comet.y - comet.vy * comet.length * 0.12
     );
-    gradient.addColorStop(0, `rgba(222, 247, 255, ${Math.max(comet.life, 0)})`);
-    gradient.addColorStop(1, "rgba(107, 220, 255, 0)");
+    gradient.addColorStop(0, `rgba(198, 212, 222, ${Math.max(comet.life * 0.72, 0)})`);
+    gradient.addColorStop(1, "rgba(89, 201, 238, 0)");
 
     ctx.beginPath();
     ctx.moveTo(comet.x, comet.y);
     ctx.lineTo(comet.x - comet.vx * comet.length * 0.12, comet.y - comet.vy * comet.length * 0.12);
     ctx.strokeStyle = gradient;
     ctx.lineWidth = 1.35;
-    ctx.shadowColor = "rgba(107, 220, 255, 0.45)";
-    ctx.shadowBlur = 14;
+    ctx.shadowColor = "rgba(89, 201, 238, 0.24)";
+    ctx.shadowBlur = 10;
     ctx.stroke();
   }
 
   shootingStars = shootingStars.filter((comet) => comet.life > 0);
 
   requestAnimationFrame(draw);
+}
+
+function syncMobilePanels() {
+  mobilePanels.forEach((panel) => {
+    if (mobilePanelQuery.matches) {
+      if (!panel.dataset.mobileReady) {
+        panel.open = false;
+        panel.dataset.mobileReady = "true";
+      }
+      return;
+    }
+
+    panel.open = true;
+    delete panel.dataset.mobileReady;
+  });
+}
+
+syncMobilePanels();
+
+if (mobilePanelQuery.addEventListener) {
+  mobilePanelQuery.addEventListener("change", syncMobilePanels);
+} else {
+  mobilePanelQuery.addListener(syncMobilePanels);
 }
 
 window.addEventListener("resize", resize);
