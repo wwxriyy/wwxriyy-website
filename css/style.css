@@ -344,6 +344,10 @@ h3 {
   filter: drop-shadow(0 0 8px rgba(107, 220, 255, 0.12));
 }
 
+.app-visual-studio {
+  filter: drop-shadow(0 0 8px rgba(143, 92, 205, 0.22));
+}
+
 .app-sublime {
   filter: drop-shadow(0 0 8px rgba(255, 152, 0, 0.18));
 }
