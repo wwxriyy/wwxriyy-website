@@ -372,7 +372,7 @@ h3 {
 }
 
 .links a:nth-child(4) .brand-icon {
-  filter: invert(100%) drop-shadow(0 0 8px rgba(255, 255, 255, 0.12));
+  filter: drop-shadow(0 0 8px rgba(34, 158, 217, 0.18));
 }
 
 .links a:nth-child(5) .brand-icon {
