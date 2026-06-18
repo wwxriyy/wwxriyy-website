@@ -372,8 +372,7 @@ h3 {
 }
 
 .links a:nth-child(4) .brand-icon {
-  filter: invert(54%) sepia(94%) saturate(1384%) hue-rotate(166deg) brightness(101%) contrast(94%)
-    drop-shadow(0 0 8px rgba(34, 158, 217, 0.18));
+  filter: invert(100%) drop-shadow(0 0 8px rgba(255, 255, 255, 0.12));
 }
 
 .links a:nth-child(5) .brand-icon {
@@ -382,8 +381,7 @@ h3 {
 }
 
 .links a:nth-child(6) .brand-icon {
-  filter: invert(43%) sepia(95%) saturate(1059%) hue-rotate(217deg) brightness(100%) contrast(92%)
-    drop-shadow(0 0 8px rgba(88, 101, 242, 0.18));
+  filter: invert(100%) drop-shadow(0 0 8px rgba(255, 255, 255, 0.12));
 }
 
 .icon-list small {
