@@ -454,6 +454,16 @@ h3 {
   outline: none;
 }
 
+.verified-badge {
+  display: block;
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  margin-left: -4px;
+  object-fit: contain;
+  box-shadow: 0 0 8px rgba(56, 151, 240, 0.22);
+}
+
 @keyframes blink {
   50% {
     opacity: 0;
