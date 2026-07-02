@@ -250,7 +250,7 @@ a {
 .stack,
 .project,
 .page-intro,
-.links-page {
+.home-links {
   grid-column: 1 / -1;
 }
 
@@ -441,10 +441,6 @@ h3 {
   gap: 10px;
 }
 
-.links-page nav {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
 .links a {
   position: relative;
   min-height: 42px;
@@ -490,7 +486,7 @@ h3 {
 
   .site-tabs {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
     padding: 8px;
   }
@@ -545,8 +541,7 @@ h3 {
     gap: 16px;
   }
 
-  .links nav,
-  .links-page nav {
+  .links nav {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
   }

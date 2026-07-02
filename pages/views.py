@@ -26,17 +26,5 @@ def projects(request):
     )
 
 
-def links(request):
-    return render(
-        request,
-        "links.html",
-        {
-            "active_page": "links",
-            "page_title": "Links",
-            "terminal_command": "cat ~/links",
-        },
-    )
-
-
 def healthz(request):
     return HttpResponse("ok", content_type="text/plain")
