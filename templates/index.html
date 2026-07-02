@@ -1,148 +1,63 @@
+{% extends "base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Biography page for wwxriyy :0" />
-    <title>wwxriyy bio</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-  </head>
-  <body>
-    <canvas id="starfield" aria-hidden="true"></canvas>
-    <main class="shell" aria-label="Bio">
-      <section class="terminal-card">
-        <div class="terminal-top" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
 
-        <header class="hero">
-          <p class="path" aria-label="/home/wwxriyy">
-            <span class="linux-user">wwxriyy@linux</span><span class="linux-path">:~$</span>
-            <span class="linux-command">cd /home/wwxriyy</span><span class="cursor">|</span>
-          </p>
-        </header>
+{% block content %}
+  <article class="panel intro">
+    <p class="identity">
+      <strong>wwxriyy</strong>
+      <span class="muted">/</span>
+      <span>old luirdni, 21</span>
+      <span class="muted">/</span>
+      <span>Bogdan</span>
+      <span class="flag" aria-label="Poland" role="img">&#x1F1F5;&#x1F1F1;</span>
+    </p>
+    <p class="about">
+      Developer &amp; Backend Engineer &bull; UI and console applications, web,
+      microcontrollers &amp; circuits.
+    </p>
+  </article>
 
-        <section class="bio-grid" aria-label="Profile details">
-          <article class="panel intro">
-            <p class="identity">
-              <strong>wwxriyy</strong>
-              <span class="muted">/</span>
-              <span>old luirdni, 21</span>
-              <span class="muted">/</span>
-              <span>Bogdan</span>
-              <img class="flag" src="{% static 'assets/icons/flag-poland.svg' %}" alt="Poland" />
-            </p>
-            <p class="about">
-              Developer & Backend Engineer • UI and console applications, web,
-              microcontrollers & circuits.
-            </p>
-          </article>
-
-          <article class="panel stack">
-            <h2><span class="prompt">$</span> Tech stack</h2>
-            <div class="stack-groups">
-              <div>
-                <h3>Apps</h3>
-                <ul class="icon-list">
-                  <li>
-                    <img class="brand-icon" src="{% static 'assets/icons/vscode.svg' %}" alt="" />
-                    <span>Visual Studio Code</span>
-                  </li>
-                  <li>
-                    <img class="brand-icon app-visual-studio" src="{% static 'assets/icons/visual-studio.png' %}" alt="" />
-                    <span>Visual Studio</span>
-                  </li>
-                  <li>
-                    <img class="brand-icon app-sublime" src="{% static 'assets/icons/sublime-text.svg' %}" alt="" />
-                    <span>Sublime Text</span>
-                  </li>
-                  <li>
-                    <img class="brand-icon app-filezilla" src="{% static 'assets/icons/filezilla.svg' %}" alt="" />
-                    <span>FileZilla Pro</span>
-                  </li>
-                  <li>
-                    <img class="brand-icon app-git" src="{% static 'assets/icons/git-cmd.svg' %}" alt="" />
-                    <span>Git CMD</span>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h3>Languages</h3>
-                <ul class="icon-list">
-                  <li>
-                    <img class="brand-icon" src="{% static 'assets/icons/csharp.svg' %}" alt="" />
-                    <span>C# <small>ASP.NET</small></span>
-                  </li>
-                  <li>
-                    <img class="brand-icon" src="{% static 'assets/icons/python.svg' %}" alt="" />
-                    <span>Python <small>Django, PyQt6</small></span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </article>
-
-          <details class="panel project collapsible-panel" data-mobile-collapsible open>
-            <summary class="panel-summary">
-              <h2><span class="prompt">></span> Active project</h2>
-              <span class="chevron" aria-hidden="true"></span>
-            </summary>
-            <div class="project-line">
-              <div class="project-icons" aria-hidden="true">
-                <img class="brand-icon" src="{% static 'assets/icons/cpp.svg' %}" alt="" />
-                <img class="brand-icon" src="{% static 'assets/icons/html5.svg' %}" alt="" />
-                <img class="brand-icon" src="{% static 'assets/icons/css3.svg' %}" alt="" />
-                <img class="brand-icon" src="{% static 'assets/icons/javascript.svg' %}" alt="" />
-              </div>
-              <p>
-                <a class="project-link" href="https://github.com/wwxriyy/CubeRobot" target="_blank" rel="noreferrer">CubeRobot</a>
-                - A breadboard-based robot with an ESP8266, TFT display,
-                RGB LED, DHT11 sensor, and web interface. Battery-powered and
-                fully sourced.
-              </p>
-            </div>
-          </details>
-
-          <details class="panel links collapsible-panel" data-mobile-collapsible open>
-            <summary class="panel-summary">
-              <h2><span class="prompt">#</span> Links</h2>
-              <span class="chevron" aria-hidden="true"></span>
-            </summary>
-            <nav aria-label="Social links">
-              <a href="https://instagram.com/wwxriyy" target="_blank" rel="noreferrer" aria-label="Instagram">
-                <img class="brand-icon" src="{% static 'assets/icons/instagram.svg' %}" alt="" />
-                <span>Instagram</span>
-                <img class="verified-badge" src="{% static 'assets/icons/verified-badge.svg' %}" alt="" />
-              </a>
-              <a href="https://www.tiktok.com/@wwxriyy" target="_blank" rel="noreferrer" aria-label="TikTok">
-                <img class="brand-icon" src="{% static 'assets/icons/tiktok.svg' %}" alt="" />
-                <span>TikTok</span>
-              </a>
-              <a href="https://github.com/wwxriyy" target="_blank" rel="noreferrer" aria-label="GitHub">
-                <img class="brand-icon" src="{% static 'assets/icons/github.svg' %}" alt="" />
-                <span>GitHub</span>
-              </a>
-              <a href="https://t.me/wwxriyy" target="_blank" rel="noreferrer" aria-label="Telegram">
-                <img class="brand-icon" src="{% static 'assets/icons/telegram.svg' %}" alt="" />
-                <span>Telegram</span>
-              </a>
-              <a href="https://open.spotify.com/user/31wl3xubqn4xdfzbpp56wmlwxwvu" target="_blank" rel="noreferrer" aria-label="Spotify">
-                <img class="brand-icon" src="{% static 'assets/icons/spotify.svg' %}" alt="" />
-                <span>Spotify</span>
-              </a>
-              <a href="https://discord.gg/zNpk97sR" target="_blank" rel="noreferrer" aria-label="Discord">
-                <img class="brand-icon" src="{% static 'assets/icons/discord.svg' %}" alt="" />
-                <span>Discord</span>
-              </a>
-            </nav>
-          </details>
-        </section>
-      </section>
-    </main>
-
-    <script src="{% static 'js/main.js' %}"></script>
-  </body>
-</html>
+  <article class="panel stack">
+    <h2><span class="prompt">$</span> Tech stack</h2>
+    <div class="stack-groups">
+      <div>
+        <h3>Apps</h3>
+        <ul class="icon-list">
+          <li>
+            <img class="brand-icon" src="{% static 'assets/icons/vscode.svg' %}" alt="" />
+            <span>Visual Studio Code</span>
+          </li>
+          <li>
+            <img class="brand-icon app-visual-studio" src="{% static 'assets/icons/visual-studio.svg' %}" alt="" />
+            <span>Visual Studio</span>
+          </li>
+          <li>
+            <img class="brand-icon app-sublime" src="{% static 'assets/icons/sublime-text.svg' %}" alt="" />
+            <span>Sublime Text</span>
+          </li>
+          <li>
+            <img class="brand-icon app-filezilla" src="{% static 'assets/icons/filezilla.svg' %}" alt="" />
+            <span>FileZilla Pro</span>
+          </li>
+          <li>
+            <img class="brand-icon app-git" src="{% static 'assets/icons/git-cmd.svg' %}" alt="" />
+            <span>Git CMD</span>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3>Languages</h3>
+        <ul class="icon-list">
+          <li>
+            <img class="brand-icon" src="{% static 'assets/icons/csharp.svg' %}" alt="" />
+            <span>C# <small>ASP.NET</small></span>
+          </li>
+          <li>
+            <img class="brand-icon" src="{% static 'assets/icons/python.svg' %}" alt="" />
+            <span>Python <small>Django, PyQt6</small></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </article>
+{% endblock %}

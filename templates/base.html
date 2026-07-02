@@ -1,0 +1,51 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Biography page for wwxriyy" />
+    <title>{{ page_title }} | wwxriyy</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <main class="shell" aria-label="{{ page_title }}">
+      <section class="terminal-card">
+        <div class="terminal-top" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <nav class="site-tabs" aria-label="Site sections">
+          <a class="{% if active_page == 'home' %}is-active{% endif %}" href="{% url 'home' %}">
+            <span class="tab-prompt">~</span>
+            <span>Home</span>
+          </a>
+          <a class="{% if active_page == 'projects' %}is-active{% endif %}" href="{% url 'projects' %}">
+            <span class="tab-prompt">></span>
+            <span>Projects</span>
+          </a>
+          <a class="{% if active_page == 'links' %}is-active{% endif %}" href="{% url 'links' %}">
+            <span class="tab-prompt">#</span>
+            <span>Links</span>
+          </a>
+        </nav>
+
+        <header class="hero">
+          <p class="path" aria-label="{{ terminal_command }}">
+            <span class="linux-user">wwxriyy@linux</span><span class="linux-path">:~$</span>
+            <span class="linux-command">{{ terminal_command }}</span><span class="cursor">|</span>
+          </p>
+        </header>
+
+        <section class="bio-grid" aria-label="{{ page_title }} content">
+          {% block content %}{% endblock %}
+        </section>
+      </section>
+    </main>
+
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

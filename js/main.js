@@ -1,7 +1,5 @@
 const canvas = document.querySelector("#starfield");
 const ctx = canvas.getContext("2d");
-const mobilePanels = document.querySelectorAll("[data-mobile-collapsible]");
-const mobilePanelQuery = window.matchMedia("(max-width: 720px)");
 
 let stars = [];
 let shootingStars = [];
@@ -98,29 +96,6 @@ function draw() {
   shootingStars = shootingStars.filter((comet) => comet.life > 0);
 
   requestAnimationFrame(draw);
-}
-
-function syncMobilePanels() {
-  mobilePanels.forEach((panel) => {
-    if (mobilePanelQuery.matches) {
-      if (!panel.dataset.mobileReady) {
-        panel.open = false;
-        panel.dataset.mobileReady = "true";
-      }
-      return;
-    }
-
-    panel.open = true;
-    delete panel.dataset.mobileReady;
-  });
-}
-
-syncMobilePanels();
-
-if (mobilePanelQuery.addEventListener) {
-  mobilePanelQuery.addEventListener("change", syncMobilePanels);
-} else {
-  mobilePanelQuery.addListener(syncMobilePanels);
 }
 
 window.addEventListener("resize", resize);
