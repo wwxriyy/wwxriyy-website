@@ -33,19 +33,26 @@ function resize() {
 }
 
 function spawnShootingStar() {
-  if (shootingStars.length > 2 || width < 700) {
+  const maxShootingStars = width < 700 ? 2 : 5;
+
+  if (shootingStars.length >= maxShootingStars) {
     return;
   }
 
-  shootingStars.push({
-    x: randomBetween(width * 0.18, width * 0.86),
-    y: randomBetween(0, height * 0.34),
-    vx: randomBetween(-5.2, -3.2),
-    vy: randomBetween(2.5, 3.8),
-    life: 1,
-    decay: randomBetween(0.012, 0.018),
-    length: randomBetween(84, 138),
-  });
+  const freeSlots = maxShootingStars - shootingStars.length;
+  const burstCount = width < 700 ? 1 : Math.min(freeSlots, Math.random() > 0.55 ? 2 : 1);
+
+  for (let index = 0; index < burstCount; index += 1) {
+    shootingStars.push({
+      x: randomBetween(width * 0.18, width * 0.92),
+      y: randomBetween(-20, height * 0.4),
+      vx: randomBetween(-6.2, -3.4),
+      vy: randomBetween(2.4, 4.5),
+      life: 1,
+      decay: randomBetween(0.01, 0.017),
+      length: randomBetween(94, 168),
+    });
+  }
 }
 
 function draw() {
@@ -101,4 +108,5 @@ function draw() {
 window.addEventListener("resize", resize);
 resize();
 draw();
-setInterval(spawnShootingStar, 3600);
+setTimeout(spawnShootingStar, 500);
+setInterval(spawnShootingStar, 1700);

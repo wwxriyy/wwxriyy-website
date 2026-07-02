@@ -8,7 +8,7 @@ def home(request):
         "index.html",
         {
             "active_page": "home",
-            "page_title": "Home",
+            "page_title": "home",
             "terminal_command": "cd /home/wwxriyy",
         },
     )
@@ -20,7 +20,7 @@ def projects(request):
         "projects.html",
         {
             "active_page": "projects",
-            "page_title": "Projects",
+            "page_title": "projects",
             "terminal_command": "ls ~/projects",
         },
     )
