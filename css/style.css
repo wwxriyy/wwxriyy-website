@@ -392,8 +392,7 @@ h3 {
   gap: 12px;
 }
 
-.page-intro p,
-.project-meta {
+.page-intro p {
   margin: 0;
   color: var(--muted);
   line-height: 1.6;
@@ -403,16 +402,8 @@ h3 {
   margin-bottom: 10px;
 }
 
-.project-head {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  justify-content: space-between;
+.project-title {
   margin-bottom: 14px;
-}
-
-.project-head h2 {
-  margin-bottom: 8px;
 }
 
 .project-icons {
@@ -441,28 +432,6 @@ h3 {
 .project-link:focus-visible {
   color: #ffe39b;
   text-decoration: underline;
-  outline: none;
-}
-
-.terminal-button {
-  display: inline-flex;
-  min-height: 36px;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.075);
-  border-radius: 7px;
-  color: var(--text);
-  text-decoration: none;
-  background: rgba(255, 255, 255, 0.035);
-  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
-}
-
-.terminal-button:hover,
-.terminal-button:focus-visible {
-  border-color: rgba(151, 163, 181, 0.24);
-  background: rgba(255, 255, 255, 0.055);
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -574,11 +543,6 @@ h3 {
 
   .stack-groups {
     gap: 16px;
-  }
-
-  .project-head {
-    display: grid;
-    gap: 12px;
   }
 
   .links nav,
