@@ -467,12 +467,45 @@ h3 {
   outline: none;
 }
 
+.link-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+  flex: 1 1 auto;
+}
+
+.link-title {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.12;
+}
+
+.link-title > span,
+.link-url {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link-url {
+  color: #686f7a;
+  font-size: 0.78rem;
+  line-height: 1.1;
+}
+
+.links a:hover .link-url,
+.links a:focus-visible .link-url {
+  color: #858d99;
+}
+
 .verified-badge {
   display: block;
   width: 15px;
   height: 15px;
   flex: 0 0 auto;
-  margin-left: -4px;
+  margin-left: -1px;
   object-fit: contain;
   box-shadow: 0 0 8px rgba(56, 151, 240, 0.22);
 }
@@ -558,7 +591,8 @@ h3 {
     gap: 8px;
   }
 
-  .links a span {
+  .link-title > span,
+  .link-url {
     overflow: hidden;
     text-overflow: ellipsis;
   }
