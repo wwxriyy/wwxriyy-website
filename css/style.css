@@ -269,18 +269,18 @@ a {
 }
 
 .name-with-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.08em;
   white-space: nowrap;
 }
 
 .flag {
-  display: inline-block;
-  margin-left: 0.08em;
-  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-  font-size: 1.05em;
-  line-height: 1;
-  vertical-align: 0;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.34));
-  transform: translateY(-0.08em);
+  display: block;
+  width: 1.22em;
+  height: 1.22em;
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 
 .about {
