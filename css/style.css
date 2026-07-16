@@ -271,7 +271,7 @@ a {
 .name-with-flag {
   display: inline-flex;
   align-items: center;
-  gap: 0.08em;
+  gap: 0.35em;
   white-space: nowrap;
 }
 
