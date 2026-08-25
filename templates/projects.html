@@ -12,12 +12,13 @@
   <article class="panel project project-card">
     <h2 class="project-title">
       <span class="prompt">01</span>
+      <span class="project-icons" aria-hidden="true">
+        <img class="brand-icon" src="{% static 'assets/icons/python.svg' %}" alt="" />
+      </span>
       <a class="project-link" href="https://github.com/wwxriyy/Keyvora" target="_blank" rel="noreferrer">Keyvora</a>
     </h2>
     <div class="project-line">
-      <div class="project-icons" aria-hidden="true">
-        <img class="brand-icon" src="{% static 'assets/icons/python.svg' %}" alt="" />
-      </div>
+      <img class="project-logo project-logo-keyvora" src="{% static 'assets/icons/keyvora-logo.png' %}" alt="Keyvora logo" />
       <p>
         An application for saving passwords in a local database with encryption and Google Authentication.
         It uses a local SQLite database, SQLAlchemy models, PyQt6 windows, QSS styling, JSON-based themes/localization, and encrypted database fields powered by Fernet.
@@ -28,15 +29,15 @@
   <article class="panel project project-card">
     <h2 class="project-title">
       <span class="prompt">02</span>
-      <a class="project-link" href="https://github.com/wwxriyy/CubeRobot" target="_blank" rel="noreferrer">CubeRobot</a>
-    </h2>
-    <div class="project-line">
-      <div class="project-icons" aria-hidden="true">
+      <span class="project-icons" aria-hidden="true">
         <img class="brand-icon" src="{% static 'assets/icons/cpp.svg' %}" alt="" />
         <img class="brand-icon" src="{% static 'assets/icons/html5.svg' %}" alt="" />
         <img class="brand-icon" src="{% static 'assets/icons/css3.svg' %}" alt="" />
         <img class="brand-icon" src="{% static 'assets/icons/javascript.svg' %}" alt="" />
-      </div>
+      </span>
+      <a class="project-link" href="https://github.com/wwxriyy/CubeRobot" target="_blank" rel="noreferrer">CubeRobot</a>
+    </h2>
+    <div class="project-line">
       <p>
         Animate expressive robot eyes on a TFT display, control RGB lighting, 
         read temperature/humidity, and react to ambient light — all from a clean web interface.
