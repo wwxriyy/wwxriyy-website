@@ -110,3 +110,94 @@ resize();
 draw();
 setTimeout(spawnShootingStar, 500);
 setInterval(spawnShootingStar, 1700);
+
+const workspace = document.getElementById("scrollWorkspace");
+const percentLabel = document.getElementById("scrollPercent");
+
+if (workspace && percentLabel) {
+  workspace.addEventListener("scroll", () => {
+    const scrollTop = workspace.scrollTop;
+    const maxScroll = workspace.scrollHeight - workspace.clientHeight;
+
+    if (maxScroll <= 0) {
+      percentLabel.textContent = "100%";
+      return;
+    }
+
+    const percentage = Math.round((scrollTop / maxScroll) * 100);
+
+    if (percentage === 0) {
+      percentLabel.textContent = "Top";
+    } else if (percentage >= 99) {
+      percentLabel.textContent = "Bot";
+    } else {
+      percentLabel.textContent = `${percentage}%`;
+    }
+  });
+}
+
+function initCodeLineInteraction() {
+  const codeBlock = document.getElementById("codeBlock");
+  const lineNumbers = document.getElementById("lineNumbers");
+  const gitGutter = document.getElementById("gitGutter");
+
+  if (!codeBlock || !lineNumbers) return;
+
+  const htmlContent = codeBlock.innerHTML;
+  const lines = htmlContent.split("\n");
+
+  codeBlock.innerHTML = lines
+    .map((line, idx) => `<span class="code-line-span" data-line="${idx + 1}">${line}</span>`)
+    .join("");
+
+  if (gitGutter) {
+    gitGutter.innerHTML = lines
+      .map((_, idx) => {
+        if (idx === 4 || idx === 12) return `<span class="git-add">+</span>`;
+        if (idx === 20 || idx === 28) return `<span class="git-mod">~</span>`;
+        return `<span></span>`;
+      })
+      .join("");
+  }
+
+  function updateRelativeLineNumbers(activeIdx) {
+    lineNumbers.innerHTML = lines
+      .map((_, idx) => {
+        const lineNum = idx + 1;
+        if (lineNum === activeIdx) {
+          return `<span class="current" data-line="${lineNum}">${lineNum}</span>`;
+        } else {
+          const relNum = Math.abs(lineNum - activeIdx);
+          return `<span data-line="${lineNum}">${relNum}</span>`;
+        }
+      })
+      .join("");
+
+    document.querySelectorAll(".line-numbers span").forEach((el) => {
+      el.addEventListener("click", () => {
+        const targetLine = parseInt(el.getAttribute("data-line"), 10);
+        setActiveLine(targetLine);
+      });
+    });
+  }
+
+  function setActiveLine(lineNum) {
+    const num = parseInt(lineNum, 10);
+    updateRelativeLineNumbers(num);
+
+    document.querySelectorAll(".code-line-span").forEach((el) => {
+      el.classList.toggle("active-line", el.getAttribute("data-line") === String(num));
+    });
+  }
+
+  setActiveLine(10);
+
+  document.querySelectorAll(".code-line-span").forEach((el) => {
+    el.addEventListener("click", () => {
+      const lineNum = el.getAttribute("data-line");
+      setActiveLine(lineNum);
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initCodeLineInteraction);

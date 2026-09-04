@@ -26,5 +26,29 @@ def projects(request):
     )
 
 
+def wezterm(request):
+    return render(
+        request,
+        "wezterm.html",
+        {
+            "active_page": "wezterm",
+            "page_title": "WezTerm Config",
+            "terminal_command": "cat ~/.config/wezterm/wezterm.lua",
+        },
+    )
+
+
+def nvim(request):
+    return render(
+        request,
+        "nvim.html",
+        {
+            "active_page": "nvim",
+            "page_title": "Neovim Config",
+            "terminal_command": "nvim ~/.config/nvim/init.lua",
+        },
+    )
+
+
 def healthz(request):
     return HttpResponse("ok", content_type="text/plain")

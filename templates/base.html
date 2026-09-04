@@ -1,47 +1,132 @@
 {% load static %}
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Biography page for wwxriyy" />
-    <title>{{ page_title }} | wwxriyy</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-  </head>
-  <body>
-    <canvas id="starfield" aria-hidden="true"></canvas>
-    <main class="shell" aria-label="{{ page_title }}">
-      <section class="terminal-card">
-        <div class="terminal-top" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }} | wwxriyy</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <canvas id="starfield"></canvas>
+
+  <div class="editor-container">
+    <div class="window-header">
+      <div class="window-controls">
+        <span class="control close"></span>
+        <span class="control minimize"></span>
+        <span class="control maximize"></span>
+      </div>
+      <div class="window-title">{{ terminal_command }}</div>
+    </div>
+
+    <div class="editor-body">
+      <aside class="sidebar">
+        <div class="sidebar-title">EXPLORER</div>
+        <ul class="file-tree">
+          <li class="folder-item">
+            <span class="folder-name">📂 wwxriyy_bio</span>
+            <ul>
+              <li class="folder-item">
+                <span class="folder-name">📁 modules</span>
+                <ul>
+                  <li class="file-item {% if active_page == 'home' %}active{% endif %}">
+                    <a href="{% url 'home' %}">
+                      <img src="{% static 'assets/icons/python.svg' %}" alt="py">
+                      <span>about.py</span>
+                    </a>
+                  </li>
+                  <li class="file-item {% if active_page == 'projects' %}active{% endif %}">
+                    <a href="{% url 'projects' %}">
+                      <img src="{% static 'assets/icons/python.svg' %}" alt="py">
+                      <span>projects.py</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              
+              <li class="folder-item">
+                <span class="folder-name">📁 configs</span>
+                <ul>
+                  <li class="file-item {% if active_page == 'wezterm' %}active{% endif %}">
+                    <a href="{% url 'wezterm' %}">
+                      <img src="{% static 'assets/icons/lua.svg' %}" alt="lua">
+                      <span>.wezterm.lua</span>
+                    </a>
+                  </li>
+                  <li class="file-item {% if active_page == 'nvim' %}active{% endif %}">
+                    <a href="{% url 'nvim' %}">
+                      <img src="{% static 'assets/icons/lua.svg' %}" alt="lua">
+                      <span>init.lua</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+            </ul>
+          </li>
+        </ul>
+      </aside>
+
+      <main class="code-editor">
+        <div class="tabs-header">
+          <a href="{% url 'home' %}" class="tab {% if active_page == 'home' %}active{% endif %}">
+            <img src="{% static 'assets/icons/python.svg' %}" alt="py">
+            <span>about.py</span>
+          </a>
+          <a href="{% url 'projects' %}" class="tab {% if active_page == 'projects' %}active{% endif %}">
+            <img src="{% static 'assets/icons/python.svg' %}" alt="py">
+            <span>projects.py</span>
+          </a>
+          <a href="{% url 'wezterm' %}" class="tab {% if active_page == 'wezterm' %}active{% endif %}">
+            <img src="{% static 'assets/icons/lua.svg' %}" alt="lua">
+            <span>.wezterm.lua</span>
+          </a>
+          <a href="{% url 'nvim' %}" class="tab {% if active_page == 'nvim' %}active{% endif %}">
+            <img src="{% static 'assets/icons/lua.svg' %}" alt="lua">
+            <span>init.lua</span>
+          </a>
         </div>
 
-        <nav class="site-tabs" aria-label="Site sections">
-          <a class="{% if active_page == 'home' %}is-active{% endif %}" href="{% url 'home' %}">
-            <span class="tab-prompt">~</span>
-            <span>home</span>
-          </a>
-          <a class="{% if active_page == 'projects' %}is-active{% endif %}" href="{% url 'projects' %}">
-            <span class="tab-prompt">></span>
-            <span>projects</span>
-          </a>
-        </nav>
+        <div class="breadcrumbs">
+          <span class="bc-item">📂 {% if active_page == 'wezterm' or active_page == 'nvim' %}configs{% else %}modules{% endif %}</span>
+          <span class="bc-sep">›</span>
+          <span class="bc-item">
+            <img src="{% static 'assets/icons/' %}{% if active_page == 'wezterm' or active_page == 'nvim' %}lua.svg{% else %}python.svg{% endif %}" class="bc-icon" alt="">
+            {% if active_page == 'wezterm' %}.wezterm.lua{% elif active_page == 'nvim' %}init.lua{% else %}{{ active_page }}.py{% endif %}
+          </span>
+          <span class="bc-sep">›</span>
+          <span class="bc-item class-bc">⚙️ Developer</span>
+        </div>
 
-        <header class="hero">
-          <p class="path" aria-label="{{ terminal_command }}">
-            <span class="linux-user">wwxriyy@linux</span><span class="linux-path">:~$</span>
-            <span class="linux-command">{{ terminal_command }}</span><span class="cursor">|</span>
-          </p>
-        </header>
+        <div class="editor-workspace" id="scrollWorkspace">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </main>
+    </div>
 
-        <section class="bio-grid" aria-label="{{ page_title }} content">
-          {% block content %}{% endblock %}
-        </section>
-      </section>
-    </main>
+    <div class="status-bar">
+      <div class="status-left">
+        <span class="status-mode">NORMAL</span>
+        <span class="status-branch"> main</span>
+        <span class="status-path">
+          wwxriyy_bio/{% if active_page == 'wezterm' or active_page == 'nvim' %}configs{% else %}modules{% endif %}/{% if active_page == 'wezterm' %}.wezterm.lua{% elif active_page == 'nvim' %}init.lua{% else %}{{ active_page }}.py{% endif %}
+        </span>
+      </div>
+      <div class="status-right">
+        <span class="status-item">utf-8</span>
+        <span class="status-sep">|</span>
+        <span class="status-item">
+          <img src="{% static 'assets/icons/' %}{% if active_page == 'wezterm' or active_page == 'nvim' %}lua.svg{% else %}python.svg{% endif %}" class="status-python-icon" alt="lang">
+          {% if active_page == 'wezterm' or active_page == 'nvim' %}lua{% else %}python 3{% endif %}
+        </span>
+        <span class="status-percent" id="scrollPercent">Top</span>
+      </div>
+    </div>
+  </div>
 
-    <script src="{% static 'js/main.js' %}"></script>
-  </body>
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
 </html>

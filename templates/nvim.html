@@ -1,0 +1,616 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="code-container">
+  <div class="git-gutter" id="gitGutter"></div>
+  <div class="line-numbers" id="lineNumbers"></div>
+
+  <pre class="code-content"><code id="codeBlock"><span class="keyword">local</span> lazypath = vim.fn.stdpath(<span class="string">"data"</span>) .. <span class="string">"/lazy/lazy.nvim"</span>
+
+<span class="keyword">if</span> <span class="keyword">not</span> vim.loop.fs_stat(lazypath) <span class="keyword">then</span>
+    vim.fn.system({
+        <span class="string">"git"</span>,
+        <span class="string">"clone"</span>,
+        <span class="string">"--filter=blob:none"</span>,
+        <span class="string">"https://github.com/folke/lazy.nvim.git"</span>,
+        <span class="string">"--branch=stable"</span>,
+        lazypath,
+    })
+<span class="keyword">end</span>
+
+vim.opt.rtp:prepend(lazypath)
+
+vim.opt.mouse = <span class="string">"a"</span>
+vim.opt.mousemoveevent = <span class="keyword">true</span>
+vim.opt.swapfile = <span class="keyword">false</span>
+vim.opt.backup = <span class="keyword">false</span>
+vim.opt.writebackup = <span class="keyword">false</span>
+vim.opt.updatetime = <span class="number">500</span>
+
+vim.g.mapleader = <span class="string">" "</span>
+vim.g.maplocalleader = <span class="string">" "</span>
+
+vim.diagnostic.config({
+    virtual_text = <span class="keyword">false</span>,
+    signs = <span class="keyword">true</span>,
+    underline = <span class="keyword">true</span>,
+    update_in_insert = <span class="keyword">false</span>,
+    severity_sort = <span class="keyword">true</span>,
+    float = {
+        border = <span class="string">"rounded"</span>,
+        source = <span class="string">"always"</span>,
+        header = <span class="string">""</span>,
+        prefix = <span class="string">""</span>,
+    },
+})
+
+<span class="keyword">require</span>(<span class="string">"lazy"</span>).setup({
+
+    {
+        <span class="string">"nvim-tree/nvim-web-devicons"</span>,
+        lazy = <span class="keyword">false</span>,
+        config = <span class="keyword">function</span>()
+            <span class="keyword">require</span>(<span class="string">"nvim-web-devicons"</span>).setup({
+                default = <span class="keyword">true</span>,
+                override_by_filename = {
+                    [<span class="string">".gitignore"</span>] = { icon = <span class="string">""</span>, color = <span class="string">"#f1502f"</span>, name = <span class="string">"GitIgnore"</span> },
+                    [<span class="string">"LICENSE"</span>] = { icon = <span class="string">"🔑"</span>, color = <span class="string">"#e5c07b"</span>, name = <span class="string">"License"</span> },
+                    [<span class="string">"requirements.txt"</span>] = { icon = <span class="string">"📋"</span>, color = <span class="string">"#61afef"</span>, name = <span class="string">"Requirements"</span> },
+                },
+                override_by_extension = {
+                    [<span class="string">"py"</span>] = { icon = <span class="string">""</span>, color = <span class="string">"#ffbc03"</span>, name = <span class="string">"Py"</span> },
+                    [<span class="string">"json"</span>] = { icon = <span class="string">"󰘦"</span>, color = <span class="string">"#e5c07b"</span>, name = <span class="string">"Json"</span> },
+                    [<span class="string">"db"</span>] = { icon = <span class="string">""</span>, color = <span class="string">"#e06c75"</span>, name = <span class="string">"Db"</span> },
+                    [<span class="string">"ico"</span>] = { icon = <span class="string">"⭐"</span>, color = <span class="string">"#e5c07b"</span>, name = <span class="string">"Ico"</span> },
+                },
+            })
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"goolord/alpha-nvim"</span>,
+        dependencies = { <span class="string">"nvim-tree/nvim-web-devicons"</span> },
+        config = <span class="keyword">function</span>()
+            <span class="keyword">local</span> alpha = <span class="keyword">require</span>(<span class="string">"alpha"</span>)
+            <span class="keyword">local</span> dashboard = <span class="keyword">require</span>(<span class="string">"alpha.themes.dashboard"</span>)
+
+            dashboard.section.header.val = {
+                <span class="string">" ██▄    █ ▄▄▄▄▄ ▄▄▄▄▄  ▄▄▄  ▄▄▄ ▄▄▄█▄▄▄"</span>,
+                <span class="string">" █ ▀█   █ █     █   █  █ █  █ █   █   "</span>,
+                <span class="string">" █  ▀█  █ █▄▄▄▄ █   █  █ ▀▄▄▀ █   █   "</span>,
+                <span class="string">" █   ▀██ █     █   █  █      █   █   "</span>,
+                <span class="string">" █     █ ▀▄▄▄▄ ▀▄▄▄▀  █      █   █   "</span>,
+            }
+
+            dashboard.section.buttons.val = {
+                dashboard.button(<span class="string">"f"</span>, <span class="string">"🔍  Find File"</span>, <span class="string">"&lt;cmd&gt;Telescope find_files&lt;CR&gt;"</span>),
+                dashboard.button(<span class="string">"e"</span>, <span class="string">"📁  New File"</span>, <span class="string">"&lt;cmd&gt;ene &lt;BAR&gt; startinsert&lt;CR&gt;"</span>),
+                dashboard.button(<span class="string">"r"</span>, <span class="string">"🕒  Recent Files"</span>, <span class="string">"&lt;cmd&gt;Telescope oldfiles&lt;CR&gt;"</span>),
+                dashboard.button(<span class="string">"q"</span>, <span class="string">"❌  Quit Neovim"</span>, <span class="string">"&lt;cmd&gt;qa&lt;CR&gt;"</span>),
+            }
+
+            alpha.setup(dashboard.opts)
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"sainnhe/gruvbox-material"</span>,
+        lazy = <span class="keyword">false</span>,
+        priority = <span class="number">1000</span>,
+        config = <span class="keyword">function</span>()
+            vim.g.gruvbox_material_background = <span class="string">"medium"</span>
+            vim.g.gruvbox_material_foreground = <span class="string">"material"</span>
+            vim.g.gruvbox_material_enable_italic = <span class="keyword">true</span>
+            vim.g.gruvbox_material_transparent_background = <span class="number">1</span>
+            vim.cmd(<span class="string">"colorscheme gruvbox-material"</span>)
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"folke/noice.nvim"</span>,
+        event = <span class="string">"VeryLazy"</span>,
+        dependencies = {
+            <span class="string">"MunifTanjim/nui.nvim"</span>,
+            <span class="string">"rcarriga/nvim-notify"</span>,
+        },
+        opts = {
+            lsp = {
+                progress = {
+                    enabled = <span class="keyword">true</span>,
+                },
+                override = {
+                    [<span class="string">"vim.lsp.util.convert_input_to_markdown_lines"</span>] = <span class="keyword">true</span>,
+                    [<span class="string">"vim.lsp.util.stylize_markdown"</span>] = <span class="keyword">true</span>,
+                    [<span class="string">"cmp.entry.get_documentation"</span>] = <span class="keyword">true</span>,
+                },
+            },
+            presets = {
+                bottom_search = <span class="keyword">true</span>,
+                command_palette = <span class="keyword">true</span>,
+                long_message_to_split = <span class="keyword">true</span>,
+                inc_rename = <span class="keyword">false</span>,
+                lsp_doc_border = <span class="keyword">true</span>,
+            },
+            routes = {
+                {
+                    filter = {
+                        event = <span class="string">"lsp"</span>,
+                        kind = <span class="string">"progress"</span>,
+                        find = <span class="string">"pyright"</span>,
+                    },
+                    opts = { skip = <span class="keyword">true</span> },
+                },
+                {
+                    filter = {
+                        event = <span class="string">"msg_show"</span>,
+                        find = <span class="string">"pyright"</span>,
+                    },
+                    opts = { skip = <span class="keyword">true</span> },
+                },
+                {
+                    filter = {
+                        event = <span class="string">"notify"</span>,
+                        find = <span class="string">"No information available"</span>,
+                    },
+                    opts = { skip = <span class="keyword">true</span> },
+                },
+            },
+        },
+    },
+
+    {
+        <span class="string">"Bekaboo/dropbar.nvim"</span>,
+        event = { <span class="string">"BufReadPost"</span>, <span class="string">"BufNewFile"</span> },
+    },
+
+    {
+        <span class="string">"NvChad/nvim-colorizer.lua"</span>,
+        event = { <span class="string">"BufReadPost"</span>, <span class="string">"BufNewFile"</span> },
+        config = <span class="keyword">function</span>()
+            <span class="keyword">require</span>(<span class="string">"colorizer"</span>).setup({
+                filetypes = { <span class="string">"*"</span> },
+                user_default_options = {
+                    RGB = <span class="keyword">true</span>,
+                    RRGGBB = <span class="keyword">true</span>,
+                    RRGGBBAA = <span class="keyword">true</span>,
+                    AARRGGBB = <span class="keyword">true</span>,
+                    rgb_fn = <span class="keyword">true</span>,
+                    hsl_fn = <span class="keyword">true</span>,
+                    css = <span class="keyword">true</span>,
+                    css_fn = <span class="keyword">true</span>,
+                    mode = <span class="string">"background"</span>,
+                },
+            })
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"nvimdev/lspsaga.nvim"</span>,
+        lazy = <span class="keyword">false</span>,
+        config = <span class="keyword">function</span>()
+            <span class="keyword">require</span>(<span class="string">"lspsaga"</span>).setup({
+                ui = {
+                    border = <span class="string">"rounded"</span>,
+                },
+                hover = {
+                    max_width = <span class="number">0.6</span>,
+                    open_link = <span class="string">"gx"</span>,
+                },
+                diagnostic = {
+                    show_code_action = <span class="keyword">true</span>,
+                    border_follow = <span class="keyword">true</span>,
+                },
+            })
+
+            vim.keymap.set(<span class="string">"n"</span>, <span class="string">"K"</span>, <span class="string">"&lt;cmd&gt;Lspsaga hover_doc&lt;CR&gt;"</span>, { silent = <span class="keyword">true</span> })
+
+            vim.api.nvim_create_autocmd(<span class="string">"CursorHold"</span>, {
+                callback = <span class="keyword">function</span>()
+                    <span class="keyword">local</span> bufnr = vim.api.nvim_get_current_buf()
+                    <span class="keyword">if</span> #vim.lsp.get_clients({ bufnr = bufnr }) &gt; <span class="number">0</span> <span class="keyword">then</span>
+                        <span class="keyword">local</span> win_config = vim.api.nvim_win_get_config(<span class="number">0</span>)
+                        <span class="keyword">if</span> win_config.relative == <span class="string">""</span> <span class="keyword">then</span>
+                            vim.lsp.buf.hover({ silent = <span class="keyword">true</span> })
+                        <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>,
+            })
+        <span class="keyword">end</span>,
+        dependencies = {
+            <span class="string">"nvim-treesitter/nvim-treesitter"</span>,
+            <span class="string">"nvim-tree/nvim-web-devicons"</span>,
+        },
+    },
+
+    {
+        <span class="string">"lukas-reineke/indent-blankline.nvim"</span>,
+        main = <span class="string">"ibl"</span>,
+        event = { <span class="string">"BufReadPost"</span>, <span class="string">"BufNewFile"</span> },
+        opts = {
+            indent = {
+                char = <span class="string">"│"</span>,
+                tab_char = <span class="string">"│"</span>,
+            },
+            scope = {
+                enabled = <span class="keyword">true</span>,
+                show_start = <span class="keyword">false</span>,
+                show_end = <span class="keyword">false</span>,
+            },
+            exclude = {
+                filetypes = {
+                    <span class="string">"help"</span>, <span class="string">"alpha"</span>, <span class="string">"dashboard"</span>, <span class="string">"neo-tree"</span>,
+                    <span class="string">"Trouble"</span>, <span class="string">"lazy"</span>, <span class="string">"mason"</span>,
+                },
+            },
+        },
+    },
+
+    {
+        <span class="string">"nvim-neo-tree/neo-tree.nvim"</span>,
+        branch = <span class="string">"v3.x"</span>,
+        dependencies = {
+            <span class="string">"nvim-lua/plenary.nvim"</span>,
+            <span class="string">"MunifTanjim/nui.nvim"</span>,
+            <span class="string">"nvim-tree/nvim-web-devicons"</span>,
+        },
+        config = <span class="keyword">function</span>()
+            <span class="keyword">require</span>(<span class="string">"neo-tree"</span>).setup({
+                close_if_last_window = <span class="keyword">true</span>,
+                popup_border_style = <span class="string">"rounded"</span>,
+                enable_git_status = <span class="keyword">true</span>,
+                enable_diagnostics = <span class="keyword">true</span>,
+                filesystem = {
+                    follow_current_file = { enabled = <span class="keyword">true</span> },
+                    hijack_netrw_behavior = <span class="string">"open_default"</span>,
+                    use_libuv_file_watcher = <span class="keyword">true</span>,
+                    filtered_items = {
+                        visible = <span class="keyword">false</span>,
+                        hide_dotfiles = <span class="keyword">false</span>,
+                        hide_gitignored = <span class="keyword">true</span>,
+                    },
+                },
+                window = {
+                    position = <span class="string">"left"</span>,
+                    width = <span class="number">35</span>,
+                    mappings = {
+                        [<span class="string">"&lt;space&gt;"</span>] = <span class="string">"toggle_node"</span>,
+                        [<span class="string">"&lt;cr&gt;"</span>] = <span class="string">"open"</span>,
+                        [<span class="string">"o"</span>] = <span class="string">"open"</span>,
+                        [<span class="string">"v"</span>] = <span class="string">"open_vsplit"</span>,
+                        [<span class="string">"s"</span>] = <span class="string">"open_split"</span>,
+                        [<span class="string">"t"</span>] = <span class="string">"open_tabnew"</span>,
+                        [<span class="string">"a"</span>] = <span class="string">"add"</span>,
+                        [<span class="string">"d"</span>] = <span class="string">"delete"</span>,
+                        [<span class="string">"r"</span>] = <span class="string">"rename"</span>,
+                        [<span class="string">"q"</span>] = <span class="string">"close_window"</span>,
+                    },
+                },
+                default_component_configs = {
+                    indent = {
+                        with_expanders = <span class="keyword">true</span>,
+                        expander_collapsed = <span class="string">""</span>,
+                        expander_expanded = <span class="string">""</span>,
+                    },
+                    icon = {
+                        folder_closed = <span class="string">""</span>,
+                        folder_open = <span class="string">""</span>,
+                        folder_empty = <span class="string">""</span>,
+                    },
+                    git_status = {
+                        symbols = {
+                            added     = <span class="string">"+"</span>,
+                            modified  = <span class="string">"~"</span>,
+                            deleted   = <span class="string">"-"</span>,
+                            renamed   = <span class="string">"➜"</span>,
+                            untracked = <span class="string">"+"</span>,
+                            ignored   = <span class="string">"◌"</span>,
+                            unstaged  = <span class="string">"~"</span>,
+                            staged    = <span class="string">"+"</span>,
+                            conflict  = <span class="string">"⚡"</span>,
+                        },
+                    },
+                },
+            })
+
+            vim.keymap.set(<span class="string">"n"</span>, <span class="string">"&lt;leader&gt;e"</span>, <span class="string">"&lt;cmd&gt;Neotree toggle&lt;CR&gt;"</span>, { desc = <span class="string">"Toggle Explorer"</span> })
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"vyfor/cord.nvim"</span>,
+        event = <span class="string">"VeryLazy"</span>,
+        opts = {
+            user_workspace_symbols = <span class="keyword">false</span>,
+            log_level = <span class="string">"error"</span>,
+            editor = {
+                client = <span class="string">"neovim"</span>,
+                tooltip = <span class="string">"Neovim"</span>,
+            },
+            display = {
+                theme = <span class="string">"default"</span>,
+                flavor = <span class="string">"dark"</span>,
+                show_time = <span class="keyword">true</span>,
+            },
+            text = {
+                editing = <span class="keyword">function</span>(opts)
+                    <span class="keyword">return</span> <span class="string">"Editing "</span> .. (opts.filename <span class="keyword">or</span> <span class="string">"file"</span>)
+                <span class="keyword">end</span>,
+                viewing = <span class="keyword">function</span>(opts)
+                    <span class="keyword">return</span> <span class="string">"Viewing "</span> .. (opts.filename <span class="keyword">or</span> <span class="string">"file"</span>)
+                <span class="keyword">end</span>,
+                workspace = <span class="keyword">function</span>(opts)
+                    <span class="keyword">return</span> <span class="string">"In workspace "</span> .. (opts.workspace <span class="keyword">or</span> <span class="string">"workspace"</span>)
+                <span class="keyword">end</span>,
+            },
+            buttons = {
+                {
+                    label = <span class="string">"Neovim Editor"</span>,
+                    url = <span class="string">"https://neovim.io"</span>,
+                },
+            },
+        },
+    },
+
+    {
+        <span class="string">"nvim-telescope/telescope.nvim"</span>,
+        branch = <span class="string">"0.1.x"</span>,
+        dependencies = { <span class="string">"nvim-lua/plenary.nvim"</span> },
+        config = <span class="keyword">function</span>()
+            <span class="keyword">local</span> builtin = <span class="keyword">require</span>(<span class="string">"telescope.builtin"</span>)
+            <span class="keyword">require</span>(<span class="string">"telescope"</span>).setup({
+                defaults = {
+                    layout_strategy = <span class="string">"horizontal"</span>,
+                    layout_config = { preview_width = <span class="number">0.55</span> },
+                    sorting_strategy = <span class="string">"ascending"</span>,
+                    border = <span class="keyword">true</span>,
+                },
+            })
+
+            vim.keymap.set(<span class="string">"n"</span>, <span class="string">"&lt;leader&gt;ff"</span>, builtin.find_files, { desc = <span class="string">"Find Files"</span> })
+            vim.keymap.set(<span class="string">"n"</span>, <span class="string">"&lt;leader&gt;fg"</span>, builtin.live_grep, { desc = <span class="string">"Live Grep"</span> })
+            vim.keymap.set(<span class="string">"n"</span>, <span class="string">"&lt;leader&gt;fb"</span>, builtin.buffers, { desc = <span class="string">"Find Buffers"</span> })
+            vim.keymap.set(<span class="string">"n"</span>, <span class="string">"&lt;leader&gt;fh"</span>, builtin.help_tags, { desc = <span class="string">"Help Tags"</span> })
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"williamboman/mason-lspconfig.nvim"</span>,
+        dependencies = {
+            <span class="string">"williamboman/mason.nvim"</span>,
+            <span class="string">"neovim/nvim-lspconfig"</span>,
+            <span class="string">"hrsh7th/cmp-nvim-lsp"</span>,
+        },
+        config = <span class="keyword">function</span>()
+            <span class="keyword">require</span>(<span class="string">"mason"</span>).setup({ ui = { border = <span class="string">"rounded"</span> } })
+
+            <span class="keyword">local</span> lspconfig = <span class="keyword">require</span>(<span class="string">"lspconfig"</span>)
+            <span class="keyword">local</span> capabilities = <span class="keyword">require</span>(<span class="string">"cmp_nvim_lsp"</span>).default_capabilities()
+
+            <span class="keyword">require</span>(<span class="string">"mason-lspconfig"</span>).setup({
+                ensure_installed = { <span class="string">"pyright"</span>, <span class="string">"jsonls"</span>, <span class="string">"omnisharp"</span> },
+                handlers = {
+                    <span class="keyword">function</span>(server_name)
+                        lspconfig[server_name].setup({
+                            capabilities = capabilities,
+                        })
+                    <span class="keyword">end</span>,
+                    [<span class="string">"pyright"</span>] = <span class="keyword">function</span>()
+                        lspconfig.pyright.setup({
+                            capabilities = capabilities,
+                            settings = {
+                                python = {
+                                    analysis = {
+                                        typeCheckingMode = <span class="string">"basic"</span>,
+                                        autoSearchPaths = <span class="keyword">true</span>,
+                                        useLibraryCodeForTypes = <span class="keyword">true</span>,
+                                        diagnosticSeverityOverrides = {
+                                            reportGeneralTypeIssues = <span class="string">"none"</span>,
+                                            reportOptionalSubscript = <span class="string">"none"</span>,
+                                            reportOptionalMemberAccess = <span class="string">"none"</span>,
+                                        },
+                                    },
+                                },
+                            },
+                        })
+                    <span class="keyword">end</span>,
+                },
+            })
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"hrsh7th/nvim-cmp"</span>,
+        dependencies = {
+            <span class="string">"hrsh7th/cmp-nvim-lsp"</span>,
+            <span class="string">"hrsh7th/cmp-buffer"</span>,
+            <span class="string">"hrsh7th/cmp-path"</span>,
+            <span class="string">"L3MON4D3/LuaSnip"</span>,
+            <span class="string">"saadparwaiz1/cmp_luasnip"</span>,
+        },
+        config = <span class="keyword">function</span>()
+            <span class="keyword">local</span> cmp = <span class="keyword">require</span>(<span class="string">"cmp"</span>)
+            cmp.setup({
+                snippet = {
+                    expand = <span class="keyword">function</span>(args)
+                        <span class="keyword">require</span>(<span class="string">"luasnip"</span>).lsp_expand(args.body)
+                    end,
+                },
+                mapping = cmp.mapping.preset.insert({
+                    [<span class="string">"&lt;C-Space&gt;"</span>] = cmp.mapping.complete(),
+                    [<span class="string">"&lt;CR&gt;"</span>] = cmp.mapping.confirm({ select = <span class="keyword">true</span> }),
+                    [<span class="string">"&lt;Tab&gt;"</span>] = cmp.mapping.select_next_item(),
+                    [<span class="string">"&lt;S-Tab&gt;"</span>] = cmp.mapping.select_prev_item(),
+                    [<span class="string">"&lt;C-e&gt;"</span>] = cmp.mapping.abort(),
+                }),
+                sources = {
+                    { name = <span class="string">"nvim_lsp"</span> },
+                    { name = <span class="string">"path"</span> },
+                    { name = <span class="string">"buffer"</span> },
+                },
+                window = {
+                    completion = cmp.config.window.bordered({
+                        border = <span class="string">"rounded"</span>,
+                        winhighlight = <span class="string">"Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None"</span>,
+                        max_height = <span class="number">8</span>,
+                    }),
+                    documentation = cmp.config.window.bordered({
+                        border = <span class="string">"rounded"</span>,
+                        winhighlight = <span class="string">"Normal:NormalFloat,FloatBorder:FloatBorder"</span>,
+                        max_height = <span class="number">10</span>,
+                        max_width = <span class="number">50</span>,
+                    }),
+                },
+                formatting = {
+                    fields = { <span class="string">"abbr"</span>, <span class="string">"kind"</span>, <span class="string">"menu"</span> },
+                    format = <span class="keyword">function</span>(entry, vim_item)
+                        vim_item.menu = ({
+                            nvim_lsp = <span class="string">"[LSP]"</span>,
+                            buffer = <span class="string">"[Buf]"</span>,
+                            path = <span class="string">"[Path]"</span>,
+                        })[entry.source.name]
+                        <span class="keyword">return</span> vim_item
+                    <span class="keyword">end</span>,
+                },
+            })
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"nvim-treesitter/nvim-treesitter"</span>,
+        branch = <span class="string">"main"</span>,
+        lazy = <span class="keyword">false</span>,
+        build = <span class="string">":TSUpdate"</span>,
+        config = <span class="keyword">function</span>()
+            <span class="keyword">require</span>(<span class="string">"nvim-treesitter"</span>).setup({
+                highlight = { enable = <span class="keyword">true</span> },
+            })
+            vim.api.nvim_create_autocmd(<span class="string">"FileType"</span>, {
+                pattern = { <span class="string">"python"</span>, <span class="string">"cs"</span>, <span class="string">"json"</span>, <span class="string">"lua"</span>, <span class="string">"vim"</span>, <span class="string">"bash"</span> },
+                callback = <span class="keyword">function</span>()
+                    <span class="keyword">if</span> vim.treesitter.language.add(vim.bo.filetype) <span class="keyword">then</span>
+                        vim.treesitter.start()
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>,
+            })
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"nvim-lualine/lualine.nvim"</span>,
+        dependencies = { <span class="string">"nvim-tree/nvim-web-devicons"</span> },
+        config = <span class="keyword">function</span>()
+            <span class="keyword">require</span>(<span class="string">"lualine"</span>).setup({
+                options = {
+                    theme = <span class="string">"gruvbox-material"</span>,
+                    globalstatus = <span class="keyword">true</span>,
+                    section_separators = { left = <span class="string">""</span>, right = <span class="string">""</span> },
+                    component_separators = { left = <span class="string">""</span>, right = <span class="string">""</span> },
+                    icons_enabled = <span class="keyword">true</span>,
+                },
+                sections = {
+                    lualine_a = { <span class="string">"mode"</span> },
+                    lualine_b = { { <span class="string">"branch"</span>, icon = <span class="string">""</span> } },
+                    lualine_c = {
+                        {
+                            <span class="string">"filename"</span>,
+                            path = <span class="number">1</span>,
+                            symbols = { modified = <span class="string">"~"</span>, readonly = <span class="string">"🔒"</span>, unnamed = <span class="string">"[No Name]"</span> },
+                        },
+                    },
+                    lualine_x = { <span class="string">"encoding"</span>, <span class="string">"fileformat"</span>, <span class="string">"filetype"</span> },
+                    lualine_y = { <span class="string">"progress"</span> },
+                    lualine_z = { <span class="string">"location"</span> },
+                },
+            })
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"akinsho/bufferline.nvim"</span>,
+        version = <span class="string">"*"</span>,
+        dependencies = { <span class="string">"nvim-tree/nvim-web-devicons"</span> },
+        config = <span class="keyword">function</span>()
+            <span class="keyword">require</span>(<span class="string">"bufferline"</span>).setup({
+                options = {
+                    mode = <span class="string">"buffers"</span>,
+                    style_preset = <span class="keyword">require</span>(<span class="string">"bufferline"</span>).style_preset.default,
+                    themable = <span class="keyword">true</span>,
+                    diagnostics = <span class="string">"nvim_lsp"</span>,
+                    separator_style = { <span class="string">""</span>, <span class="string">""</span> },
+                    indicator = { style = <span class="string">"none"</span> },
+                    show_buffer_close_icons = <span class="keyword">true</span>,
+                    show_close_icon = <span class="keyword">false</span>,
+                    close_icon = <span class="string">"󰅖"</span>,
+                    buffer_close_icon = <span class="string">"󰅖"</span>,
+                    modified_icon = <span class="string">"~"</span>,
+                    enforce_regular_tabs = <span class="keyword">false</span>,
+                    always_show_bufferline = <span class="keyword">true</span>,
+                    offsets = {
+                        {
+                            filetype = <span class="string">"neo-tree"</span>,
+                            text = <span class="string">"EXPLORER"</span>,
+                            text_align = <span class="string">"left"</span>,
+                            separator = <span class="keyword">false</span>,
+                        },
+                    },
+                },
+            })
+
+            vim.keymap.set(<span class="string">"n"</span>, <span class="string">"&lt;Tab&gt;"</span>, <span class="string">"&lt;cmd&gt;BufferLineCycleNext&lt;CR&gt;"</span>, { desc = <span class="string">"Next Buffer"</span> })
+            vim.keymap.set(<span class="string">"n"</span>, <span class="string">"&lt;S-Tab&gt;"</span>, <span class="string">"&lt;cmd&gt;BufferLineCyclePrev&lt;CR&gt;"</span>, { desc = <span class="string">"Prev Buffer"</span> })
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"lewis6991/gitsigns.nvim"</span>,
+        config = <span class="keyword">function</span>()
+            <span class="keyword">require</span>(<span class="string">"gitsigns"</span>).setup({
+                signs = {
+                    add          = { text = <span class="string">"+"</span> },
+                    change       = { text = <span class="string">"~"</span> },
+                    delete       = { text = <span class="string">"-"</span> },
+                    topdelete    = { text = <span class="string">"-"</span> },
+                    changedelete = { text = <span class="string">"~"</span> },
+                    untracked    = { text = <span class="string">"+"</span> },
+                },
+            })
+        <span class="keyword">end</span>,
+    },
+
+    {
+        <span class="string">"folke/which-key.nvim"</span>,
+        event = <span class="string">"VeryLazy"</span>,
+        opts = { preset = <span class="string">"modern"</span> },
+    },
+
+    {
+        <span class="string">"akinsho/toggleterm.nvim"</span>,
+        version = <span class="string">"*"</span>,
+        config = <span class="keyword">function</span>()
+            <span class="keyword">local</span> powershell = vim.fn.executable(<span class="string">"pwsh"</span>) == <span class="number">1</span> <span class="keyword">and</span> <span class="string">"pwsh"</span> <span class="keyword">or</span> <span class="string">"powershell.exe"</span>
+
+            <span class="keyword">require</span>(<span class="string">"toggleterm"</span>).setup({
+                size = <span class="number">15</span>,
+                open_mapping = [[&lt;C-\&gt;]],
+                direction = <span class="string">"horizontal"</span>,
+                shell = powershell,
+                dir = <span class="string">"git_dir"</span>,
+                close_on_exit = <span class="keyword">false</span>,
+            })
+
+            vim.api.nvim_create_autocmd(<span class="string">"TermOpen"</span>, {
+                pattern = <span class="string">"term://*toggleterm#*"</span>,
+                callback = <span class="keyword">function</span>()
+                    <span class="keyword">local</span> opts = { buffer = <span class="number">0</span> }
+                    vim.keymap.set(<span class="string">"t"</span>, <span class="string">"&lt;C-h&gt;"</span>, [[&lt;Cmd&gt;wincmd h&lt;CR&gt;]], opts)
+                    vim.keymap.set(<span class="string">"t"</span>, <span class="string">"&lt;C-j&gt;"</span>, [[&lt;Cmd&gt;wincmd j&lt;CR&gt;]], opts)
+                    vim.keymap.set(<span class="string">"t"</span>, <span class="string">"&lt;C-k&gt;"</span>, [[&lt;Cmd&gt;wincmd k&lt;CR&gt;]], opts)
+                    vim.keymap.set(<span class="string">"t"</span>, <span class="string">"&lt;C-l&gt;"</span>, [[&lt;Cmd&gt;wincmd l&lt;CR&gt;]], opts)
+                <span class="keyword">end</span>,
+            })
+        <span class="keyword">end</span>,
+    },
+
+})</code></pre>
+</div>
+{% endblock %}

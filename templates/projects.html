@@ -2,46 +2,30 @@
 {% load static %}
 
 {% block content %}
-  <article class="panel page-intro">
-    <h2><span class="prompt">></span> Projects</h2>
-    <p>
-      Yellow project names lead to the project's open source code on GitHub.
-    </p>
-  </article>
+<div class="code-container">
+  <div class="git-gutter" id="gitGutter"></div>
+  <div class="line-numbers" id="lineNumbers"></div>
 
-  <article class="panel project project-card">
-    <h2 class="project-title">
-      <span class="prompt">01</span>
-      <span class="project-icons" aria-hidden="true">
-        <img class="brand-icon" src="{% static 'assets/icons/python.svg' %}" alt="" />
-      </span>
-      <a class="project-link" href="https://github.com/wwxriyy/Keyvora" target="_blank" rel="noreferrer">Keyvora</a>
-    </h2>
-    <div class="project-line">
-      <img class="project-logo project-logo-keyvora" src="{% static 'assets/icons/keyvora-logo.png' %}" alt="Keyvora logo" />
-      <p>
-        An application for saving passwords in a local database with encryption and Google Authentication.
-        It uses a local SQLite database, SQLAlchemy models, PyQt6 windows, QSS styling, JSON-based themes/localization, and encrypted database fields powered by Fernet.
-      </p>
-    </div>
-  </article>
-
-  <article class="panel project project-card">
-    <h2 class="project-title">
-      <span class="prompt">02</span>
-      <span class="project-icons" aria-hidden="true">
-        <img class="brand-icon" src="{% static 'assets/icons/cpp.svg' %}" alt="" />
-        <img class="brand-icon" src="{% static 'assets/icons/html5.svg' %}" alt="" />
-        <img class="brand-icon" src="{% static 'assets/icons/css3.svg' %}" alt="" />
-        <img class="brand-icon" src="{% static 'assets/icons/javascript.svg' %}" alt="" />
-      </span>
-      <a class="project-link" href="https://github.com/wwxriyy/CubeRobot" target="_blank" rel="noreferrer">CubeRobot</a>
-    </h2>
-    <div class="project-line">
-      <p>
-        Animate expressive robot eyes on a TFT display, control RGB lighting, 
-        read temperature/humidity, and react to ambient light — all from a clean web interface.
-      </p>
-    </div>
-  </article>
+  <pre class="code-content"><code id="codeBlock">projects = [
+    {
+        <span class="string">"name"</span>: <span class="string">"Keyvora"</span>,
+        <span class="string">"url"</span>: <span class="string">"<a href="https://github.com/wwxriyy/Keyvora" target="_blank">https://github.com/wwxriyy/Keyvora</a>"</span>,
+        <span class="string">"stack"</span>: [
+            <span class="string">"<img src="{% static 'assets/icons/python.svg' %}" class="inline-icon" alt=""> Python"</span>,
+        ],
+        <span class="string">"description"</span>: <span class="string">"An application for saving passwords in a local database with encryption and Google Authentication. It uses a local SQLite database, SQLAlchemy models, PyQt6 windows, QSS styling, JSON-based themes/localization, and encrypted database fields powered by Fernet."</span>
+    },
+    {
+        <span class="string">"name"</span>: <span class="string">"CubeRobot"</span>,
+        <span class="string">"url"</span>: <span class="string">"<a href="https://github.com/wwxriyy/CubeRobot" target="_blank">https://github.com/wwxriyy/CubeRobot</a>"</span>,
+        <span class="string">"stack"</span>: [
+            <span class="string">"<img src="{% static 'assets/icons/cpp.svg' %}" class="inline-icon" alt=""> C++"</span>,
+            <span class="string">"<img src="{% static 'assets/icons/html5.svg' %}" class="inline-icon" alt=""> HTML5"</span>,
+            <span class="string">"<img src="{% static 'assets/icons/css3.svg' %}" class="inline-icon" alt=""> CSS3"</span>,
+            <span class="string">"<img src="{% static 'assets/icons/javascript.svg' %}" class="inline-icon" alt=""> JavaScript"</span>,
+        ],
+        <span class="string">"description"</span>: <span class="string">"Animate expressive robot eyes on a TFT display, control RGB lighting, read temperature/humidity, and react to ambient light — all from a clean web interface."</span>
+    }
+]</code></pre>
+</div>
 {% endblock %}

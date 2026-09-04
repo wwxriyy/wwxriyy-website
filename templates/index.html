@@ -2,116 +2,43 @@
 {% load static %}
 
 {% block content %}
-  <article class="panel intro">
-    <p class="identity">
-      <strong>wwxriyy</strong>
-      <span class="muted">/</span>
-      <span>old luirdni, 21</span>
-      <span class="muted">/</span>
-      <span class="name-with-flag"><span>Bogdan</span><img class="flag" src="{% static 'assets/icons/poland-flag.png' %}" alt="Poland flag" /></span>
-    </p>
-    <p class="about">
-      Developer &amp; Backend Engineer &bull; UI and console applications, web,
-      microcontrollers &amp; circuits.
-    </p>
-  </article>
+<div class="code-container">
+  <div class="git-gutter" id="gitGutter"></div>
+  <div class="line-numbers" id="lineNumbers"></div>
 
-  <article class="panel stack">
-    <h2><span class="prompt">$</span> Tech stack</h2>
-    <div class="stack-groups">
-      <div>
-        <h3>Apps</h3>
-        <ul class="icon-list">
-          <li>
-            <img class="brand-icon app-vscode" src="{% static 'assets/icons/vscode.svg' %}" alt="" />
-            <span>Visual Studio Code</span>
-          </li>
-          <li>
-            <img class="brand-icon app-visual-studio" src="{% static 'assets/icons/visual-studio.svg' %}" alt="" />
-            <span>Visual Studio</span>
-          </li>
-          <li>
-            <img class="brand-icon app-neovim" src="{% static 'assets/icons/neovim.svg' %}" alt="" />
-            <span>Neovim</span>
-          </li>
-          <li>
-            <img class="brand-icon app-sublime" src="{% static 'assets/icons/sublime-text.svg' %}" alt="" />
-            <span>Sublime Text</span>
-          </li>
-          <li>
-            <img class="brand-icon app-filezilla" src="{% static 'assets/icons/filezilla.svg' %}" alt="" />
-            <span>FileZilla Pro</span>
-          </li>
-          <li>
-            <img class="brand-icon app-git" src="{% static 'assets/icons/git-cmd.svg' %}" alt="" />
-            <span>Git CMD</span>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h3>Languages</h3>
-        <ul class="icon-list">
-          <li>
-            <img class="brand-icon" src="{% static 'assets/icons/csharp.svg' %}" alt="" />
-            <span>C# <small>ASP.NET</small></span>
-          </li>
-          <li>
-            <img class="brand-icon" src="{% static 'assets/icons/python.svg' %}" alt="" />
-            <span>Python <small>Django, PyQt6</small></span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </article>
+  <pre class="code-content"><code id="codeBlock"><span class="keyword">from</span> dataclasses <span class="keyword">import</span> dataclass, field
+<span class="keyword">from</span> typing <span class="keyword">import</span> List, Dict
 
-  <article class="panel links home-links">
-    <h2><span class="prompt">#</span> Links</h2>
-    <nav aria-label="Social links">
-      <a href="https://instagram.com/wwxriyy" target="_blank" rel="noreferrer" aria-label="Instagram">
-        <img class="brand-icon" src="{% static 'assets/icons/instagram.svg' %}" alt="" />
-        <span class="link-copy">
-          <span class="link-title">
-            <span>Instagram</span>
-            <img class="verified-badge" src="{% static 'assets/icons/verified-badge.svg' %}" alt="" />
-          </span>
-          <span class="link-url">instagram.com/wwxriyy</span>
-        </span>
-      </a>
-      <a href="https://www.tiktok.com/@wwxriyy" target="_blank" rel="noreferrer" aria-label="TikTok">
-        <img class="brand-icon" src="{% static 'assets/icons/tiktok.svg' %}" alt="" />
-        <span class="link-copy">
-          <span class="link-title"><span>TikTok</span></span>
-          <span class="link-url">tiktok.com/@wwxriyy</span>
-        </span>
-      </a>
-      <a href="https://github.com/wwxriyy" target="_blank" rel="noreferrer" aria-label="GitHub">
-        <img class="brand-icon" src="{% static 'assets/icons/github.svg' %}" alt="" />
-        <span class="link-copy">
-          <span class="link-title"><span>GitHub</span></span>
-          <span class="link-url">github.com/wwxriyy</span>
-        </span>
-      </a>
-      <a href="https://t.me/wwxriyy" target="_blank" rel="noreferrer" aria-label="Telegram">
-        <img class="brand-icon" src="{% static 'assets/icons/telegram.svg' %}" alt="" />
-        <span class="link-copy">
-          <span class="link-title"><span>Telegram</span></span>
-          <span class="link-url">t.me/wwxriyy</span>
-        </span>
-      </a>
-      <a href="https://open.spotify.com/user/31wl3xubqn4xdfzbpp56wmlwxwvu" target="_blank" rel="noreferrer" aria-label="Spotify">
-        <img class="brand-icon" src="{% static 'assets/icons/spotify.svg' %}" alt="" />
-        <span class="link-copy">
-          <span class="link-title"><span>Spotify</span></span>
-          <span class="link-url">open.spotify.com/user/31wl3xub...</span>
-        </span>
-      </a>
-      <a href="https://discord.gg/zNpk97sR" target="_blank" rel="noreferrer" aria-label="Discord">
-        <img class="brand-icon" src="{% static 'assets/icons/discord.svg' %}" alt="" />
-        <span class="link-copy">
-          <span class="link-title"><span>Discord</span></span>
-          <span class="link-url">discord.gg/zNpk97sR</span>
-        </span>
-      </a>
-    </nav>
-  </article>
+<span class="decorator">@dataclass</span>
+<span class="keyword">class</span> <span class="class-name">Developer</span>:
+    username: <span class="type">str</span> = <span class="string">"wwxriyy / old luirdni"</span>
+    from_country: <span class="string">"Ukraine > <img src="{% static 'assets/icons/ukraine-flag.png' %}" class="inline-icon-color" alt="UA"> Poland <img src="{% static 'assets/icons/poland-flag.png' %}" class="inline-icon-color" alt="PL">"</span>
+    age: <span class="type">int</span> = <span class="number">21</span>
+    location: <span class="type">str</span> = <span class="string">"Mariupol > Łódź"</span>
+    role: <span class="type">str</span> = <span class="string">"developer & backend engineer"</span>
+    bio: <span class="type">str</span> = <span class="string">"UI and console applications, web, microcontrollers & circuits."</span>
+
+    apps: List[<span class="type">str</span>] = field(default_factory=<span class="keyword">lambda</span>: [
+        <span class="string">"<img src="{% static 'assets/icons/vscode.svg' %}" class="app-vscode" alt=""> Visual Studio Code"</span>,
+        <span class="string">"<img src="{% static 'assets/icons/visual-studio.svg' %}" class="app-visual-studio" alt=""> Visual Studio"</span>,
+        <span class="string">"<img src="{% static 'assets/icons/neovim.svg' %}" class="app-neovim" alt=""> Neovim"</span>,
+        <span class="string">"<img src="{% static 'assets/icons/sublime-text.svg' %}" class="app-sublime" alt=""> Sublime Text"</span>,
+        <span class="string">"<img src="{% static 'assets/icons/filezilla.svg' %}" class="app-filezilla" alt=""> FileZilla Pro"</span>,
+        <span class="string">"<img src="{% static 'assets/icons/git-cmd.svg' %}" class="app-git" alt=""> Git CMD"</span>
+    ])
+
+    languages: List[<span class="type">str</span>] = field(default_factory=<span class="keyword">lambda</span>: [
+        <span class="string">"<img src="{% static 'assets/icons/csharp.svg' %}" class="inline-icon-color" alt=""> C# (ASP.NET)"</span>,
+        <span class="string">"<img src="{% static 'assets/icons/python.svg' %}" class="inline-icon-color" alt=""> Python (Django, PyQt)"</span>
+    ])
+
+    socials: Dict[<span class="type">str</span>, <span class="type">str</span>] = field(default_factory=<span class="keyword">lambda</span>: {
+        <span class="string">"Instagram"</span>: <span class="string">"<img src="{% static 'assets/icons/instagram.svg' %}" class="icon-instagram" alt=""><a href="https://instagram.com/wwxriyy" target="_blank">instagram.com/wwxriyy</a> <img src="{% static 'assets/icons/verified-badge.svg' %}" class="inline-icon-color" alt="">"</span>,
+        <span class="string">"TikTok"</span>: <span class="string">"<img src="{% static 'assets/icons/tiktok.svg' %}" class="icon-tiktok" alt=""><a href="https://tiktok.com/@wwxriyy" target="_blank">tiktok.com/@wwxriyy</a>"</span>,
+        <span class="string">"GitHub"</span>: <span class="string">"<img src="{% static 'assets/icons/github.svg' %}" class="icon-github" alt=""><a href="https://github.com/wwxriyy" target="_blank">github.com/wwxriyy</a>"</span>,
+        <span class="string">"Telegram"</span>: <span class="string">"<img src="{% static 'assets/icons/telegram.svg' %}" class="icon-telegram" alt=""><a href="https://t.me/wwxriyy" target="_blank">t.me/wwxriyy</a>"</span>,
+        <span class="string">"Spotify"</span>: <span class="string">"<img src="{% static 'assets/icons/spotify.svg' %}" class="icon-spotify" alt=""><a href="https://open.spotify.com/user/31wl3xubqn4xdfzbpp56wmlwxwvu" target="_blank">open.spotify.com/user/31wl3xubqn4xdfzbpp56wmlwxwvu</a>"</span>,
+        <span class="string">"Discord"</span>: <span class="string">"<img src="{% static 'assets/icons/discord.svg' %}" class="icon-discord" alt=""><a href="https://discord.gg/zNpk97sR" target="_blank">discord.gg/zNpk97sR</a>"</span>
+    })</code></pre>
+</div>
 {% endblock %}

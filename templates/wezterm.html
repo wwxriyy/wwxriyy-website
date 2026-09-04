@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="code-container">
+  <div class="git-gutter" id="gitGutter"></div>
+  <div class="line-numbers" id="lineNumbers"></div>
+
+  <pre class="code-content"><code id="codeBlock"><span class="keyword">local</span> wezterm = <span class="keyword">require</span>(<span class="string">"wezterm"</span>)
+
+<span class="keyword">local</span> config = wezterm.config_builder()
+
+config.default_prog = {
+    <span class="string">"powershell.exe"</span>,
+    <span class="string">"-NoLogo"</span>,
+}
+
+config.window_decorations = <span class="string">"TITLE | RESIZE"</span>
+
+config.initial_cols = <span class="number">200</span>
+config.initial_rows = <span class="number">50</span>
+
+config.window_background_opacity = <span class="number">0.75</span>
+config.win32_system_backdrop = <span class="string">"Acrylic"</span>
+
+config.window_padding = {
+    left = <span class="number">12</span>,
+    right = <span class="number">12</span>,
+    top = <span class="number">8</span>,
+    bottom = <span class="number">8</span>,
+}
+
+config.window_close_confirmation = <span class="string">"NeverPrompt"</span>
+
+config.font = wezterm.font_with_fallback({
+    {
+        family = <span class="string">"JetBrainsMono Nerd Font"</span>,
+        weight = <span class="string">"Regular"</span>,
+    },
+    <span class="string">"Symbols Nerd Font Mono"</span>,
+})
+
+config.font_size = <span class="number">14.0</span>
+
+config.freetype_load_target = <span class="string">"Normal"</span>
+config.freetype_render_target = <span class="string">"Normal"</span>
+
+config.color_scheme = <span class="string">"Nord (Gogh)"</span>
+
+config.colors = {
+    background = <span class="string">"#171a1f"</span>,
+
+    cursor_bg = <span class="string">"#88c0d0"</span>,
+    cursor_fg = <span class="string">"#171a1f"</span>,
+    cursor_border = <span class="string">"#88c0d0"</span>,
+
+    selection_bg = <span class="string">"#4c566a"</span>,
+    selection_fg = <span class="string">"#d8dee9"</span>,
+}
+
+config.enable_tab_bar = <span class="keyword">false</span>
+
+config.default_cursor_style = <span class="string">"BlinkingBar"</span>
+config.cursor_blink_rate = <span class="number">650</span>
+
+config.front_end = <span class="string">"OpenGL"</span>
+config.animation_fps = <span class="number">60</span>
+
+config.scrollback_lines = <span class="number">10000</span>
+
+config.mouse_bindings = {
+    {
+        event = {
+            Up = {
+                streak = <span class="number">1</span>,
+                button = <span class="string">"Left"</span>,
+            },
+        },
+        mods = <span class="string">"CTRL"</span>,
+        action = wezterm.action.OpenLinkAtMouseCursor,
+    },
+}
+
+config.keys = {
+    {
+        key = <span class="string">"t"</span>,
+        mods = <span class="string">"CTRL|SHIFT"</span>,
+        action = wezterm.action.SpawnTab(<span class="string">"CurrentPaneDomain"</span>),
+    },
+    {
+        key = <span class="string">"w"</span>,
+        mods = <span class="string">"CTRL|SHIFT"</span>,
+        action = wezterm.action.CloseCurrentTab({
+            confirm = <span class="keyword">true</span>,
+        }),
+    },
+    {
+        key = <span class="string">"Tab"</span>,
+        mods = <span class="string">"CTRL"</span>,
+        action = wezterm.action.ActivateTabRelative(<span class="number">1</span>),
+    },
+    {
+        key = <span class="string">"Tab"</span>,
+        mods = <span class="string">"CTRL|SHIFT"</span>,
+        action = wezterm.action.ActivateTabRelative(-<span class="number">1</span>),
+    },
+    {
+        key = <span class="string">"RightArrow"</span>,
+        mods = <span class="string">"ALT"</span>,
+        action = wezterm.action.ActivatePaneDirection(<span class="string">"Right"</span>),
+    },
+    {
+        key = <span class="string">"LeftArrow"</span>,
+        mods = <span class="string">"ALT"</span>,
+        action = wezterm.action.ActivatePaneDirection(<span class="string">"Left"</span>),
+    },
+    {
+        key = <span class="string">"UpArrow"</span>,
+        mods = <span class="string">"ALT"</span>,
+        action = wezterm.action.ActivatePaneDirection(<span class="string">"Up"</span>),
+    },
+    {
+        key = <span class="string">"DownArrow"</span>,
+        mods = <span class="string">"ALT"</span>,
+        action = wezterm.action.ActivatePaneDirection(<span class="string">"Down"</span>),
+    },
+    {
+        key = <span class="string">"c"</span>,
+        mods = <span class="string">"CTRL"</span>,
+        action = wezterm.action.CopyTo(<span class="string">"Clipboard"</span>),
+    },
+    {
+        key = <span class="string">"v"</span>,
+        mods = <span class="string">"CTRL"</span>,
+        action = wezterm.action.PasteFrom(<span class="string">"Clipboard"</span>),
+    },
+    {
+        key = <span class="string">"+"</span>,
+        mods = <span class="string">"CTRL"</span>,
+        action = wezterm.action.IncreaseFontSize,
+    },
+    {
+        key = <span class="string">"-"</span>,
+        mods = <span class="string">"CTRL"</span>,
+        action = wezterm.action.DecreaseFontSize,
+    },
+    {
+        key = <span class="string">"0"</span>,
+        mods = <span class="string">"CTRL"</span>,
+        action = wezterm.action.ResetFontSize,
+    },
+    {
+        key = <span class="string">"F11"</span>,
+        action = wezterm.action.ToggleFullScreen,
+    },
+}
+
+config.launch_menu = {
+    {
+        label = <span class="string">"PowerShell"</span>,
+        args = {
+            <span class="string">"powershell.exe"</span>,
+            <span class="string">"-NoLogo"</span>,
+        },
+    },
+}
+
+config.audible_bell = <span class="string">"Disabled"</span>
+
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
+
+<span class="keyword">return</span> config</code></pre>
+</div>
+{% endblock %}

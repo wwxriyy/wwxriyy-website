@@ -1,10 +1,5 @@
-from django.urls import path
-
-from pages.views import healthz, home, projects
-
+from django.urls import path, include
 
 urlpatterns = [
-    path("", home, name="home"),
-    path("projects/", projects, name="projects"),
-    path("healthz/", healthz, name="healthz"),
+    path("", include("pages.urls")),
 ]
