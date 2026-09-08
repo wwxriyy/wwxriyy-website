@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/code.css' %}">
+<link rel="stylesheet" href="{% static 'css/projects.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="code-container">
   <div class="git-gutter" id="gitGutter"></div>
@@ -13,7 +18,13 @@
         <span class="string">"stack"</span>: [
             <span class="string">"<img src="{% static 'assets/icons/python.svg' %}" class="inline-icon" alt=""> Python"</span>,
         ],
-        <span class="string">"description"</span>: <span class="string">"An application for saving passwords in a local database with encryption and Google Authentication. It uses a local SQLite database, SQLAlchemy models, PyQt6 windows, QSS styling, JSON-based themes/localization, and encrypted database fields powered by Fernet."</span>
+        <span class="string">"description"</span>: [
+            <span class="string">"Saves passwords in a local encrypted database with Google Authentication,"</span>,
+            <span class="string">"SQLite database managed through SQLAlchemy models,"</span>,
+            <span class="string">"PyQt6 desktop interface styled with QSS,"</span>,
+            <span class="string">"JSON-based theming and localization,"</span>,
+            <span class="string">"Database fields encrypted with Fernet."</span>,
+        ]
     },
     {
         <span class="string">"name"</span>: <span class="string">"CubeRobot"</span>,
@@ -24,7 +35,12 @@
             <span class="string">"<img src="{% static 'assets/icons/css3.svg' %}" class="inline-icon" alt=""> CSS3"</span>,
             <span class="string">"<img src="{% static 'assets/icons/javascript.svg' %}" class="inline-icon" alt=""> JavaScript"</span>,
         ],
-        <span class="string">"description"</span>: <span class="string">"Animate expressive robot eyes on a TFT display, control RGB lighting, read temperature/humidity, and react to ambient light — all from a clean web interface."</span>
+        <span class="string">"description"</span>: [
+            <span class="string">"Animates expressive robot eyes on a TFT display,"</span>,
+            <span class="string">"Controls RGB lighting from the web interface,"</span>,
+            <span class="string">"Reads temperature and humidity from onboard sensors,"</span>,
+            <span class="string">"Reacts automatically to ambient light."</span>,
+        ]
     }
 ]</code></pre>
 </div>

@@ -51,7 +51,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "bio_site.urls"
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
@@ -64,7 +64,7 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "bio_site.wsgi.application"
+WSGI_APPLICATION = "core.wsgi.application"
 
 LANGUAGE_CODE = "ru"
 TIME_ZONE = "Europe/Warsaw"

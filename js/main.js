@@ -3,12 +3,45 @@ const ctx = canvas.getContext("2d");
 
 let stars = [];
 let shootingStars = [];
+let nebulaBlobs = [];
 let width = 0;
 let height = 0;
 let pixelRatio = 1;
 
 function randomBetween(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+function initNebula() {
+  const palette = [
+    { r: 76, g: 92, b: 168 },
+    { r: 130, g: 96, b: 176 },
+    { r: 56, g: 132, b: 156 },
+    { r: 176, g: 100, b: 164 },
+    { r: 46, g: 66, b: 132 },
+    { r: 98, g: 78, b: 150 },
+  ];
+
+  const shortSide = Math.min(width, height);
+  const count = width < 700 ? 4 : 6;
+
+  nebulaBlobs = Array.from({ length: count }, (_, index) => {
+    const color = palette[index % palette.length];
+    return {
+      baseX: randomBetween(width * 0.08, width * 0.92),
+      baseY: randomBetween(height * 0.08, height * 0.92),
+      radius: randomBetween(shortSide * 0.32, shortSide * 0.52),
+      color,
+      driftX: randomBetween(26, 60),
+      driftY: randomBetween(20, 48),
+      speedX: randomBetween(0.00009, 0.00022),
+      speedY: randomBetween(0.00011, 0.00026),
+      phaseX: randomBetween(0, Math.PI * 2),
+      phaseY: randomBetween(0, Math.PI * 2),
+      pulseSpeed: randomBetween(0.00015, 0.0003),
+      pulsePhase: randomBetween(0, Math.PI * 2),
+    };
+  });
 }
 
 function resize() {
@@ -30,6 +63,8 @@ function resize() {
     speed: randomBetween(0.008, 0.024),
     drift: randomBetween(0.03, 0.11),
   }));
+
+  initNebula();
 }
 
 function spawnShootingStar() {
@@ -55,8 +90,34 @@ function spawnShootingStar() {
   }
 }
 
-function draw() {
+function drawNebula(time) {
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+
+  for (const blob of nebulaBlobs) {
+    const x = blob.baseX + Math.sin(time * blob.speedX + blob.phaseX) * blob.driftX;
+    const y = blob.baseY + Math.cos(time * blob.speedY + blob.phaseY) * blob.driftY;
+    const pulse = 0.85 + Math.sin(time * blob.pulseSpeed + blob.pulsePhase) * 0.15;
+    const radius = blob.radius * pulse;
+
+    const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+    gradient.addColorStop(0, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0.24)`);
+    gradient.addColorStop(0.45, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0.11)`);
+    gradient.addColorStop(1, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0)`);
+
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function draw(time) {
   ctx.clearRect(0, 0, width, height);
+
+  drawNebula(time || 0);
 
   for (const star of stars) {
     star.phase += star.speed;
@@ -107,7 +168,7 @@ function draw() {
 
 window.addEventListener("resize", resize);
 resize();
-draw();
+requestAnimationFrame(draw);
 setTimeout(spawnShootingStar, 500);
 setInterval(spawnShootingStar, 1700);
 
@@ -136,6 +197,118 @@ if (workspace && percentLabel) {
   });
 }
 
+function initSidebarDrawer() {
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebar = document.getElementById("sidebar");
+  const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+  const sidebarClose = document.getElementById("sidebarClose");
+
+  if (!menuToggle || !sidebar || !sidebarBackdrop) return;
+
+  function closeDrawer() {
+    sidebar.classList.remove("open");
+    sidebarBackdrop.classList.remove("visible");
+  }
+
+  function toggleDrawer() {
+    sidebar.classList.toggle("open");
+    sidebarBackdrop.classList.toggle("visible");
+  }
+
+  menuToggle.addEventListener("click", toggleDrawer);
+  sidebarBackdrop.addEventListener("click", closeDrawer);
+
+  if (sidebarClose) {
+    sidebarClose.addEventListener("click", closeDrawer);
+  }
+
+  sidebar.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeDrawer);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initSidebarDrawer);
+
+function initTabClosers() {
+  const STORAGE_KEY = "closedTabsV2";
+  const tabs = document.querySelectorAll(".tab");
+  const sidebarLinks = document.querySelectorAll(".file-item a[data-tab]");
+
+  function readClosed() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+
+      if (raw === null) {
+        const defaults = Array.from(tabs)
+          .map((tab) => tab.dataset.tab)
+          .filter((id) => id && id !== "home");
+        writeClosed(defaults);
+        return defaults;
+      }
+
+      const stored = JSON.parse(raw);
+      return Array.isArray(stored) ? stored : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function writeClosed(list) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    } catch (error) {
+      return;
+    }
+  }
+
+  const activeTab = document.querySelector(".tab.active");
+  const activeId = activeTab ? activeTab.dataset.tab : null;
+  const closed = readClosed().filter((id) => id !== activeId);
+  writeClosed(closed);
+
+  tabs.forEach((tab) => {
+    if (closed.includes(tab.dataset.tab)) {
+      tab.style.display = "none";
+    }
+  });
+
+  tabs.forEach((tab) => {
+    const closer = tab.querySelector(".tab-close");
+    if (!closer) return;
+
+    closer.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const id = tab.dataset.tab;
+      const isActive = tab.classList.contains("active");
+
+      tab.classList.add("tab-closing");
+
+      setTimeout(() => {
+        tab.style.display = "none";
+      }, 180);
+
+      if (!isActive) {
+        const list = readClosed();
+        if (!list.includes(id)) {
+          list.push(id);
+          writeClosed(list);
+        }
+      }
+    });
+  });
+
+  sidebarLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      const id = link.dataset.tab;
+      writeClosed(readClosed().filter((item) => item !== id));
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initTabClosers);
+
 function initCodeLineInteraction() {
   const codeBlock = document.getElementById("codeBlock");
   const lineNumbers = document.getElementById("lineNumbers");
@@ -151,10 +324,29 @@ function initCodeLineInteraction() {
     .join("");
 
   if (gitGutter) {
+    const marks = new Array(lines.length).fill(null);
+    const hunkCount = Math.max(2, Math.round(lines.length / 16));
+
+    for (let hunk = 0; hunk < hunkCount; hunk += 1) {
+      const type = Math.random() > 0.4 ? "add" : "mod";
+      const blockLength = type === "add"
+        ? Math.ceil(randomBetween(1, 4))
+        : Math.ceil(randomBetween(1, 3));
+      const maxStart = Math.max(1, lines.length - blockLength);
+      const start = Math.floor(randomBetween(0, maxStart));
+
+      for (let offset = 0; offset < blockLength; offset += 1) {
+        const idx = start + offset;
+        if (idx < lines.length) {
+          marks[idx] = type;
+        }
+      }
+    }
+
     gitGutter.innerHTML = lines
       .map((_, idx) => {
-        if (idx === 4 || idx === 12) return `<span class="git-add">+</span>`;
-        if (idx === 20 || idx === 28) return `<span class="git-mod">~</span>`;
+        if (marks[idx] === "add") return `<span class="git-add">+</span>`;
+        if (marks[idx] === "mod") return `<span class="git-mod">~</span>`;
         return `<span></span>`;
       })
       .join("");
@@ -188,6 +380,11 @@ function initCodeLineInteraction() {
     document.querySelectorAll(".code-line-span").forEach((el) => {
       el.classList.toggle("active-line", el.getAttribute("data-line") === String(num));
     });
+
+    const statusPosition = document.getElementById("statusPosition");
+    if (statusPosition) {
+      statusPosition.textContent = `Ln ${num}, Col 1`;
+    }
   }
 
   setActiveLine(10);

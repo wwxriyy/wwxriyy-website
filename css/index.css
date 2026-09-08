@@ -1,0 +1,96 @@
+.inline-icon-color,
+.app-vscode,
+.app-visual-studio,
+.app-neovim,
+.app-sublime,
+.app-filezilla,
+.app-git,
+.icon-instagram,
+.icon-tiktok,
+.icon-github,
+.icon-telegram,
+.icon-spotify,
+.icon-discord {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin: 0 4px 0 0;
+  display: inline-block;
+  filter: none;
+}
+
+.framework-icon {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin: 0 0 0 6px;
+  display: inline-block;
+}
+
+.app-neovim {
+  filter: drop-shadow(0 0 8px rgba(116, 210, 255, 0.14));
+}
+.app-sublime {
+  filter: drop-shadow(0 0 8px rgba(247, 200, 115, 0.18));
+}
+.app-filezilla {
+  filter: drop-shadow(0 0 8px rgba(255, 91, 117, 0.16));
+}
+.app-git {
+  filter: invert(48%) sepia(87%) saturate(2469%) hue-rotate(340deg) brightness(100%) contrast(90%) drop-shadow(0 0 8px rgba(240, 80, 51, 0.16));
+}
+
+.icon-instagram {
+  filter: drop-shadow(0 0 8px rgba(221, 42, 123, 0.18));
+}
+.icon-tiktok {
+  filter: invert(100%) drop-shadow(1px 0 0 rgba(37, 244, 238, 0.62)) drop-shadow(-1px 0 0 rgba(254, 44, 85, 0.58));
+}
+.icon-github {
+  filter: invert(100%) drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
+}
+.icon-telegram {
+  filter: drop-shadow(0 0 8px rgba(34, 158, 217, 0.16));
+}
+.icon-spotify {
+  filter: invert(51%) sepia(89%) saturate(505%) hue-rotate(88deg) brightness(101%) contrast(90%) drop-shadow(0 0 8px rgba(29, 185, 84, 0.16));
+}
+.icon-discord {
+  filter: invert(39%) sepia(86%) saturate(3458%) hue-rotate(220deg) brightness(96%) contrast(95%);
+}
+
+.code-content a.social-link {
+  text-decoration: none !important;
+}
+
+.code-content a.social-link:hover {
+  text-decoration: none !important;
+}
+
+@media (max-width: 480px) {
+  .inline-icon-color,
+  .app-vscode,
+  .app-visual-studio,
+  .app-neovim,
+  .app-sublime,
+  .app-filezilla,
+  .app-git,
+  .icon-instagram,
+  .icon-tiktok,
+  .icon-github,
+  .icon-telegram,
+  .icon-spotify,
+  .icon-discord {
+    width: 14px;
+    height: 14px;
+    margin: 0 2px 0 0;
+  }
+
+  .framework-icon {
+    width: 12px;
+    height: 12px;
+    margin: 0 0 0 5px;
+  }
+}

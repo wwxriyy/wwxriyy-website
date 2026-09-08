@@ -1,0 +1,17 @@
+.inline-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin: 0 4px 0 0;
+  display: inline-block;
+  filter: none;
+}
+
+@media (max-width: 480px) {
+  .inline-icon {
+    width: 14px;
+    height: 14px;
+    margin: 0 2px 0 0;
+  }
+}
