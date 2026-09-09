@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page_title }} | wwxriyy</title>
+  <title>{% if active_page == 'wezterm' %}wezterm{% elif active_page == 'nvim' %}neovim{% elif active_page == 'projects' %}projects{% else %}about{% endif %} | wwxriyy</title>
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   {% block extra_css %}{% endblock %}
 </head>
@@ -36,7 +36,7 @@
         </div>
         <ul class="file-tree">
           <li class="folder-item">
-            <span class="folder-name"><img src="{% static 'assets/icons/folder.svg' %}" class="folder-icon" width="15" height="15" alt=""> wwxriyy_bio</span>
+            <span class="folder-name"><img src="{% static 'assets/icons/folder.svg' %}" class="folder-icon" width="15" height="15" alt=""> wwxriyy</span>
             <ul>
               <li class="folder-item">
                 <span class="folder-name"><img src="{% static 'assets/icons/folder.svg' %}" class="folder-icon" width="15" height="15" alt=""> modules</span>
@@ -146,12 +146,14 @@
         <span class="status-sep">|</span>
         <span class="status-item">
           <img src="{% static 'assets/icons/' %}{% if active_page == 'wezterm' or active_page == 'nvim' %}lua.svg{% else %}python.svg{% endif %}" class="status-python-icon {% if active_page == 'wezterm' or active_page == 'nvim' %}icon-lua{% endif %}" alt="lang">
-          {% if active_page == 'wezterm' or active_page == 'nvim' %}lua{% else %}python3{% endif %}
+          {% if active_page == 'wezterm' or active_page == 'nvim' %}lua{% else %}python 3{% endif %}
         </span>
         <span class="status-percent" id="scrollPercent">Top</span>
       </div>
     </div>
   </div>
+
+  <div class="notify-stack" id="notifyStack"></div>
 
   <script src="{% static 'js/main.js' %}"></script>
 </body>

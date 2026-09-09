@@ -92,8 +92,6 @@ function spawnShootingStar() {
 
 function drawNebula(time) {
   ctx.save();
-  ctx.globalCompositeOperation = "lighter";
-
   for (const blob of nebulaBlobs) {
     const x = blob.baseX + Math.sin(time * blob.speedX + blob.phaseX) * blob.driftX;
     const y = blob.baseY + Math.cos(time * blob.speedY + blob.phaseY) * blob.driftY;
@@ -101,8 +99,8 @@ function drawNebula(time) {
     const radius = blob.radius * pulse;
 
     const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-    gradient.addColorStop(0, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0.24)`);
-    gradient.addColorStop(0.45, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0.11)`);
+    gradient.addColorStop(0, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0.16)`);
+    gradient.addColorStop(0.45, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0.07)`);
     gradient.addColorStop(1, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0)`);
 
     ctx.fillStyle = gradient;
@@ -171,6 +169,56 @@ resize();
 requestAnimationFrame(draw);
 setTimeout(spawnShootingStar, 500);
 setInterval(spawnShootingStar, 1700);
+
+function initNotify() {
+  const STORAGE_KEY = "notifySeen";
+
+  try {
+    if (sessionStorage.getItem(STORAGE_KEY)) return;
+  } catch (error) {
+    return;
+  }
+
+  const stack = document.getElementById("notifyStack");
+  if (!stack) return;
+
+  const duration = 6000;
+
+  const notify = document.createElement("div");
+  notify.className = "notify";
+  notify.innerHTML = `
+    <div class="notify-header">
+      <span class="notify-level"><span class="notify-dot"></span>hint</span>
+      <button class="notify-close" aria-label="Dismiss">×</button>
+    </div>
+    <div class="notify-body">This isn't a screenshot — tabs, files and lines are all clickable. Try it.</div>
+    <div class="notify-progress"></div>
+  `;
+
+  const progress = notify.querySelector(".notify-progress");
+  progress.style.animationDuration = `${duration}ms`;
+
+  stack.appendChild(notify);
+  requestAnimationFrame(() => notify.classList.add("show"));
+
+  let dismissTimer = setTimeout(dismiss, duration);
+
+  function dismiss() {
+    clearTimeout(dismissTimer);
+    notify.classList.remove("show");
+    setTimeout(() => notify.remove(), 350);
+  }
+
+  notify.querySelector(".notify-close").addEventListener("click", dismiss);
+
+  try {
+    sessionStorage.setItem(STORAGE_KEY, "1");
+  } catch (error) {
+    return;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initNotify);
 
 const workspace = document.getElementById("scrollWorkspace");
 const percentLabel = document.getElementById("scrollPercent");
