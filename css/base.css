@@ -4,12 +4,20 @@
   padding: 0;
 }
 
+html {
+  width: 100%;
+  min-height: 100%;
+  background: #08090c;
+}
+
 body {
   background: radial-gradient(ellipse at 50% 30%, #141827 0%, #08090c 100%);
   font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   font-size: 16px;
   color: #a9b1d6;
   min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,44 +25,63 @@ body {
   overflow: hidden;
   position: relative;
   cursor: text;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 #starfield {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
   pointer-events: none;
 }
 
 .editor-container {
+  position: relative;
   width: 98vw;
   max-width: 1700px;
   height: 96vh;
-  background-color: rgba(12, 14, 22, 0.25);
-  
-  -webkit-backdrop-filter: blur(24px) saturate(120%);
-  backdrop-filter: blur(24px) saturate(1.2);
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  isolation: isolate;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  height: 96dvh;
+
+  background: rgba(12, 14, 22, 0.78);
 
   border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
+
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  z-index: 1;
+
+}
+
+.editor-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+
+  background: rgba(12, 14, 22, 0.25);
+
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+  backdrop-filter: blur(24px) saturate(120%);
+}
+
+.editor-container > * {
+  position: relative;
   z-index: 1;
 }
 
 .window-header {
-  background-color: rgba(12, 13, 18, 0.5);
+  background: rgba(12, 13, 18, 0.50);
   height: 40px;
+  min-height: 40px;
   display: flex;
   align-items: center;
   padding: 0 16px;
@@ -71,6 +98,7 @@ body {
   width: 12px;
   height: 12px;
   border-radius: 50%;
+  flex: 0 0 auto;
 }
 
 .close { background-color: #f7768e; }
@@ -104,6 +132,7 @@ body {
   border: none;
   cursor: pointer;
   z-index: 2;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .menu-toggle span {
@@ -121,19 +150,22 @@ body {
 
 .editor-body {
   display: flex;
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: hidden;
 }
 
 .sidebar {
   width: 250px;
-  background-color: rgba(12, 13, 18, 0.4);
+  min-width: 250px;
+  background: rgba(12, 13, 18, 0.40);
   border-right: 1px solid rgba(255, 255, 255, 0.05);
   padding: 14px;
   font-size: 15px;
   user-select: none;
   overflow-y: auto;
   cursor: default;
+  -webkit-overflow-scrolling: touch;
 }
 
 .sidebar-header {
@@ -158,14 +190,16 @@ body {
   height: 26px;
   border-radius: 6px;
   border: none;
-  background-color: rgba(122, 162, 247, 0.12);
+  background: rgba(122, 162, 247, 0.12);
   color: #7aa2f7;
   font-size: 17px;
   line-height: 1;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.file-tree, .file-tree ul {
+.file-tree,
+.file-tree ul {
   list-style: none;
   padding-left: 14px;
   position: relative;
@@ -185,7 +219,8 @@ body {
   background: rgba(122, 162, 247, 0.2);
 }
 
-.folder-item, .file-item {
+.folder-item,
+.file-item {
   margin: 4px 0;
   position: relative;
 }
@@ -225,9 +260,11 @@ body {
   padding: 3px 8px;
   border-radius: 4px;
   transition: background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.file-item.active a, .file-item a:hover {
+.file-item.active a,
+.file-item a:hover {
   background-color: rgba(36, 40, 59, 0.5);
   color: #7dcfff;
 }
@@ -244,7 +281,9 @@ body {
 }
 
 .code-editor {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -253,7 +292,8 @@ body {
 
 .tabs-header {
   display: flex;
-  background-color: rgba(12, 13, 18, 0.3);
+  flex: 0 0 auto;
+  background: rgba(12, 13, 18, 0.30);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -266,10 +306,11 @@ body {
   color: #565f89;
   text-decoration: none;
   border-right: 1px solid rgba(255, 255, 255, 0.05);
-  background-color: rgba(15, 16, 22, 0.2);
+  background: rgba(15, 16, 22, 0.20);
   cursor: pointer;
   position: relative;
   transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .tab:hover {
@@ -332,10 +373,11 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex: 0 0 auto;
   padding: 6px 16px;
   font-size: 13px;
   color: #565f89;
-  background-color: rgba(10, 11, 15, 0.2);
+  background: rgba(10, 11, 15, 0.20);
   border-bottom: 1px solid rgba(255, 255, 255, 0.03);
   user-select: none;
   cursor: default;
@@ -352,11 +394,15 @@ body {
 }
 
 .editor-workspace {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: auto;
   padding: 14px 0;
-  background-color: transparent;
+  background: transparent;
   cursor: text;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .editor-workspace::-webkit-scrollbar,
@@ -369,22 +415,21 @@ body {
 .editor-workspace::-webkit-scrollbar-track,
 .sidebar::-webkit-scrollbar-track,
 .code-content::-webkit-scrollbar-track {
-  background: rgba(15, 16, 22, 0.3);
+  background: rgba(15, 16, 22, 0.30);
   border-radius: 3px;
 }
 
 .editor-workspace::-webkit-scrollbar-thumb,
 .sidebar::-webkit-scrollbar-thumb,
 .code-content::-webkit-scrollbar-thumb {
-  background: rgba(86, 95, 137, 0.5);
+  background: rgba(86, 95, 137, 0.50);
   border-radius: 3px;
-  transition: background 0.2s ease;
 }
 
 .editor-workspace::-webkit-scrollbar-thumb:hover,
 .sidebar::-webkit-scrollbar-thumb:hover,
 .code-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(122, 162, 247, 0.6);
+  background: rgba(122, 162, 247, 0.60);
 }
 
 .editor-workspace::-webkit-scrollbar-corner,
@@ -395,7 +440,8 @@ body {
 
 .status-bar {
   height: 28px;
-  background-color: rgba(12, 13, 18, 0.7);
+  min-height: 28px;
+  background: rgba(12, 13, 18, 0.70);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -406,7 +452,8 @@ body {
   cursor: default;
 }
 
-.status-left, .status-right {
+.status-left,
+.status-right {
   display: flex;
   align-items: center;
   height: 100%;
@@ -423,7 +470,7 @@ body {
 }
 
 .status-branch {
-  background-color: rgba(36, 40, 59, 0.6);
+  background-color: rgba(36, 40, 59, 0.60);
   color: #7aa2f7;
   padding: 0 10px;
   height: 100%;
@@ -503,16 +550,26 @@ body {
 @media (max-width: 768px) {
   body {
     padding: 0;
+    align-items: stretch;
+    justify-content: stretch;
   }
 
   .editor-container {
-    width: 100vw;
+    width: 100%;
+    max-width: none;
     height: 100vh;
+    height: 100dvh;
+    min-height: 0;
     border-radius: 0;
     border: none;
-    background-color: rgba(12, 14, 22, 0.35);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
+    background: rgba(12, 14, 22, 0.82);
+  }
+
+  .editor-container::before {
+    border-radius: 0;
+    -webkit-backdrop-filter: blur(16px) saturate(115%);
+    backdrop-filter: blur(16px) saturate(115%);
+    background: rgba(12, 14, 22, 0.28);
   }
 
   .menu-toggle {
@@ -532,30 +589,28 @@ body {
     bottom: 0;
     width: 84%;
     max-width: 300px;
-    background-color: rgba(9, 10, 15, 0.98);
-    -webkit-backdrop-filter: blur(22px) saturate(120%);
-    backdrop-filter: blur(22px) saturate(1.2);
-    -webkit-transform: translateX(-105%);
-    transform: translateX(-105%);
+    background: rgba(9, 10, 15, 0.98);
     border-right: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 24px 0 60px rgba(0, 0, 0, 0.65);
     padding: 18px 14px;
     transition: transform 0.28s ease;
+    transform: translateX(-105%);
+    -webkit-transform: translateX(-105%);
     z-index: 110;
+    will-change: transform;
+    -webkit-overflow-scrolling: touch;
   }
 
   .sidebar.open {
-    -webkit-transform: translateX(0);
     transform: translateX(0);
+    -webkit-transform: translateX(0);
   }
 
   .sidebar-backdrop.visible {
     display: block;
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.55);
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
+    background: rgba(0, 0, 0, 0.55);
     z-index: 100;
   }
 
@@ -599,13 +654,14 @@ body {
   .editor-workspace::-webkit-scrollbar-thumb,
   .sidebar::-webkit-scrollbar-thumb,
   .code-content::-webkit-scrollbar-thumb {
-    background: rgba(122, 162, 247, 0.5);
+    background: rgba(122, 162, 247, 0.50);
     border-radius: 4px;
   }
 
   .status-bar {
     font-size: 11px;
     height: 24px;
+    min-height: 24px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -652,6 +708,7 @@ body {
   .status-bar {
     font-size: 10px;
     height: 22px;
+    min-height: 22px;
   }
 
   .status-mode,
@@ -687,7 +744,7 @@ body {
   position: relative;
   width: 300px;
   max-width: calc(100vw - 32px);
-  background-color: rgba(19, 21, 31, 0.95);
+  background: rgba(19, 21, 31, 0.95);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   border-left: 3px solid #7aa2f7;
@@ -695,15 +752,16 @@ body {
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
   padding: 12px 14px 16px;
   overflow: hidden;
-  -webkit-transform: translateX(120%);
   transform: translateX(120%);
+  -webkit-transform: translateX(120%);
   opacity: 0;
   transition: transform 0.35s ease, opacity 0.35s ease;
+  will-change: transform, opacity;
 }
 
 .notify.show {
-  -webkit-transform: translateX(0);
   transform: translateX(0);
+  -webkit-transform: translateX(0);
   opacity: 1;
 }
 
@@ -741,6 +799,7 @@ body {
   line-height: 1;
   cursor: pointer;
   padding: 0 0 0 10px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .notify-close:hover {
@@ -778,5 +837,27 @@ body {
 
   .notify {
     width: 100%;
+  }
+}
+
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .editor-container::before {
+    background: rgba(12, 14, 22, 0.82);
+  }
+
+  .notify {
+    background: rgba(19, 21, 31, 0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
