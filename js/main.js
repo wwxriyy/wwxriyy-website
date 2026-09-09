@@ -218,8 +218,6 @@ function initNotify() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", initNotify);
-
 const workspace = document.getElementById("scrollWorkspace");
 const percentLabel = document.getElementById("scrollPercent");
 
@@ -274,8 +272,6 @@ function initSidebarDrawer() {
     link.addEventListener("click", closeDrawer);
   });
 }
-
-document.addEventListener("DOMContentLoaded", initSidebarDrawer);
 
 function initTabClosers() {
   const STORAGE_KEY = "closedTabsV2";
@@ -355,8 +351,6 @@ function initTabClosers() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", initTabClosers);
-
 function initCodeLineInteraction() {
   const codeBlock = document.getElementById("codeBlock");
   const lineNumbers = document.getElementById("lineNumbers");
@@ -373,14 +367,14 @@ function initCodeLineInteraction() {
 
   if (gitGutter) {
     const marks = new Array(lines.length).fill(null);
-    const hunkCount = Math.max(2, Math.round(lines.length / 16));
+    const hunkCount = Math.max(2, Math.round(lines.length / 12));
 
     for (let hunk = 0; hunk < hunkCount; hunk += 1) {
-      const type = Math.random() > 0.4 ? "add" : "mod";
+      const type = Math.random() > 0.35 ? "add" : "mod";
       const blockLength = type === "add"
-        ? Math.ceil(randomBetween(1, 4))
+        ? Math.ceil(randomBetween(1, 5))
         : Math.ceil(randomBetween(1, 3));
-      const maxStart = Math.max(1, lines.length - blockLength);
+      const maxStart = Math.max(0, lines.length - blockLength);
       const start = Math.floor(randomBetween(0, maxStart));
 
       for (let offset = 0; offset < blockLength; offset += 1) {
@@ -398,6 +392,17 @@ function initCodeLineInteraction() {
         return `<span></span>`;
       })
       .join("");
+
+    const totalAdds = gitGutter.querySelectorAll(".git-add").length;
+    const totalMods = gitGutter.querySelectorAll(".git-mod").length;
+
+    const diffAdd = document.querySelector(".diff-add");
+    const diffMod = document.querySelector(".diff-mod");
+    const diffDel = document.querySelector(".diff-del");
+
+    if (diffAdd) diffAdd.textContent = `+${totalAdds}`;
+    if (diffMod) diffMod.textContent = `~${totalMods}`;
+    if (diffDel) diffDel.textContent = `-0`;
   }
 
   function updateRelativeLineNumbers(activeIdx) {
@@ -435,7 +440,7 @@ function initCodeLineInteraction() {
     }
   }
 
-  setActiveLine(10);
+  setActiveLine(1);
 
   document.querySelectorAll(".code-line-span").forEach((el) => {
     el.addEventListener("click", () => {
@@ -445,4 +450,9 @@ function initCodeLineInteraction() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", initCodeLineInteraction);
+document.addEventListener("DOMContentLoaded", () => {
+  initNotify();
+  initSidebarDrawer();
+  initTabClosers();
+  initCodeLineInteraction();
+});

@@ -115,6 +115,13 @@
 .type { color: #2ac3de; }
 .string { color: #9ece6a; }
 .number { color: #ff9e64; }
+.comment { color: #565f89; font-style: italic; }       
+.function { color: #7aa2f7; }                           
+.builtin { color: #7dcfff; }                             
+.property { color: #73daca; }
+.boolean { color: #ff9e64; font-weight: bold; }          
+.operator { color: #89ddff; }                             
+.punctuation { color: #c0caf5; }
 
 .code-content a {
   color: #73daca;

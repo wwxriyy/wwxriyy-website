@@ -34,8 +34,15 @@ body {
   max-width: 1700px;
   height: 96vh;
   background-color: rgba(12, 14, 22, 0.25);
+  
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
   backdrop-filter: blur(24px) saturate(1.2);
-  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  isolation: isolate;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+
   border-radius: 10px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
   display: flex;
@@ -504,8 +511,8 @@ body {
     border-radius: 0;
     border: none;
     background-color: rgba(12, 14, 22, 0.35);
-    backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
   }
 
   .menu-toggle {
@@ -526,17 +533,19 @@ body {
     width: 84%;
     max-width: 300px;
     background-color: rgba(9, 10, 15, 0.98);
+    -webkit-backdrop-filter: blur(22px) saturate(120%);
     backdrop-filter: blur(22px) saturate(1.2);
-    -webkit-backdrop-filter: blur(22px) saturate(1.2);
+    -webkit-transform: translateX(-105%);
+    transform: translateX(-105%);
     border-right: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 24px 0 60px rgba(0, 0, 0, 0.65);
     padding: 18px 14px;
-    transform: translateX(-105%);
     transition: transform 0.28s ease;
     z-index: 110;
   }
 
   .sidebar.open {
+    -webkit-transform: translateX(0);
     transform: translateX(0);
   }
 
@@ -545,6 +554,7 @@ body {
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.55);
+    -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
     z-index: 100;
   }
@@ -678,19 +688,21 @@ body {
   width: 300px;
   max-width: calc(100vw - 32px);
   background-color: rgba(19, 21, 31, 0.95);
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   border-left: 3px solid #7aa2f7;
   border-radius: 8px;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
   padding: 12px 14px 16px;
   overflow: hidden;
+  -webkit-transform: translateX(120%);
   transform: translateX(120%);
   opacity: 0;
   transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
 .notify.show {
+  -webkit-transform: translateX(0);
   transform: translateX(0);
   opacity: 1;
 }

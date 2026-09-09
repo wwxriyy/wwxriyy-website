@@ -19,7 +19,7 @@
         <span class="control minimize"></span>
         <span class="control maximize"></span>
       </div>
-      <div class="window-title">nvim ~/wwxriyy_bio/{% if active_page == 'wezterm' or active_page == 'nvim' %}configs{% else %}modules{% endif %}/{% if active_page == 'wezterm' %}wezterm.lua{% elif active_page == 'nvim' %}init.lua{% else %}{{ active_page }}.py{% endif %}</div>
+      <div class="window-title">nvim ~/wwxriyy_bio/{% if active_page == 'wezterm' %}configs/wezterm/wezterm.lua{% elif active_page == 'nvim' %}configs/nvim/lazy.lua{% else %}modules/{{ active_page }}.py{% endif %}</div>
       <button class="menu-toggle" id="menuToggle" aria-label="Toggle file explorer">
         <span></span>
         <span></span>
@@ -59,17 +59,27 @@
               <li class="folder-item">
                 <span class="folder-name"><img src="{% static 'assets/icons/folder.svg' %}" class="folder-icon" width="15" height="15" alt=""> configs</span>
                 <ul>
-                  <li class="file-item {% if active_page == 'wezterm' %}active{% endif %}">
-                    <a href="{% url 'wezterm' %}" data-tab="wezterm">
-                      <img src="{% static 'assets/icons/lua.svg' %}" class="icon-lua" alt="lua">
-                      <span>wezterm.lua</span>
-                    </a>
+                  <li class="folder-item">
+                    <span class="folder-name"><img src="{% static 'assets/icons/folder.svg' %}" class="folder-icon" width="15" height="15" alt=""> nvim</span>
+                    <ul>
+                      <li class="file-item {% if active_page == 'nvim' %}active{% endif %}">
+                        <a href="{% url 'nvim' %}" data-tab="nvim">
+                          <img src="{% static 'assets/icons/lua.svg' %}" class="icon-lua" alt="lua">
+                          <span>lazy.lua</span>
+                        </a>
+                      </li>
+                    </ul>
                   </li>
-                  <li class="file-item {% if active_page == 'nvim' %}active{% endif %}">
-                    <a href="{% url 'nvim' %}" data-tab="nvim">
-                      <img src="{% static 'assets/icons/lua.svg' %}" class="icon-lua" alt="lua">
-                      <span>init.lua</span>
-                    </a>
+                  <li class="folder-item">
+                    <span class="folder-name"><img src="{% static 'assets/icons/folder.svg' %}" class="folder-icon" width="15" height="15" alt=""> wezterm</span>
+                    <ul>
+                      <li class="file-item {% if active_page == 'wezterm' %}active{% endif %}">
+                        <a href="{% url 'wezterm' %}" data-tab="wezterm">
+                          <img src="{% static 'assets/icons/lua.svg' %}" class="icon-lua" alt="lua">
+                          <span>wezterm.lua</span>
+                        </a>
+                      </li>
+                    </ul>
                   </li>
                 </ul>
               </li>
@@ -91,24 +101,34 @@
             <span>projects.py</span>
             <span class="tab-close">×</span>
           </a>
+          <a href="{% url 'nvim' %}" class="tab {% if active_page == 'nvim' %}active{% endif %}" data-tab="nvim">
+            <img src="{% static 'assets/icons/lua.svg' %}" alt="lua">
+            <span>lazy.lua</span>
+            <span class="tab-close">×</span>
+          </a>
           <a href="{% url 'wezterm' %}" class="tab {% if active_page == 'wezterm' %}active{% endif %}" data-tab="wezterm">
             <img src="{% static 'assets/icons/lua.svg' %}" alt="lua">
             <span>wezterm.lua</span>
             <span class="tab-close">×</span>
           </a>
-          <a href="{% url 'nvim' %}" class="tab {% if active_page == 'nvim' %}active{% endif %}" data-tab="nvim">
-            <img src="{% static 'assets/icons/lua.svg' %}" alt="lua">
-            <span>init.lua</span>
-            <span class="tab-close">×</span>
-          </a>
         </div>
 
         <div class="breadcrumbs">
-          <span class="bc-item"><img src="{% static 'assets/icons/folder.svg' %}" class="bc-icon" width="14" height="14" alt=""> {% if active_page == 'wezterm' or active_page == 'nvim' %}configs{% else %}modules{% endif %}</span>
+          <span class="bc-item">
+            <img src="{% static 'assets/icons/folder.svg' %}" class="bc-icon" width="14" height="14" alt="">
+            {% if active_page == 'wezterm' or active_page == 'nvim' %}configs{% else %}modules{% endif %}
+          </span>
+          {% if active_page == 'wezterm' or active_page == 'nvim' %}
+          <span class="bc-sep">›</span>
+          <span class="bc-item">
+            <img src="{% static 'assets/icons/folder.svg' %}" class="bc-icon" width="14" height="14" alt="">
+            {% if active_page == 'wezterm' %}wezterm{% else %}nvim{% endif %}
+          </span>
+          {% endif %}
           <span class="bc-sep">›</span>
           <span class="bc-item">
             <img src="{% static 'assets/icons/' %}{% if active_page == 'wezterm' or active_page == 'nvim' %}lua.svg{% else %}python.svg{% endif %}" class="bc-icon {% if active_page == 'wezterm' or active_page == 'nvim' %}icon-lua{% endif %}" alt="">
-            {% if active_page == 'wezterm' %}wezterm.lua{% elif active_page == 'nvim' %}init.lua{% else %}{{ active_page }}.py{% endif %}
+            {% if active_page == 'wezterm' %}wezterm.lua{% elif active_page == 'nvim' %}lazy.lua{% else %}{{ active_page }}.py{% endif %}
           </span>
         </div>
 
@@ -124,12 +144,12 @@
         <span class="status-mode">NORMAL</span>
         <span class="status-branch"> main</span>
         <span class="status-item status-diff">
-          <span class="diff-add">+12</span>
-          <span class="diff-mod">~4</span>
-          <span class="diff-del">-2</span>
+          <span class="diff-add">+{{ diff_add|default:"5" }}</span>
+          <span class="diff-mod">~{{ diff_mod|default:"2" }}</span>
+          <span class="diff-del">-{{ diff_del|default:"0" }}</span>
         </span>
         <span class="status-path">
-          wwxriyy_bio/{% if active_page == 'wezterm' or active_page == 'nvim' %}configs{% else %}modules{% endif %}/{% if active_page == 'wezterm' %}wezterm.lua{% elif active_page == 'nvim' %}init.lua{% else %}{{ active_page }}.py{% endif %}
+          wwxriyy_bio/{% if active_page == 'wezterm' %}configs/wezterm/wezterm.lua{% elif active_page == 'nvim' %}configs/nvim/lazy.lua{% else %}modules/{{ active_page }}.py{% endif %}
         </span>
       </div>
       <div class="status-right">
@@ -146,7 +166,7 @@
         <span class="status-sep">|</span>
         <span class="status-item">
           <img src="{% static 'assets/icons/' %}{% if active_page == 'wezterm' or active_page == 'nvim' %}lua.svg{% else %}python.svg{% endif %}" class="status-python-icon {% if active_page == 'wezterm' or active_page == 'nvim' %}icon-lua{% endif %}" alt="lang">
-          {% if active_page == 'wezterm' or active_page == 'nvim' %}lua{% else %}python 3{% endif %}
+          {% if active_page == 'wezterm' or active_page == 'nvim' %}lua{% else %}python3{% endif %}
         </span>
         <span class="status-percent" id="scrollPercent">Top</span>
       </div>
