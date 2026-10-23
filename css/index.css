@@ -46,10 +46,10 @@
   filter: drop-shadow(0 0 8px rgba(221, 42, 123, 0.18));
 }
 .icon-tiktok {
-  filter: invert(100%) drop-shadow(1px 0 0 rgba(37, 244, 238, 0.62)) drop-shadow(-1px 0 0 rgba(254, 44, 85, 0.58));
+  filter: drop-shadow(1px 0 0 rgba(37, 244, 238, 0.62)) drop-shadow(-1px 0 0 rgba(254, 44, 85, 0.58));
 }
 .icon-github {
-  filter: invert(100%) drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
+  filter: drop-shadow(0 0 6px rgba(60, 40, 100, 0.15));
 }
 .icon-telegram {
   filter: drop-shadow(0 0 8px rgba(34, 158, 217, 0.16));
@@ -62,11 +62,11 @@
 }
 
 .code-content a.social-link {
-  text-decoration: none !important;
+  text-decoration: none;
 }
 
 .code-content a.social-link:hover {
-  text-decoration: none !important;
+  text-decoration: none;
 }
 
 @media (max-width: 480px) {
