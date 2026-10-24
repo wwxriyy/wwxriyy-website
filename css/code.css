@@ -13,7 +13,7 @@
   width: 22px;
   min-width: 22px;
   text-align: center;
-  color: #8a82ad;
+  color: #565f89;
   user-select: none;
   font-weight: bold;
   cursor: default;
@@ -24,9 +24,9 @@
   line-height: 1.6em;
 }
 
-.git-gutter .git-add { color: #22b573; }
-.git-gutter .git-mod { color: #f0a020; }
-.git-gutter .git-del { color: #ff5d8f; }
+.git-gutter .git-add { color: #9ece6a; }
+.git-gutter .git-mod { color: #e0af68; }
+.git-gutter .git-del { color: #f7768e; }
 
 .line-numbers {
   display: flex;
@@ -35,7 +35,7 @@
   min-width: 50px;
   text-align: right;
   padding-right: 14px;
-  color: #b9b2d6;
+  color: #5a6384;
   user-select: none;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .line-numbers span.current {
-  color: #f2711c;
+  color: #ff9e64;
   font-weight: bold;
 }
 
@@ -59,7 +59,7 @@
   font-family: inherit;
   font-size: inherit;
   line-height: 1.6;
-  color: #4a4275;
+  color: #c3cae8;
   white-space: pre;
   overflow-x: auto;
   cursor: text;
@@ -76,11 +76,11 @@
   height: 6px;
 }
 .code-content::-webkit-scrollbar-thumb:horizontal {
-  background: rgba(138, 130, 173, 0.5);
+  background: rgba(86, 95, 137, 0.5);
   border-radius: 3px;
 }
 .code-content::-webkit-scrollbar-thumb:horizontal:hover {
-  background: rgba(108, 92, 231, 0.6);
+  background: rgba(122, 162, 247, 0.6);
 }
 
 .code-line-span {
@@ -93,12 +93,12 @@
 }
 
 .code-line-span.active-line {
-  background-color: rgba(108, 92, 231, 0.08);
+  background-color: rgba(255, 236, 214, 0.07);
 }
 
 .code-line-span.active-line::after {
   content: '|';
-  color: #6c5ce7;
+  color: #7aa2f7;
   font-weight: normal;
   line-height: inherit;
   animation: blink 1s step-end infinite;
@@ -110,31 +110,31 @@
   50% { opacity: 0; }
 }
 
-.keyword { color: #a04ee0; font-weight: bold; }
-.decorator { color: #0a9bb8; }
-.class-name { color: #0a9bb8; font-weight: bold; }
-.type { color: #1596b5; }
-.string { color: #22b573; }
-.number { color: #f2711c; }
-.comment { color: #8a82ad; font-style: italic; }       
-.function { color: #6c5ce7; }                           
-.builtin { color: #0e8fbf; }                             
-.property { color: #0fae96; }
-.boolean { color: #f2711c; font-weight: bold; }          
-.operator { color: #2e9fd6; }                             
-.punctuation { color: #8a82ad; }
+.keyword { color: #bb9af7; font-weight: bold; }
+.decorator { color: #0db9d7; }
+.class-name { color: #0db9d7; font-weight: bold; }
+.type { color: #2ac3de; }
+.string { color: #9ece6a; }
+.number { color: #ff9e64; }
+.comment { color: #7782ad; font-style: italic; }       
+.function { color: #7aa2f7; }                           
+.builtin { color: #7dcfff; }                             
+.property { color: #73daca; }
+.boolean { color: #ff9e64; font-weight: bold; }          
+.operator { color: #89ddff; }                             
+.punctuation { color: #c0caf5; }
 
 .code-content a {
-  color: #0fae96;
+  color: #73daca;
   text-decoration: none;
   border-radius: 3px;
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .code-content a:hover {
-  color: #0a8f7b;
+  color: #9ece6a;
   text-decoration: none;
-  background-color: rgba(15, 174, 150, 0.12);
+  background-color: rgba(158, 206, 106, 0.12);
 }
 
 @media (max-width: 768px) {
@@ -164,7 +164,7 @@
     height: 8px;
   }
   .code-content::-webkit-scrollbar-thumb:horizontal {
-    background: rgba(108, 92, 231, 0.5);
+    background: rgba(122, 162, 247, 0.5);
     border-radius: 4px;
   }
 
@@ -217,4 +217,26 @@
     font-size: 13px;
     margin-left: 1px;
   }
+}
+
+/* One source of truth for line height: gutters never drift away from the code */
+.code-container {
+  --fs: 18px;
+  --lh: 1.6;
+  font-size: var(--fs);
+}
+
+.line-numbers span,
+.git-gutter span,
+.code-line-span {
+  height: calc(var(--fs) * var(--lh));
+  line-height: calc(var(--fs) * var(--lh));
+}
+
+@media (max-width: 768px) {
+  .code-container { --fs: 15px; --lh: 1.5; }
+}
+
+@media (max-width: 480px) {
+  .code-container { --fs: 13px; --lh: 1.4; }
 }

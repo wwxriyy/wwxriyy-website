@@ -1,184 +1,203 @@
-const canvas = document.querySelector("#starfield");
-const ctx = canvas.getContext("2d");
+/* ===== water background (WebGL, runs behind the glass UI) ===== */
+(function initWaterBackground() {
+  const canvas = document.getElementById("bgWater");
+  if (!canvas) return;
 
-const STAR_COLORS = [
-  [255, 93, 143],
-  [108, 92, 231],
-  [56, 182, 255],
-  [255, 159, 67],
-  [34, 181, 115],
-];
-
-let stars = [];
-let shootingStars = [];
-let nebulaBlobs = [];
-let width = 0;
-let height = 0;
-let pixelRatio = 1;
-
-function randomBetween(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-function initNebula() {
-  const palette = [
-    { r: 255, g: 154, b: 196 },
-    { r: 167, g: 139, b: 250 },
-    { r: 110, g: 207, b: 255 },
-    { r: 255, g: 209, b: 102 },
-    { r: 120, g: 230, b: 190 },
-    { r: 255, g: 160, b: 122 },
-  ];
-
-  const shortSide = Math.min(width, height);
-  const count = width < 700 ? 4 : 6;
-
-  nebulaBlobs = Array.from({ length: count }, (_, index) => {
-    const color = palette[index % palette.length];
-    return {
-      baseX: randomBetween(width * 0.08, width * 0.92),
-      baseY: randomBetween(height * 0.08, height * 0.92),
-      radius: randomBetween(shortSide * 0.32, shortSide * 0.52),
-      color,
-      driftX: randomBetween(26, 60),
-      driftY: randomBetween(20, 48),
-      speedX: randomBetween(0.00009, 0.00022),
-      speedY: randomBetween(0.00011, 0.00026),
-      phaseX: randomBetween(0, Math.PI * 2),
-      phaseY: randomBetween(0, Math.PI * 2),
-      pulseSpeed: randomBetween(0.00015, 0.0003),
-      pulsePhase: randomBetween(0, Math.PI * 2),
-    };
+  const gl = canvas.getContext("webgl", {
+    alpha: false,
+    antialias: false,
+    depth: false,
+    stencil: false,
+    powerPreference: "low-power",
   });
-}
+  if (!gl) return; // the blurred CSS photo stays as the background
 
-function resize() {
-  pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = Math.floor(width * pixelRatio);
-  canvas.height = Math.floor(height * pixelRatio);
-  canvas.style.width = `${width}px`;
-  canvas.style.height = `${height}px`;
-  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  const phone = window.matchMedia("(max-width: 768px)").matches;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const count = Math.min(180, Math.max(80, Math.floor((width * height) / 8500)));
-  stars = Array.from({ length: count }, () => ({
-    x: randomBetween(0, width),
-    y: randomBetween(0, height),
-    radius: randomBetween(0.8, 2.6),
-    phase: randomBetween(0, Math.PI * 2),
-    speed: randomBetween(0.008, 0.024),
-    drift: randomBetween(0.03, 0.11),
-    color: STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)],
-  }));
+  // The scene is blurred anyway: render small and let the browser upscale it.
+  const SCALE = phone ? 0.4 : 0.55;
+  const FPS = phone ? 24 : 30;
+  const BLUR_BIAS = phone ? 2.2 : 3.0; // mip level offset: a smooth, cheap blur
+  const TEXTURE_SIZE = phone ? [1024, 512] : [2048, 1024];
+  const LOOP = 125.6637; // 2*PI/0.05: every wave term wraps seamlessly
 
-  initNebula();
-}
+  const vertexSource = `
+    attribute vec2 a_pos;
+    varying vec2 v_uv;
+    void main() {
+      v_uv = vec2(a_pos.x * 0.5 + 0.5, 0.5 - a_pos.y * 0.5);
+      gl_Position = vec4(a_pos, 0.0, 1.0);
+    }`;
 
-function spawnShootingStar() {
-  const maxShootingStars = width < 700 ? 2 : 5;
+  const fragmentSource = `
+    #ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #else
+    precision mediump float;
+    #endif
+    uniform sampler2D u_tex;
+    uniform vec2 u_res;
+    uniform vec2 u_img;
+    uniform float u_time;
+    uniform float u_bias;
+    uniform float u_water;
+    varying vec2 v_uv;
 
-  if (shootingStars.length >= maxShootingStars) {
-    return;
-  }
-
-  const freeSlots = maxShootingStars - shootingStars.length;
-  const burstCount = width < 700 ? 1 : Math.min(freeSlots, Math.random() > 0.55 ? 2 : 1);
-
-  for (let index = 0; index < burstCount; index += 1) {
-    shootingStars.push({
-      x: randomBetween(width * 0.18, width * 0.92),
-      y: randomBetween(-20, height * 0.4),
-      vx: randomBetween(-6.2, -3.4),
-      vy: randomBetween(2.4, 4.5),
-      life: 1,
-      decay: randomBetween(0.01, 0.017),
-      length: randomBetween(94, 168),
-    });
-  }
-}
-
-function drawNebula(time) {
-  ctx.save();
-  for (const blob of nebulaBlobs) {
-    const x = blob.baseX + Math.sin(time * blob.speedX + blob.phaseX) * blob.driftX;
-    const y = blob.baseY + Math.cos(time * blob.speedY + blob.phaseY) * blob.driftY;
-    const pulse = 0.85 + Math.sin(time * blob.pulseSpeed + blob.pulsePhase) * 0.15;
-    const radius = blob.radius * pulse;
-
-    const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-    gradient.addColorStop(0, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0.34)`);
-    gradient.addColorStop(0.45, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0.15)`);
-    gradient.addColorStop(1, `rgba(${blob.color.r}, ${blob.color.g}, ${blob.color.b}, 0)`);
-
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  ctx.restore();
-}
-
-function draw(time) {
-  ctx.clearRect(0, 0, width, height);
-  ctx.shadowBlur = 0;
-
-  drawNebula(time || 0);
-
-  for (const star of stars) {
-    star.phase += star.speed;
-    star.y += star.drift;
-
-    if (star.y > height + 8) {
-      star.y = -8;
-      star.x = randomBetween(0, width);
+    vec2 ripple(vec2 p, float t) {
+      float d = p.y - u_water;
+      float mask = smoothstep(0.0, 0.03, d);
+      float depth = clamp(d / (1.0 - u_water), 0.0, 1.0);
+      float z = 1.0 / (d + 0.06);
+      float wave = sin(z * 5.0 + t * 0.9 + sin(p.x * 7.0 + t * 0.25) * 1.6);
+      wave += 0.5 * sin(z * 11.0 - t * 1.3 + p.x * 12.0);
+      float amp = mask * (0.0010 + 0.0060 * depth);
+      p.x += wave * amp;
+      return p;
     }
 
-    const alpha = 0.28 + Math.abs(Math.sin(star.phase)) * 0.5;
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${star.color[0]}, ${star.color[1]}, ${star.color[2]}, ${alpha})`;
-    ctx.shadowColor = `rgba(${star.color[0]}, ${star.color[1]}, ${star.color[2]}, 0.35)`;
-    ctx.shadowBlur = 6;
-    ctx.fill();
+    void main() {
+      float sr = u_res.x / u_res.y;
+      float ir = u_img.x / u_img.y;
+      vec2 s = sr > ir ? vec2(1.0, ir / sr) : vec2(sr / ir, 1.0);
+      vec2 p = ripple((v_uv - 0.5) * s + 0.5, u_time);
+
+      vec2 o = (vec2(0.75) / u_res) * s;
+      vec3 c = texture2D(u_tex, p, u_bias).rgb * 0.4;
+      c += (texture2D(u_tex, p + o, u_bias).rgb + texture2D(u_tex, p - o, u_bias).rgb
+          + texture2D(u_tex, p + vec2(o.x, -o.y), u_bias).rgb + texture2D(u_tex, p + vec2(-o.x, o.y), u_bias).rgb) * 0.15;
+
+      float vignette = smoothstep(1.15, 0.35, length(v_uv - 0.5));
+      c *= (0.86 + 0.14 * vignette);
+      gl_FragColor = vec4(c, 1.0);
+    }`;
+
+  function compile(type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null;
   }
 
-  for (const comet of shootingStars) {
-    comet.x += comet.vx;
-    comet.y += comet.vy;
-    comet.life -= comet.decay;
+  const vertex = compile(gl.VERTEX_SHADER, vertexSource);
+  const fragment = compile(gl.FRAGMENT_SHADER, fragmentSource);
+  if (!vertex || !fragment) return;
 
-    const gradient = ctx.createLinearGradient(
-      comet.x,
-      comet.y,
-      comet.x - comet.vx * comet.length * 0.12,
-      comet.y - comet.vy * comet.length * 0.12
-    );
-    gradient.addColorStop(0, `rgba(255, 93, 143, ${Math.max(comet.life * 0.85, 0)})`);
-    gradient.addColorStop(1, "rgba(108, 92, 231, 0)");
+  const program = gl.createProgram();
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, fragment);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+  gl.useProgram(program);
 
-    ctx.beginPath();
-    ctx.moveTo(comet.x, comet.y);
-    ctx.lineTo(comet.x - comet.vx * comet.length * 0.12, comet.y - comet.vy * comet.length * 0.12);
-    ctx.strokeStyle = gradient;
-    ctx.lineWidth = 2.2;
-    ctx.shadowColor = "rgba(255, 93, 143, 0.35)";
-    ctx.shadowBlur = 10;
-    ctx.stroke();
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const position = gl.getAttribLocation(program, "a_pos");
+  gl.enableVertexAttribArray(position);
+  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+  const uniform = (name) => gl.getUniformLocation(program, name);
+  const uRes = uniform("u_res");
+  const uImg = uniform("u_img");
+  const uTime = uniform("u_time");
+  const uBias = uniform("u_bias");
+  const uWater = uniform("u_water");
+
+  let ready = false;
+  let rafId = 0;
+  let lastFrame = 0;
+  let viewW = 0;
+  let viewH = 0;
+
+  function resize(force) {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    // Ignore the mobile URL bar showing/hiding: only react to real size changes.
+    if (!force && w === viewW && Math.abs(h - viewH) < 150) return;
+    viewW = w;
+    viewH = h;
+    canvas.width = Math.max(2, Math.round(w * SCALE));
+    canvas.height = Math.max(2, Math.round(h * SCALE));
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (ready) draw(performance.now());
   }
 
-  shootingStars = shootingStars.filter((comet) => comet.life > 0);
+  function draw(now) {
+    gl.uniform1f(uTime, reduceMotion ? 7.0 : (now / 1000) % LOOP);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
 
-  requestAnimationFrame(draw);
-}
+  function frame(now) {
+    rafId = requestAnimationFrame(frame);
+    if (now - lastFrame < 1000 / FPS) return;
+    lastFrame = now;
+    draw(now);
+  }
 
-window.addEventListener("resize", resize);
-resize();
-requestAnimationFrame(draw);
-setTimeout(spawnShootingStar, 500);
-setInterval(spawnShootingStar, 1700);
+  function start() {
+    if (rafId || reduceMotion || !ready) return;
+    rafId = requestAnimationFrame(frame);
+  }
+
+  function stop() {
+    cancelAnimationFrame(rafId);
+    rafId = 0;
+  }
+
+  const image = new Image();
+  image.decoding = "async";
+  image.onload = () => {
+    // Pre-scale to a power-of-two texture so mipmaps remove shimmering on the moving water.
+    const source = document.createElement("canvas");
+    source.width = TEXTURE_SIZE[0];
+    source.height = TEXTURE_SIZE[1];
+    const sctx = source.getContext("2d");
+    sctx.imageSmoothingQuality = "high";
+    sctx.drawImage(image, 0, 0, source.width, source.height);
+
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, source);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.uniform1i(uniform("u_tex"), 0);
+    gl.uniform2f(uImg, image.naturalWidth, image.naturalHeight);
+    gl.uniform1f(uWater, 0.675); // where the shore meets the lake in the photo
+    gl.uniform1f(uBias, BLUR_BIAS);
+
+    ready = true;
+    resize(true);
+    draw(performance.now());
+    canvas.classList.add("ready");
+    start();
+  };
+  image.src = phone && canvas.dataset.srcSmall ? canvas.dataset.srcSmall : canvas.dataset.src;
+
+  let resizeTimer = 0;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => resize(false), 150);
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop();
+    else start();
+  });
+
+  canvas.addEventListener("webglcontextlost", (event) => {
+    event.preventDefault();
+    stop();
+    canvas.classList.remove("ready");
+  });
+})();
+/* ===== end water background ===== */
+
+
 
 function initNotify() {
   const STORAGE_KEY = "notifySeen";
@@ -591,49 +610,47 @@ function initCodeLineInteraction() {
     if (diffDel) diffDel.textContent = `-${count("del")}`;
   }
 
-  function updateRelativeLineNumbers(activeIdx) {
-    lineNumbers.innerHTML = lines
-      .map((_, idx) => {
-        const lineNum = idx + 1;
-        if (lineNum === activeIdx) {
-          return `<span class="current" data-line="${lineNum}">${lineNum}</span>`;
-        } else {
-          const relNum = Math.abs(lineNum - activeIdx);
-          return `<span data-line="${lineNum}">${relNum}</span>`;
-        }
-      })
-      .join("");
+  lineNumbers.innerHTML = lines.map((_, idx) => `<span data-line="${idx + 1}">${idx + 1}</span>`).join("");
 
-    document.querySelectorAll(".line-numbers span").forEach((el) => {
-      el.addEventListener("click", () => {
-        const targetLine = parseInt(el.getAttribute("data-line"), 10);
-        setActiveLine(targetLine);
-      });
-    });
-  }
+  const numberEls = lineNumbers.children;
+  const lineEls = codeBlock.children;
+  const statusPosition = document.getElementById("statusPosition");
+  let activeLine = 0;
 
   function setActiveLine(lineNum) {
-    const num = parseInt(lineNum, 10);
-    updateRelativeLineNumbers(num);
+    const num = Math.min(Math.max(parseInt(lineNum, 10) || 1, 1), lines.length);
 
-    document.querySelectorAll(".code-line-span").forEach((el) => {
-      el.classList.toggle("active-line", el.getAttribute("data-line") === String(num));
-    });
-
-    const statusPosition = document.getElementById("statusPosition");
-    if (statusPosition) {
-      statusPosition.textContent = `Ln ${num}, Col 1`;
+    for (let i = 0; i < numberEls.length; i += 1) {
+      const el = numberEls[i];
+      const isCurrent = i + 1 === num;
+      el.textContent = isCurrent ? num : Math.abs(i + 1 - num);
+      el.classList.toggle("current", isCurrent);
     }
+
+    if (activeLine && lineEls[activeLine - 1]) lineEls[activeLine - 1].classList.remove("active-line");
+    if (lineEls[num - 1]) lineEls[num - 1].classList.add("active-line");
+    activeLine = num;
+
+    if (statusPosition) statusPosition.textContent = `Ln ${num}, Col 1`;
   }
 
-  setActiveLine(1);
+  function lineFromEvent(event) {
+    const target = event.target.closest("[data-line]");
+    return target ? target.getAttribute("data-line") : null;
+  }
 
-  document.querySelectorAll(".code-line-span").forEach((el) => {
-    el.addEventListener("click", () => {
-      const lineNum = el.getAttribute("data-line");
-      setActiveLine(lineNum);
-    });
+  lineNumbers.addEventListener("click", (event) => {
+    const line = lineFromEvent(event);
+    if (line) setActiveLine(line);
   });
+
+  codeBlock.addEventListener("click", (event) => {
+    if (event.target.closest("a")) return;
+    const line = lineFromEvent(event);
+    if (line) setActiveLine(line);
+  });
+
+  setActiveLine(1);
 }
 
 document.addEventListener("DOMContentLoaded", () => {

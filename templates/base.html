@@ -3,14 +3,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f10">
+  <link rel="preload" as="image" href="{% static 'assets/images/background-image.jpg' %}" media="(min-width: 769px)">
+  <link rel="preload" as="image" href="{% static 'assets/images/background-image-mobile.jpg' %}" media="(max-width: 768px)">
   <title>{% if active_page == 'wezterm' %}wezterm{% elif active_page == 'nvim' %}neovim{% elif active_page == 'projects' %}projects{% else %}about{% endif %} | wwxriyy</title>
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   {% block extra_css %}{% endblock %}
 </head>
 <body>
 
-  <canvas id="starfield"></canvas>
+  <canvas id="bgWater" aria-hidden="true"
+          data-src="{% static 'assets/images/background-image.jpg' %}"
+          data-src-small="{% static 'assets/images/background-image-mobile.jpg' %}"></canvas>
 
   <div class="editor-container">
     <div class="window-header">
@@ -175,6 +180,6 @@
 
   <div class="notify-stack" id="notifyStack"></div>
 
-  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/main.js' %}" defer></script>
 </body>
 </html>

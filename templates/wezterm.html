@@ -10,169 +10,214 @@
   <div class="git-gutter" id="gitGutter"></div>
   <div class="line-numbers" id="lineNumbers"></div>
 
-  <pre class="code-content"><code id="codeBlock"><span class="keyword">local</span> <span class="builtin">wezterm</span> <span class="operator">=</span> <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"wezterm"</span><span class="punctuation">)</span>
+  <pre class="code-content"><code id="codeBlock" data-lang="lua">{% verbatim %}--[[
+================================================================================
+ WWNeoVim / WezTerm
+ Author: @wwxriyy
+    Telegram:  @wwxriyy  (https://t.me/wwxriyy)
+    Instagram: @wwxriyy  (https://instagram.com/wwxriyy)
+    GitHub:    @wwxriyy  (https://github.com/wwxriyy)
+================================================================================
 
-<span class="keyword">local</span> <span class="builtin">config</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="function">config_builder</span><span class="punctuation">()</span>
+ CONTROLS
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">default_prog</span> <span class="operator">=</span> <span class="punctuation">{</span>
-    <span class="string">"powershell.exe"</span><span class="punctuation">,</span>
-    <span class="string">"-NoLogo"</span><span class="punctuation">,</span>
-<span class="punctuation">}</span>
+ Tabs
+    Ctrl+Shift+T         new tab
+    Ctrl+Shift+W         close tab
+    Ctrl+Tab             next tab
+    Ctrl+Shift+Tab       previous tab
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">window_decorations</span> <span class="operator">=</span> <span class="string">"TITLE | RESIZE"</span>
+ Panes
+    Alt+Arrows           move between panes
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">initial_cols</span> <span class="operator">=</span> <span class="number">200</span>
-<span class="builtin">config</span><span class="operator">.</span><span class="property">initial_rows</span> <span class="operator">=</span> <span class="number">50</span>
+ Clipboard
+    Ctrl+C               copy selection (sends Ctrl+C if nothing is selected)
+    Ctrl+V               paste
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">window_background_opacity</span> <span class="operator">=</span> <span class="number">0.75</span>
-<span class="builtin">config</span><span class="operator">.</span><span class="property">win32_system_backdrop</span> <span class="operator">=</span> <span class="string">"Acrylic"</span>
+ Font size
+    Ctrl +               increase
+    Ctrl -               decrease
+    Ctrl 0               reset
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">window_padding</span> <span class="operator">=</span> <span class="punctuation">{</span>
-    <span class="property">left</span> <span class="operator">=</span> <span class="number">12</span><span class="punctuation">,</span>
-    <span class="property">right</span> <span class="operator">=</span> <span class="number">12</span><span class="punctuation">,</span>
-    <span class="property">top</span> <span class="operator">=</span> <span class="number">8</span><span class="punctuation">,</span>
-    <span class="property">bottom</span> <span class="operator">=</span> <span class="number">8</span><span class="punctuation">,</span>
-<span class="punctuation">}</span>
+ Window
+    F11                  toggle fullscreen
+    Ctrl+Click           open link under cursor
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">window_close_confirmation</span> <span class="operator">=</span> <span class="string">"NeverPrompt"</span>
+ Keep the background color in sync with BG in init.lua (#141414).
+================================================================================
+--]]
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">font</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="function">font_with_fallback</span><span class="punctuation">({</span>
-    <span class="punctuation">{</span>
-        <span class="property">family</span> <span class="operator">=</span> <span class="string">"JetBrainsMono Nerd Font"</span><span class="punctuation">,</span>
-        <span class="property">weight</span> <span class="operator">=</span> <span class="string">"Regular"</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="string">"Symbols Nerd Font Mono"</span><span class="punctuation">,</span>
-<span class="punctuation">})</span>
+local wezterm = require("wezterm")
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">font_size</span> <span class="operator">=</span> <span class="number">14.0</span>
+local config = wezterm.config_builder()
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">freetype_load_target</span> <span class="operator">=</span> <span class="string">"Normal"</span>
-<span class="builtin">config</span><span class="operator">.</span><span class="property">freetype_render_target</span> <span class="operator">=</span> <span class="string">"Normal"</span>
+-- Shell
+config.default_prog = {
+    "powershell.exe",
+    "-NoLogo",
+}
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">color_scheme</span> <span class="operator">=</span> <span class="string">"Nord (Gogh)"</span>
+-- Window
+config.window_decorations = "TITLE | RESIZE"
+config.initial_cols = 200
+config.initial_rows = 50
+config.window_close_confirmation = "NeverPrompt"
+config.window_padding = {
+    left = 0,
+    right = 0,
+    top = 0,
+    bottom = 0,
+}
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">colors</span> <span class="operator">=</span> <span class="punctuation">{</span>
-    <span class="property">background</span> <span class="operator">=</span> <span class="string">"#171a1f"</span><span class="punctuation">,</span>
+-- Transparency
+config.win32_system_backdrop = "Acrylic"
+config.window_background_opacity = 0.8
+config.text_background_opacity = 0.8
 
-    <span class="property">cursor_bg</span> <span class="operator">=</span> <span class="string">"#88c0d0"</span><span class="punctuation">,</span>
-    <span class="property">cursor_fg</span> <span class="operator">=</span> <span class="string">"#171a1f"</span><span class="punctuation">,</span>
-    <span class="property">cursor_border</span> <span class="operator">=</span> <span class="string">"#88c0d0"</span><span class="punctuation">,</span>
+-- Font
+config.font = wezterm.font_with_fallback({
+    {
+        family = "JetBrainsMono Nerd Font",
+        weight = "Regular",
+    },
+    "Symbols Nerd Font Mono",
+})
+config.font_size = 14.0
+config.freetype_load_target = "Normal"
+config.freetype_render_target = "Normal"
 
-    <span class="property">selection_bg</span> <span class="operator">=</span> <span class="string">"#4c566a"</span><span class="punctuation">,</span>
-    <span class="property">selection_fg</span> <span class="operator">=</span> <span class="string">"#d8dee9"</span><span class="punctuation">,</span>
-<span class="punctuation">}</span>
+-- Colors
+config.color_scheme = "Nord (Gogh)"
+config.colors = {
+    background = "#141414",
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">enable_tab_bar</span> <span class="operator">=</span> <span class="boolean">false</span>
+    cursor_bg = "#88c0d0",
+    cursor_fg = "#141414",
+    cursor_border = "#88c0d0",
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">default_cursor_style</span> <span class="operator">=</span> <span class="string">"BlinkingBar"</span>
-<span class="builtin">config</span><span class="operator">.</span><span class="property">cursor_blink_rate</span> <span class="operator">=</span> <span class="number">650</span>
+    selection_bg = "#4c566a",
+    selection_fg = "#d8dee9",
+}
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">front_end</span> <span class="operator">=</span> <span class="string">"OpenGL"</span>
-<span class="builtin">config</span><span class="operator">.</span><span class="property">animation_fps</span> <span class="operator">=</span> <span class="number">60</span>
+-- Cursor and rendering
+config.enable_tab_bar = false
+config.default_cursor_style = "BlinkingBar"
+config.cursor_blink_rate = 650
+config.front_end = "OpenGL"
+config.animation_fps = 60
+config.scrollback_lines = 10000
+config.audible_bell = "Disabled"
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">scrollback_lines</span> <span class="operator">=</span> <span class="number">10000</span>
+-- Mouse
+config.mouse_bindings = {
+    {
+        event = {
+            Up = {
+                streak = 1,
+                button = "Left",
+            },
+        },
+        mods = "CTRL",
+        action = wezterm.action.OpenLinkAtMouseCursor,
+    },
+}
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">mouse_bindings</span> <span class="operator">=</span> <span class="punctuation">{</span>
-    <span class="punctuation">{</span>
-        <span class="property">event</span> <span class="operator">=</span> <span class="punctuation">{</span>
-            <span class="property">Up</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="property">streak</span> <span class="operator">=</span> <span class="number">1</span><span class="punctuation">,</span>
-                <span class="property">button</span> <span class="operator">=</span> <span class="string">"Left"</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"CTRL"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="property">OpenLinkAtMouseCursor</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-<span class="punctuation">}</span>
+-- Keys
+config.keys = {
+    {
+        key = "t",
+        mods = "CTRL|SHIFT",
+        action = wezterm.action.SpawnTab("CurrentPaneDomain"),
+    },
+    {
+        key = "w",
+        mods = "CTRL|SHIFT",
+        action = wezterm.action.CloseCurrentTab({
+            confirm = true,
+        }),
+    },
+    {
+        key = "Tab",
+        mods = "CTRL",
+        action = wezterm.action.ActivateTabRelative(1),
+    },
+    {
+        key = "Tab",
+        mods = "CTRL|SHIFT",
+        action = wezterm.action.ActivateTabRelative(-1),
+    },
+    {
+        key = "RightArrow",
+        mods = "ALT",
+        action = wezterm.action.ActivatePaneDirection("Right"),
+    },
+    {
+        key = "LeftArrow",
+        mods = "ALT",
+        action = wezterm.action.ActivatePaneDirection("Left"),
+    },
+    {
+        key = "UpArrow",
+        mods = "ALT",
+        action = wezterm.action.ActivatePaneDirection("Up"),
+    },
+    {
+        key = "DownArrow",
+        mods = "ALT",
+        action = wezterm.action.ActivatePaneDirection("Down"),
+    },
+    {
+        key = "c",
+        mods = "CTRL",
+        action = wezterm.action_callback(function(window, pane)
+            local selection = window:get_selection_text_for_pane(pane)
+            if selection ~= "" then
+                window:perform_action(wezterm.action.CopyTo("Clipboard"), pane)
+                window:perform_action(wezterm.action.ClearSelection, pane)
+            else
+                window:perform_action(wezterm.action.SendKey({ key = "c", mods = "CTRL" }), pane)
+            end
+        end),
+    },
+    {
+        key = "v",
+        mods = "CTRL",
+        action = wezterm.action.PasteFrom("Clipboard"),
+    },
+    {
+        key = "+",
+        mods = "CTRL",
+        action = wezterm.action.IncreaseFontSize,
+    },
+    {
+        key = "-",
+        mods = "CTRL",
+        action = wezterm.action.DecreaseFontSize,
+    },
+    {
+        key = "0",
+        mods = "CTRL",
+        action = wezterm.action.ResetFontSize,
+    },
+    {
+        key = "F11",
+        action = wezterm.action.ToggleFullScreen,
+    },
+}
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">keys</span> <span class="operator">=</span> <span class="punctuation">{</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"t"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"CTRL|SHIFT"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="function">SpawnTab</span><span class="punctuation">(</span><span class="string">"CurrentPaneDomain"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"w"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"CTRL|SHIFT"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="function">CloseCurrentTab</span><span class="punctuation">({</span>
-            <span class="property">confirm</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-        <span class="punctuation">})</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"Tab"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"CTRL"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="function">ActivateTabRelative</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">)</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"Tab"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"CTRL|SHIFT"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="function">ActivateTabRelative</span><span class="punctuation">(</span><span class="operator">-</span><span class="number">1</span><span class="punctuation">)</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"RightArrow"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"ALT"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="function">ActivatePaneDirection</span><span class="punctuation">(</span><span class="string">"Right"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"LeftArrow"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"ALT"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="function">ActivatePaneDirection</span><span class="punctuation">(</span><span class="string">"Left"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"UpArrow"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"ALT"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="function">ActivatePaneDirection</span><span class="punctuation">(</span><span class="string">"Up"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"DownArrow"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"ALT"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="function">ActivatePaneDirection</span><span class="punctuation">(</span><span class="string">"Down"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"c"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"CTRL"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="function">CopyTo</span><span class="punctuation">(</span><span class="string">"Clipboard"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"v"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"CTRL"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="function">PasteFrom</span><span class="punctuation">(</span><span class="string">"Clipboard"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"+"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"CTRL"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="property">IncreaseFontSize</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"-"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"CTRL"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="property">DecreaseFontSize</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"0"</span><span class="punctuation">,</span>
-        <span class="property">mods</span> <span class="operator">=</span> <span class="string">"CTRL"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="property">ResetFontSize</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">{</span>
-        <span class="property">key</span> <span class="operator">=</span> <span class="string">"F11"</span><span class="punctuation">,</span>
-        <span class="property">action</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="property">action</span><span class="operator">.</span><span class="property">ToggleFullScreen</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-<span class="punctuation">}</span>
+-- Launch menu
+config.launch_menu = {
+    {
+        label = "PowerShell",
+        args = {
+            "powershell.exe",
+            "-NoLogo",
+        },
+    },
+}
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">launch_menu</span> <span class="operator">=</span> <span class="punctuation">{</span>
-    <span class="punctuation">{</span>
-        <span class="property">label</span> <span class="operator">=</span> <span class="string">"PowerShell"</span><span class="punctuation">,</span>
-        <span class="property">args</span> <span class="operator">=</span> <span class="punctuation">{</span>
-            <span class="string">"powershell.exe"</span><span class="punctuation">,</span>
-            <span class="string">"-NoLogo"</span><span class="punctuation">,</span>
-        <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-<span class="punctuation">}</span>
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
 
-<span class="builtin">config</span><span class="operator">.</span><span class="property">audible_bell</span> <span class="operator">=</span> <span class="string">"Disabled"</span>
-
-<span class="builtin">config</span><span class="operator">.</span><span class="property">hyperlink_rules</span> <span class="operator">=</span> <span class="builtin">wezterm</span><span class="operator">.</span><span class="function">default_hyperlink_rules</span><span class="punctuation">()</span>
-
-<span class="keyword">return</span> <span class="builtin">config</span></code></pre>
+return config{% endverbatim %}</code></pre>
 </div>
 {% endblock %}

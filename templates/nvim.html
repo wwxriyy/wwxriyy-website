@@ -10,612 +10,921 @@
   <div class="git-gutter" id="gitGutter"></div>
   <div class="line-numbers" id="lineNumbers"></div>
 
-  <pre class="code-content"><code id="codeBlock"><span class="keyword">local</span> lazypath <span class="operator">=</span> <span class="builtin">vim</span><span class="operator">.</span><span class="property">fn</span><span class="operator">.</span><span class="function">stdpath</span><span class="punctuation">(</span><span class="string">"data"</span><span class="punctuation">)</span> <span class="operator">..</span> <span class="string">"/lazy/lazy.nvim"</span>
+  <pre class="code-content"><code id="codeBlock" data-lang="lua">{% verbatim %}--[[
+================================================================================
+ WWNeoVim
+ Author: @wwxriyy
+    Telegram:  @wwxriyy  (https://t.me/wwxriyy)
+    Instagram: @wwxriyy  (https://instagram.com/wwxriyy)
+    GitHub:    @wwxriyy  (https://github.com/wwxriyy)
+================================================================================
 
-<span class="keyword">if</span> <span class="keyword">not</span> <span class="builtin">vim</span><span class="operator">.</span><span class="property">loop</span><span class="operator">.</span><span class="function">fs_stat</span><span class="punctuation">(</span>lazypath<span class="punctuation">)</span> <span class="keyword">then</span>
-    <span class="builtin">vim</span><span class="operator">.</span><span class="property">fn</span><span class="operator">.</span><span class="function">system</span><span class="punctuation">({</span>
-        <span class="string">"git"</span><span class="punctuation">,</span>
-        <span class="string">"clone"</span><span class="punctuation">,</span>
-        <span class="string">"--filter=blob:none"</span><span class="punctuation">,</span>
-        <span class="string">"https://github.com/folke/lazy.nvim.git"</span><span class="punctuation">,</span>
-        <span class="string">"--branch=stable"</span><span class="punctuation">,</span>
-        lazypath<span class="punctuation">,</span>
-    <span class="punctuation">})</span>
-<span class="keyword">end</span>
+ CONTROLS   (Leader = Space)
 
-<span class="builtin">vim</span><span class="operator">.</span><span class="property">opt</span><span class="operator">.</span><span class="property">rtp</span><span class="operator">:</span><span class="function">prepend</span><span class="punctuation">(</span>lazypath<span class="punctuation">)</span>
+ General
+    Ctrl+S             save
+    Ctrl+A             select all
+    Esc                clear search highlight
+    Space e            toggle file explorer
+    Space w            close current buffer
+    Tab / Shift+Tab    next / previous buffer
+    Ctrl+\             toggle terminal
+    Space qs           restore session
 
-<span class="builtin">vim</span><span class="operator">.</span><span class="property">opt</span><span class="operator">.</span><span class="property">mouse</span> <span class="operator">=</span> <span class="string">"a"</span>
-<span class="builtin">vim</span><span class="operator">.</span><span class="property">opt</span><span class="operator">.</span><span class="property">mousemoveevent</span> <span class="operator">=</span> <span class="boolean">true</span>
-<span class="builtin">vim</span><span class="operator">.</span><span class="property">opt</span><span class="operator">.</span><span class="property">swapfile</span> <span class="operator">=</span> <span class="boolean">false</span>
-<span class="builtin">vim</span><span class="operator">.</span><span class="property">opt</span><span class="operator">.</span><span class="property">backup</span> <span class="operator">=</span> <span class="boolean">false</span>
-<span class="builtin">vim</span><span class="operator">.</span><span class="property">opt</span><span class="operator">.</span><span class="property">writebackup</span> <span class="operator">=</span> <span class="boolean">false</span>
-<span class="builtin">vim</span><span class="operator">.</span><span class="property">opt</span><span class="operator">.</span><span class="property">updatetime</span> <span class="operator">=</span> <span class="number">500</span>
+ Search (Telescope)
+    Space ff           find files
+    Space fg           live grep
+    Space fb           buffers
+    Space fr           recent files
+    Space fh           help tags
 
-<span class="builtin">vim</span><span class="operator">.</span><span class="property">g</span><span class="operator">.</span><span class="property">mapleader</span> <span class="operator">=</span> <span class="string">" "</span>
-<span class="builtin">vim</span><span class="operator">.</span><span class="property">g</span><span class="operator">.</span><span class="property">maplocalleader</span> <span class="operator">=</span> <span class="string">" "</span>
+ Code (LSP)
+    K                  hover documentation
+    gd                 go to definition
+    gr                 references
+    Space ca           code action
+    Space rn           rename symbol
+    Space xx           diagnostics list (Trouble)
+    Space pv           select Python virtualenv
+    Space o            outline of the file (Aerial)
+    (files are formatted automatically on save)
 
-<span class="builtin">vim</span><span class="operator">.</span><span class="property">diagnostic</span><span class="operator">.</span><span class="function">config</span><span class="punctuation">({</span>
-    <span class="property">virtual_text</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-    <span class="property">signs</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-    <span class="property">underline</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-    <span class="property">update_in_insert</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-    <span class="property">severity_sort</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-    <span class="property">float</span> <span class="operator">=</span> <span class="punctuation">{</span>
-        <span class="property">border</span> <span class="operator">=</span> <span class="string">"rounded"</span><span class="punctuation">,</span>
-        <span class="property">source</span> <span class="operator">=</span> <span class="string">"always"</span><span class="punctuation">,</span>
-        <span class="property">header</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span>
-        <span class="property">prefix</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
-<span class="punctuation">})</span>
+ Navigation
+    s                  jump to any place on screen (Flash)
+    S                  jump to a code block (Flash + Treesitter)
+    Space a            pin file (Harpoon)
+    Space h            Harpoon menu
+    Space 1..4         open pinned file 1..4
 
-<span class="keyword">require</span><span class="punctuation">(</span><span class="string">"lazy"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
+ Git
+    Space gg           LazyGit
+    Space gd           diff view
+    Space gh           history of current file
+    Space gc           close diff view
 
-    <span class="punctuation">{</span>
-        <span class="string">"nvim-tree/nvim-web-devicons"</span><span class="punctuation">,</span>
-        <span class="property">lazy</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"nvim-web-devicons"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">default</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="property">override_by_filename</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="punctuation">[</span><span class="string">".gitignore"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">icon</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span> <span class="property">color</span> <span class="operator">=</span> <span class="string">"#f1502f"</span><span class="punctuation">,</span> <span class="property">name</span> <span class="operator">=</span> <span class="string">"GitIgnore"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"LICENSE"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">icon</span> <span class="operator">=</span> <span class="string">"🔑"</span><span class="punctuation">,</span> <span class="property">color</span> <span class="operator">=</span> <span class="string">"#e5c07b"</span><span class="punctuation">,</span> <span class="property">name</span> <span class="operator">=</span> <span class="string">"License"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"requirements.txt"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">icon</span> <span class="operator">=</span> <span class="string">"📋"</span><span class="punctuation">,</span> <span class="property">color</span> <span class="operator">=</span> <span class="string">"#61afef"</span><span class="punctuation">,</span> <span class="property">name</span> <span class="operator">=</span> <span class="string">"Requirements"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">override_by_extension</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="punctuation">[</span><span class="string">"py"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">icon</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span> <span class="property">color</span> <span class="operator">=</span> <span class="string">"#ffbc03"</span><span class="punctuation">,</span> <span class="property">name</span> <span class="operator">=</span> <span class="string">"Py"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"json"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">icon</span> <span class="operator">=</span> <span class="string">"󰘦"</span><span class="punctuation">,</span> <span class="property">color</span> <span class="operator">=</span> <span class="string">"#e5c07b"</span><span class="punctuation">,</span> <span class="property">name</span> <span class="operator">=</span> <span class="string">"Json"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"db"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">icon</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span> <span class="property">color</span> <span class="operator">=</span> <span class="string">"#e06c75"</span><span class="punctuation">,</span> <span class="property">name</span> <span class="operator">=</span> <span class="string">"Db"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"ico"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">icon</span> <span class="operator">=</span> <span class="string">"⭐"</span><span class="punctuation">,</span> <span class="property">color</span> <span class="operator">=</span> <span class="string">"#e5c07b"</span><span class="punctuation">,</span> <span class="property">name</span> <span class="operator">=</span> <span class="string">"Ico"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+ Debugging (Python)
+    Space db           toggle breakpoint
+    Space dc / F5      continue / start
+    Space dn / F10     step over
+    Space di           step into
+    Space do           step out
+    Space du           toggle debug UI
 
-    <span class="punctuation">{</span>
-        <span class="string">"goolord/alpha-nvim"</span><span class="punctuation">,</span>
-        <span class="property">dependencies</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"nvim-tree/nvim-web-devicons"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">local</span> alpha <span class="operator">=</span> <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"alpha"</span><span class="punctuation">)</span>
-            <span class="keyword">local</span> dashboard <span class="operator">=</span> <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"alpha.themes.dashboard"</span><span class="punctuation">)</span>
+ Editing
+    gcc / gc           comment line / selection
+    ys / ds / cs       add / delete / change surroundings
+    Space mr           toggle Markdown rendering
 
-            dashboard<span class="operator">.</span><span class="property">section</span><span class="operator">.</span><span class="property">header</span><span class="operator">.</span><span class="property">val</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="string">" ██▄    █ ▄▄▄▄▄ ▄▄▄▄▄  ▄▄▄  ▄▄▄ ▄▄▄█▄▄▄"</span><span class="punctuation">,</span>
-                <span class="string">" █ ▀█   █ █     █   █  █ █  █ █   █   "</span><span class="punctuation">,</span>
-                <span class="string">" █  ▀█  █ █▄▄▄▄ █   █  █ ▀▄▄▀ █   █   "</span><span class="punctuation">,</span>
-                <span class="string">" █   ▀██ █     █   █  █      █   █   "</span><span class="punctuation">,</span>
-                <span class="string">" █     █ ▀▄▄▄▄ ▀▄▄▄▀  █      █   █   "</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span>
+ Terminal tools to install: git, lazygit, ripgrep, cmake (optional, for fzf)
+================================================================================
+--]]
 
-            dashboard<span class="operator">.</span><span class="property">section</span><span class="operator">.</span><span class="property">buttons</span><span class="operator">.</span><span class="property">val</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                dashboard<span class="operator">.</span><span class="function">button</span><span class="punctuation">(</span><span class="string">"f"</span><span class="punctuation">,</span> <span class="string">"🔍  Find File"</span><span class="punctuation">,</span> <span class="string">"&lt;cmd&gt;Telescope find_files&lt;CR&gt;"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-                dashboard<span class="operator">.</span><span class="function">button</span><span class="punctuation">(</span><span class="string">"e"</span><span class="punctuation">,</span> <span class="string">"📁  New File"</span><span class="punctuation">,</span> <span class="string">"&lt;cmd&gt;ene &lt;BAR&gt; startinsert&lt;CR&gt;"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-                dashboard<span class="operator">.</span><span class="function">button</span><span class="punctuation">(</span><span class="string">"r"</span><span class="punctuation">,</span> <span class="string">"🕒  Recent Files"</span><span class="punctuation">,</span> <span class="string">"&lt;cmd&gt;Telescope oldfiles&lt;CR&gt;"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-                dashboard<span class="operator">.</span><span class="function">button</span><span class="punctuation">(</span><span class="string">"q"</span><span class="punctuation">,</span> <span class="string">"❌  Quit Neovim"</span><span class="punctuation">,</span> <span class="string">"&lt;cmd&gt;qa&lt;CR&gt;"</span><span class="punctuation">)</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span>
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable",
+        lazypath,
+    })
+end
+vim.opt.rtp:prepend(lazypath)
 
-            alpha<span class="operator">.</span><span class="function">setup</span><span class="punctuation">(</span>dashboard<span class="operator">.</span><span class="property">opts</span><span class="punctuation">)</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+-- Leader
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
-    <span class="punctuation">{</span>
-        <span class="string">"sainnhe/gruvbox-material"</span><span class="punctuation">,</span>
-        <span class="property">lazy</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-        <span class="property">priority</span> <span class="operator">=</span> <span class="number">1000</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">g</span><span class="operator">.</span><span class="property">gruvbox_material_background</span> <span class="operator">=</span> <span class="string">"medium"</span>
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">g</span><span class="operator">.</span><span class="property">gruvbox_material_foreground</span> <span class="operator">=</span> <span class="string">"material"</span>
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">g</span><span class="operator">.</span><span class="property">gruvbox_material_enable_italic</span> <span class="operator">=</span> <span class="boolean">true</span>
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">g</span><span class="operator">.</span><span class="property">gruvbox_material_transparent_background</span> <span class="operator">=</span> <span class="number">1</span>
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">cmd</span><span class="punctuation">(</span><span class="string">"colorscheme gruvbox-material"</span><span class="punctuation">)</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+-- Single background color for the whole UI (keep in sync with wezterm.lua)
+local BG = "#141414"
 
-    <span class="punctuation">{</span>
-        <span class="string">"folke/noice.nvim"</span><span class="punctuation">,</span>
-        <span class="property">event</span> <span class="operator">=</span> <span class="string">"VeryLazy"</span><span class="punctuation">,</span>
-        <span class="property">dependencies</span> <span class="operator">=</span> <span class="punctuation">{</span>
-            <span class="string">"MunifTanjim/nui.nvim"</span><span class="punctuation">,</span>
-            <span class="string">"rcarriga/nvim-notify"</span><span class="punctuation">,</span>
-        <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">opts</span> <span class="operator">=</span> <span class="punctuation">{</span>
-            <span class="property">lsp</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="property">progress</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">enabled</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">override</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="punctuation">[</span><span class="string">"vim.lsp.util.convert_input_to_markdown_lines"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"vim.lsp.util.stylize_markdown"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"cmp.entry.get_documentation"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="property">presets</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="property">bottom_search</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="property">command_palette</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="property">long_message_to_split</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="property">inc_rename</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-                <span class="property">lsp_doc_border</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="property">routes</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="punctuation">{</span>
-                    <span class="property">filter</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                        <span class="property">event</span> <span class="operator">=</span> <span class="string">"lsp"</span><span class="punctuation">,</span>
-                        <span class="property">kind</span> <span class="operator">=</span> <span class="string">"progress"</span><span class="punctuation">,</span>
-                        <span class="property">find</span> <span class="operator">=</span> <span class="string">"pyright"</span><span class="punctuation">,</span>
-                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">opts</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">skip</span> <span class="operator">=</span> <span class="boolean">true</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">{</span>
-                    <span class="property">filter</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                        <span class="property">event</span> <span class="operator">=</span> <span class="string">"msg_show"</span><span class="punctuation">,</span>
-                        <span class="property">find</span> <span class="operator">=</span> <span class="string">"pyright"</span><span class="punctuation">,</span>
-                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">opts</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">skip</span> <span class="operator">=</span> <span class="boolean">true</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">{</span>
-                    <span class="property">filter</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                        <span class="property">event</span> <span class="operator">=</span> <span class="string">"notify"</span><span class="punctuation">,</span>
-                        <span class="property">find</span> <span class="operator">=</span> <span class="string">"No information available"</span><span class="punctuation">,</span>
-                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">opts</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">skip</span> <span class="operator">=</span> <span class="boolean">true</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+local function unify_ui()
+    local function set_bg(name)
+        local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
+        if not ok or not hl then
+            return
+        end
+        hl.bg = BG
+        vim.api.nvim_set_hl(0, name, hl)
+    end
 
-    <span class="punctuation">{</span>
-        <span class="string">"Bekaboo/dropbar.nvim"</span><span class="punctuation">,</span>
-        <span class="property">event</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"BufReadPost"</span><span class="punctuation">,</span> <span class="string">"BufNewFile"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+    local groups = {
+        "Normal", "NormalNC", "SignColumn", "FoldColumn", "LineNr", "CursorLineNr",
+        "EndOfBuffer", "StatusLine", "StatusLineNC", "WinBar", "WinBarNC",
+        "WinSeparator", "VertSplit",
+        "NeoTreeNormal", "NeoTreeNormalNC", "NeoTreeEndOfBuffer",
+        "NeoTreeStatusLine", "NeoTreeWinSeparator",
+        "TreesitterContext", "TreesitterContextLineNumber",
+        "GitSignsAdd", "GitSignsChange", "GitSignsDelete",
+        "GitSignsTopdelete", "GitSignsChangedelete", "GitSignsUntracked",
+        "DiagnosticSignError", "DiagnosticSignWarn", "DiagnosticSignInfo",
+        "DiagnosticSignHint", "DiagnosticSignOk",
+    }
+    for _, name in ipairs(groups) do
+        set_bg(name)
+    end
+    for _, name in ipairs(vim.fn.getcompletion("BufferLine", "highlight")) do
+        set_bg(name)
+    end
 
-    <span class="punctuation">{</span>
-        <span class="string">"NvChad/nvim-colorizer.lua"</span><span class="punctuation">,</span>
-        <span class="property">event</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"BufReadPost"</span><span class="punctuation">,</span> <span class="string">"BufNewFile"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"colorizer"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">filetypes</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"*"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">user_default_options</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">RGB</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">RRGGBB</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">RRGGBBAA</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">AARRGGBB</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">rgb_fn</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">hsl_fn</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">css</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">css_fn</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">mode</span> <span class="operator">=</span> <span class="string">"background"</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+    vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#2a2a2a", bg = BG })
+    vim.api.nvim_set_hl(0, "NeoTreeWinSeparator", { fg = "#2a2a2a", bg = BG })
+end
 
-    <span class="punctuation">{</span>
-        <span class="string">"nvimdev/lspsaga.nvim"</span><span class="punctuation">,</span>
-        <span class="property">lazy</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"lspsaga"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">ui</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">border</span> <span class="operator">=</span> <span class="string">"rounded"</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">hover</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">max_width</span> <span class="operator">=</span> <span class="number">0.6</span><span class="punctuation">,</span>
-                    <span class="property">open_link</span> <span class="operator">=</span> <span class="string">"gx"</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">diagnostic</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">show_code_action</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">border_follow</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
+vim.api.nvim_create_autocmd({ "ColorScheme", "VimEnter" }, {
+    callback = function()
+        vim.schedule(unify_ui)
+    end,
+})
+vim.api.nvim_create_autocmd("BufWinEnter", {
+    once = true,
+    callback = function()
+        vim.defer_fn(unify_ui, 100)
+    end,
+})
 
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"n"</span><span class="punctuation">,</span> <span class="string">"K"</span><span class="punctuation">,</span> <span class="string">"&lt;cmd&gt;Lspsaga hover_doc&lt;CR&gt;"</span><span class="punctuation">,</span> <span class="punctuation">{</span> <span class="property">silent</span> <span class="operator">=</span> <span class="boolean">true</span> <span class="punctuation">}</span><span class="punctuation">)</span>
+-- Options
+vim.opt.termguicolors = true
+vim.opt.mouse = "a"
+vim.opt.mousemoveevent = true
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.undofile = true
+vim.opt.updatetime = 300
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.cursorline = true
+vim.opt.signcolumn = "yes"
+vim.opt.scrolloff = 8
+vim.opt.clipboard = "unnamedplus"
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
+vim.opt.smartindent = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+vim.opt.showmode = false
+vim.opt.laststatus = 3
+vim.opt.pumblend = 10
+vim.opt.winblend = 10
+vim.opt.fillchars = { eob = " " }
+pcall(function()
+    vim.opt.winborder = "rounded"
+end)
 
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">api</span><span class="operator">.</span><span class="function">nvim_create_autocmd</span><span class="punctuation">(</span><span class="string">"CursorHold"</span><span class="punctuation">,</span> <span class="punctuation">{</span>
-                <span class="property">callback</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-                    <span class="keyword">local</span> bufnr <span class="operator">=</span> <span class="builtin">vim</span><span class="operator">.</span><span class="property">api</span><span class="operator">.</span><span class="function">nvim_get_current_buf</span><span class="punctuation">()</span>
-                    <span class="keyword">if</span> <span class="operator">#</span><span class="builtin">vim</span><span class="operator">.</span><span class="property">lsp</span><span class="operator">.</span><span class="function">get_clients</span><span class="punctuation">({</span> <span class="property">bufnr</span> <span class="operator">=</span> bufnr <span class="punctuation">})</span> <span class="operator">&gt;</span> <span class="number">0</span> <span class="keyword">then</span>
-                        <span class="keyword">local</span> win_config <span class="operator">=</span> <span class="builtin">vim</span><span class="operator">.</span><span class="property">api</span><span class="operator">.</span><span class="function">nvim_win_get_config</span><span class="punctuation">(</span><span class="number">0</span><span class="punctuation">)</span>
-                        <span class="keyword">if</span> win_config<span class="operator">.</span><span class="property">relative</span> <span class="operator">==</span> <span class="string">""</span> <span class="keyword">then</span>
-                            <span class="builtin">vim</span><span class="operator">.</span><span class="property">lsp</span><span class="operator">.</span><span class="property">buf</span><span class="operator">.</span><span class="function">hover</span><span class="punctuation">({</span> <span class="property">silent</span> <span class="operator">=</span> <span class="boolean">true</span> <span class="punctuation">})</span>
-                        <span class="keyword">end</span>
-                    <span class="keyword">end</span>
-                <span class="keyword">end</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-        <span class="property">dependencies</span> <span class="operator">=</span> <span class="punctuation">{</span>
-            <span class="string">"nvim-treesitter/nvim-treesitter"</span><span class="punctuation">,</span>
-            <span class="string">"nvim-tree/nvim-web-devicons"</span><span class="punctuation">,</span>
-        <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+-- Russian layout: normal-mode commands work without switching language
+vim.opt.langmap = table.concat({
+    "ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ",
+    ";",
+    "`qwertyuiop[]asdfghjkl\\;'zxcvbnm\\,.~QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM&lt;&gt;",
+})
 
-    <span class="punctuation">{</span>
-        <span class="string">"lukas-reineke/indent-blankline.nvim"</span><span class="punctuation">,</span>
-        <span class="property">main</span> <span class="operator">=</span> <span class="string">"ibl"</span><span class="punctuation">,</span>
-        <span class="property">event</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"BufReadPost"</span><span class="punctuation">,</span> <span class="string">"BufNewFile"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">opts</span> <span class="operator">=</span> <span class="punctuation">{</span>
-            <span class="property">indent</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="property">char</span> <span class="operator">=</span> <span class="string">"│"</span><span class="punctuation">,</span>
-                <span class="property">tab_char</span> <span class="operator">=</span> <span class="string">"│"</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="property">scope</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="property">enabled</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="property">show_start</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-                <span class="property">show_end</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="property">exclude</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="property">filetypes</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="string">"help"</span><span class="punctuation">,</span> <span class="string">"alpha"</span><span class="punctuation">,</span> <span class="string">"dashboard"</span><span class="punctuation">,</span> <span class="string">"neo-tree"</span><span class="punctuation">,</span>
-                    <span class="string">"Trouble"</span><span class="punctuation">,</span> <span class="string">"lazy"</span><span class="punctuation">,</span> <span class="string">"mason"</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+-- Diagnostics
+vim.diagnostic.config({
+    virtual_text = false,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+    severity_sort = true,
+    float = {
+        border = "rounded",
+        source = "always",
+        header = "",
+        prefix = "",
+    },
+})
 
-    <span class="punctuation">{</span>
-        <span class="string">"nvim-neo-tree/neo-tree.nvim"</span><span class="punctuation">,</span>
-        <span class="property">branch</span> <span class="operator">=</span> <span class="string">"v3.x"</span><span class="punctuation">,</span>
-        <span class="property">dependencies</span> <span class="operator">=</span> <span class="punctuation">{</span>
-            <span class="string">"nvim-lua/plenary.nvim"</span><span class="punctuation">,</span>
-            <span class="string">"MunifTanjim/nui.nvim"</span><span class="punctuation">,</span>
-            <span class="string">"nvim-tree/nvim-web-devicons"</span><span class="punctuation">,</span>
-        <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"neo-tree"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">close_if_last_window</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="property">popup_border_style</span> <span class="operator">=</span> <span class="string">"rounded"</span><span class="punctuation">,</span>
-                <span class="property">enable_git_status</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="property">enable_diagnostics</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="property">filesystem</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">follow_current_file</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">enabled</span> <span class="operator">=</span> <span class="boolean">true</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">hijack_netrw_behavior</span> <span class="operator">=</span> <span class="string">"open_default"</span><span class="punctuation">,</span>
-                    <span class="property">use_libuv_file_watcher</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">filtered_items</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                        <span class="property">visible</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-                        <span class="property">hide_dotfiles</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-                        <span class="property">hide_gitignored</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">window</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">position</span> <span class="operator">=</span> <span class="string">"left"</span><span class="punctuation">,</span>
-                    <span class="property">width</span> <span class="operator">=</span> <span class="number">35</span><span class="punctuation">,</span>
-                    <span class="property">mappings</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                        <span class="punctuation">[</span><span class="string">"&lt;space&gt;"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="string">"toggle_node"</span><span class="punctuation">,</span>
-                        <span class="punctuation">[</span><span class="string">"&lt;cr&gt;"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="string">"open"</span><span class="punctuation">,</span>
-                        <span class="punctuation">[</span><span class="string">"o"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="string">"open"</span><span class="punctuation">,</span>
-                        <span class="punctuation">[</span><span class="string">"v"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="string">"open_vsplit"</span><span class="punctuation">,</span>
-                        <span class="punctuation">[</span><span class="string">"s"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="string">"open_split"</span><span class="punctuation">,</span>
-                        <span class="punctuation">[</span><span class="string">"t"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="string">"open_tabnew"</span><span class="punctuation">,</span>
-                        <span class="punctuation">[</span><span class="string">"a"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="string">"add"</span><span class="punctuation">,</span>
-                        <span class="punctuation">[</span><span class="string">"d"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="string">"delete"</span><span class="punctuation">,</span>
-                        <span class="punctuation">[</span><span class="string">"r"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="string">"rename"</span><span class="punctuation">,</span>
-                        <span class="punctuation">[</span><span class="string">"q"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="string">"close_window"</span><span class="punctuation">,</span>
-                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">default_component_configs</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">indent</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                        <span class="property">with_expanders</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                        <span class="property">expander_collapsed</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span>
-                        <span class="property">expander_expanded</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span>
-                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">icon</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                        <span class="property">folder_closed</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span>
-                        <span class="property">folder_open</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span>
-                        <span class="property">folder_empty</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span>
-                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">git_status</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                        <span class="property">symbols</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                            <span class="property">added</span>     <span class="operator">=</span> <span class="string">"+"</span><span class="punctuation">,</span>
-                            <span class="property">modified</span>  <span class="operator">=</span> <span class="string">"~"</span><span class="punctuation">,</span>
-                            <span class="property">deleted</span>   <span class="operator">=</span> <span class="string">"-"</span><span class="punctuation">,</span>
-                            <span class="property">renamed</span>   <span class="operator">=</span> <span class="string">"➜"</span><span class="punctuation">,</span>
-                            <span class="property">untracked</span> <span class="operator">=</span> <span class="string">"+"</span><span class="punctuation">,</span>
-                            <span class="property">ignored</span>   <span class="operator">=</span> <span class="string">"◌"</span><span class="punctuation">,</span>
-                            <span class="property">unstaged</span>  <span class="operator">=</span> <span class="string">"~"</span><span class="punctuation">,</span>
-                            <span class="property">staged</span>    <span class="operator">=</span> <span class="string">"+"</span><span class="punctuation">,</span>
-                            <span class="property">conflict</span>  <span class="operator">=</span> <span class="string">"⚡"</span><span class="punctuation">,</span>
-                        <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
+-- Keymaps
+vim.keymap.set({ "n", "i", "v" }, "&lt;C-s&gt;", "&lt;cmd&gt;w&lt;CR&gt;&lt;Esc&gt;", { desc = "Save" })
+vim.keymap.set("n", "&lt;leader&gt;w", "&lt;cmd&gt;bdelete&lt;CR&gt;", { desc = "Close buffer" })
+vim.keymap.set("n", "&lt;C-a&gt;", "ggVG", { desc = "Select all" })
+vim.keymap.set("n", "&lt;Esc&gt;", "&lt;cmd&gt;nohlsearch&lt;CR&gt;", { desc = "Clear search highlight" })
+vim.keymap.set("n", "&lt;leader&gt;xx", "&lt;cmd&gt;Trouble diagnostics toggle&lt;CR&gt;", { desc = "Diagnostics list" })
+vim.keymap.set("n", "&lt;leader&gt;qs", function()
+    require("persistence").load()
+end, { desc = "Restore session" })
 
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"n"</span><span class="punctuation">,</span> <span class="string">"&lt;leader&gt;e"</span><span class="punctuation">,</span> <span class="string">"&lt;cmd&gt;Neotree toggle&lt;CR&gt;"</span><span class="punctuation">,</span> <span class="punctuation">{</span> <span class="property">desc</span> <span class="operator">=</span> <span class="string">"Toggle Explorer"</span> <span class="punctuation">}</span><span class="punctuation">)</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+-- LazyGit in a floating terminal
+local lazygit_term
+vim.keymap.set("n", "&lt;leader&gt;gg", function()
+    if vim.fn.executable("lazygit") == 0 then
+        vim.notify("lazygit is not installed (winget install JesseDuffield.lazygit)", vim.log.levels.WARN)
+        return
+    end
+    if not lazygit_term then
+        lazygit_term = require("toggleterm.terminal").Terminal:new({
+            cmd = "lazygit",
+            direction = "float",
+            hidden = true,
+            float_opts = { border = "rounded" },
+        })
+    end
+    lazygit_term:toggle()
+end, { desc = "LazyGit" })
 
-    <span class="punctuation">{</span>
-        <span class="string">"vyfor/cord.nvim"</span><span class="punctuation">,</span>
-        <span class="property">event</span> <span class="operator">=</span> <span class="string">"VeryLazy"</span><span class="punctuation">,</span>
-        <span class="property">opts</span> <span class="operator">=</span> <span class="punctuation">{</span>
-            <span class="property">user_workspace_symbols</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-            <span class="property">log_level</span> <span class="operator">=</span> <span class="string">"error"</span><span class="punctuation">,</span>
-            <span class="property">editor</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="property">client</span> <span class="operator">=</span> <span class="string">"neovim"</span><span class="punctuation">,</span>
-                <span class="property">tooltip</span> <span class="operator">=</span> <span class="string">"Neovim"</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="property">display</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="property">theme</span> <span class="operator">=</span> <span class="string">"default"</span><span class="punctuation">,</span>
-                <span class="property">flavor</span> <span class="operator">=</span> <span class="string">"dark"</span><span class="punctuation">,</span>
-                <span class="property">show_time</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="property">text</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="property">editing</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">(</span>opts<span class="punctuation">)</span>
-                    <span class="keyword">return</span> <span class="string">"Editing "</span> <span class="operator">..</span> <span class="punctuation">(</span>opts<span class="operator">.</span><span class="property">filename</span> <span class="keyword">or</span> <span class="string">"file"</span><span class="punctuation">)</span>
-                <span class="keyword">end</span><span class="punctuation">,</span>
-                <span class="property">viewing</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">(</span>opts<span class="punctuation">)</span>
-                    <span class="keyword">return</span> <span class="string">"Viewing "</span> <span class="operator">..</span> <span class="punctuation">(</span>opts<span class="operator">.</span><span class="property">filename</span> <span class="keyword">or</span> <span class="string">"file"</span><span class="punctuation">)</span>
-                <span class="keyword">end</span><span class="punctuation">,</span>
-                <span class="property">workspace</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">(</span>opts<span class="punctuation">)</span>
-                    <span class="keyword">return</span> <span class="string">"In workspace "</span> <span class="operator">..</span> <span class="punctuation">(</span>opts<span class="operator">.</span><span class="property">workspace</span> <span class="keyword">or</span> <span class="string">"workspace"</span><span class="punctuation">)</span>
-                <span class="keyword">end</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="property">buttons</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                <span class="punctuation">{</span>
-                    <span class="property">label</span> <span class="operator">=</span> <span class="string">"Neovim Editor"</span><span class="punctuation">,</span>
-                    <span class="property">url</span> <span class="operator">=</span> <span class="string">"https://neovim.io"</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+-- Diff view
+vim.keymap.set("n", "&lt;leader&gt;gd", "&lt;cmd&gt;DiffviewOpen&lt;CR&gt;", { desc = "Diff view" })
+vim.keymap.set("n", "&lt;leader&gt;gh", "&lt;cmd&gt;DiffviewFileHistory %&lt;CR&gt;", { desc = "File history" })
+vim.keymap.set("n", "&lt;leader&gt;gc", "&lt;cmd&gt;DiffviewClose&lt;CR&gt;", { desc = "Close diff view" })
 
-    <span class="punctuation">{</span>
-        <span class="string">"nvim-telescope/telescope.nvim"</span><span class="punctuation">,</span>
-        <span class="property">branch</span> <span class="operator">=</span> <span class="string">"0.1.x"</span><span class="punctuation">,</span>
-        <span class="property">dependencies</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"nvim-lua/plenary.nvim"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">local</span> builtin <span class="operator">=</span> <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"telescope.builtin"</span><span class="punctuation">)</span>
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"telescope"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">defaults</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">layout_strategy</span> <span class="operator">=</span> <span class="string">"horizontal"</span><span class="punctuation">,</span>
-                    <span class="property">layout_config</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">preview_width</span> <span class="operator">=</span> <span class="number">0.55</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">sorting_strategy</span> <span class="operator">=</span> <span class="string">"ascending"</span><span class="punctuation">,</span>
-                    <span class="property">border</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
+-- Outline, venv, markdown
+vim.keymap.set("n", "&lt;leader&gt;o", "&lt;cmd&gt;AerialToggle!&lt;CR&gt;", { desc = "Outline" })
+vim.keymap.set("n", "&lt;leader&gt;pv", "&lt;cmd&gt;VenvSelect&lt;CR&gt;", { desc = "Select virtualenv" })
+vim.keymap.set("n", "&lt;leader&gt;mr", "&lt;cmd&gt;RenderMarkdown toggle&lt;CR&gt;", { desc = "Toggle Markdown render" })
 
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"n"</span><span class="punctuation">,</span> <span class="string">"&lt;leader&gt;ff"</span><span class="punctuation">,</span> builtin<span class="operator">.</span><span class="property">find_files</span><span class="punctuation">,</span> <span class="punctuation">{</span> <span class="property">desc</span> <span class="operator">=</span> <span class="string">"Find Files"</span> <span class="punctuation">}</span><span class="punctuation">)</span>
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"n"</span><span class="punctuation">,</span> <span class="string">"&lt;leader&gt;fg"</span><span class="punctuation">,</span> builtin<span class="operator">.</span><span class="property">live_grep</span><span class="punctuation">,</span> <span class="punctuation">{</span> <span class="property">desc</span> <span class="operator">=</span> <span class="string">"Live Grep"</span> <span class="punctuation">}</span><span class="punctuation">)</span>
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"n"</span><span class="punctuation">,</span> <span class="string">"&lt;leader&gt;fb"</span><span class="punctuation">,</span> builtin<span class="operator">.</span><span class="property">buffers</span><span class="punctuation">,</span> <span class="punctuation">{</span> <span class="property">desc</span> <span class="operator">=</span> <span class="string">"Find Buffers"</span> <span class="punctuation">}</span><span class="punctuation">)</span>
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"n"</span><span class="punctuation">,</span> <span class="string">"&lt;leader&gt;fh"</span><span class="punctuation">,</span> builtin<span class="operator">.</span><span class="property">help_tags</span><span class="punctuation">,</span> <span class="punctuation">{</span> <span class="property">desc</span> <span class="operator">=</span> <span class="string">"Help Tags"</span> <span class="punctuation">}</span><span class="punctuation">)</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+-- Neovide
+if vim.g.neovide then
+    vim.o.guifont = "JetBrainsMono Nerd Font:h13"
+    vim.g.neovide_opacity = 0.85
+    vim.g.neovide_window_blurred = true
+    vim.g.neovide_floating_blur_amount_x = 6.0
+    vim.g.neovide_floating_blur_amount_y = 6.0
+    vim.g.neovide_padding_top = 12
+    vim.g.neovide_padding_left = 12
+    vim.g.neovide_padding_right = 12
+    vim.g.neovide_padding_bottom = 12
+    vim.g.neovide_cursor_animation_length = 0.08
+    vim.g.neovide_scroll_animation_length = 0.25
+    vim.g.neovide_cursor_vfx_mode = "pixiedust"
+end
 
-    <span class="punctuation">{</span>
-        <span class="string">"williamboman/mason-lspconfig.nvim"</span><span class="punctuation">,</span>
-        <span class="property">dependencies</span> <span class="operator">=</span> <span class="punctuation">{</span>
-            <span class="string">"williamboman/mason.nvim"</span><span class="punctuation">,</span>
-            <span class="string">"neovim/nvim-lspconfig"</span><span class="punctuation">,</span>
-            <span class="string">"hrsh7th/cmp-nvim-lsp"</span><span class="punctuation">,</span>
-        <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"mason"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span> <span class="property">ui</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">border</span> <span class="operator">=</span> <span class="string">"rounded"</span> <span class="punctuation">}</span> <span class="punctuation">})</span>
+-- Plugins
+require("lazy").setup({
+    -- Icons
+    {
+        "nvim-tree/nvim-web-devicons",
+        lazy = false,
+        config = function()
+            require("nvim-web-devicons").setup({
+                default = true,
+                override_by_filename = {
+                    [".gitignore"] = { icon = "", color = "#f1502f", name = "GitIgnore" },
+                    ["LICENSE"] = { icon = "󰿃", color = "#e5c07b", name = "License" },
+                    ["requirements.txt"] = { icon = "󰆼", color = "#61afef", name = "Requirements" },
+                },
+                override_by_extension = {
+                    ["py"] = { icon = "", color = "#ffbc03", name = "Py" },
+                    ["json"] = { icon = "", color = "#e5c07b", name = "Json" },
+                    ["db"] = { icon = "", color = "#e06c75", name = "Db" },
+                    ["ico"] = { icon = "", color = "#e5c07b", name = "Ico" },
+                },
+            })
+        end,
+    },
 
-            <span class="keyword">local</span> lspconfig <span class="operator">=</span> <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"lspconfig"</span><span class="punctuation">)</span>
-            <span class="keyword">local</span> capabilities <span class="operator">=</span> <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"cmp_nvim_lsp"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">default_capabilities</span><span class="punctuation">()</span>
+    -- Dashboard
+    {
+        "goolord/alpha-nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            local alpha = require("alpha")
+            local dashboard = require("alpha.themes.dashboard")
 
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"mason-lspconfig"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">ensure_installed</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"pyright"</span><span class="punctuation">,</span> <span class="string">"jsonls"</span><span class="punctuation">,</span> <span class="string">"omnisharp"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">handlers</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="keyword">function</span><span class="punctuation">(</span>server_name<span class="punctuation">)</span>
-                        lspconfig<span class="punctuation">[</span>server_name<span class="punctuation">]</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                            <span class="property">capabilities</span> <span class="operator">=</span> capabilities<span class="punctuation">,</span>
-                        <span class="punctuation">})</span>
-                    <span class="keyword">end</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"pyright"</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-                        lspconfig<span class="operator">.</span><span class="property">pyright</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                            <span class="property">capabilities</span> <span class="operator">=</span> capabilities<span class="punctuation">,</span>
-                            <span class="property">settings</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                                <span class="property">python</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                                    <span class="property">analysis</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                                        <span class="property">typeCheckingMode</span> <span class="operator">=</span> <span class="string">"basic"</span><span class="punctuation">,</span>
-                                        <span class="property">autoSearchPaths</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                                        <span class="property">useLibraryCodeForTypes</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                                        <span class="property">diagnosticSeverityOverrides</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                                            <span class="property">reportGeneralTypeIssues</span> <span class="operator">=</span> <span class="string">"none"</span><span class="punctuation">,</span>
-                                            <span class="property">reportOptionalSubscript</span> <span class="operator">=</span> <span class="string">"none"</span><span class="punctuation">,</span>
-                                            <span class="property">reportOptionalMemberAccess</span> <span class="operator">=</span> <span class="string">"none"</span><span class="punctuation">,</span>
-                                        <span class="punctuation">}</span><span class="punctuation">,</span>
-                                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                                <span class="punctuation">}</span><span class="punctuation">,</span>
-                            <span class="punctuation">}</span><span class="punctuation">,</span>
-                        <span class="punctuation">})</span>
-                    <span class="keyword">end</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+            dashboard.section.header.val = {
+                "██╗     ██╗██╗     ██╗███╗    ██╗███████╗ ██████╗ ██╗     ██╗██╗███╗    ███╗",
+                "██║     ██║██║     ██║████╗   ██║██╔════╝██╔═══██╗██║     ██║██║████╗  ████║",
+                "██║ █╗ ██║██║ █╗ ██║██╔██╗  ██║█████╗  ██║   ██║██║     ██║██║██╔████╔██║",
+                "██║███╗██║██║███╗██║██║╚██╗ ██║██╔══╝  ██║   ██║╚██╗   ██╔╝██║██║╚██╔╝██║",
+                "╚███╔███╔╝╚███╔███╔╝██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║",
+                " ╚══╝╚══╝  ╚══╝╚══╝ ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝",
+            }
+            dashboard.section.footer.val = {
+                "",
+                "Welcome to WWNeoVim | Powered by @wwxriyy :з",
+            }
+            dashboard.section.buttons.val = {
+                dashboard.button("f", "  Find File", "&lt;cmd&gt;Telescope find_files&lt;CR&gt;"),
+                dashboard.button("e", "  New File", "&lt;cmd&gt;ene &lt;BAR&gt; startinsert&lt;CR&gt;"),
+                dashboard.button("r", "  Recent Files", "&lt;cmd&gt;Telescope oldfiles&lt;CR&gt;"),
+                dashboard.button("s", "  Restore Session", "&lt;cmd&gt;lua require('persistence').load()&lt;CR&gt;"),
+                dashboard.button("q", "  Quit Neovim", "&lt;cmd&gt;qa&lt;CR&gt;"),
+            }
 
-    <span class="punctuation">{</span>
-        <span class="string">"hrsh7th/nvim-cmp"</span><span class="punctuation">,</span>
-        <span class="property">dependencies</span> <span class="operator">=</span> <span class="punctuation">{</span>
-            <span class="string">"hrsh7th/cmp-nvim-lsp"</span><span class="punctuation">,</span>
-            <span class="string">"hrsh7th/cmp-buffer"</span><span class="punctuation">,</span>
-            <span class="string">"hrsh7th/cmp-path"</span><span class="punctuation">,</span>
-            <span class="string">"L3MON4D3/LuaSnip"</span><span class="punctuation">,</span>
-            <span class="string">"saadparwaiz1/cmp_luasnip"</span><span class="punctuation">,</span>
-        <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">local</span> cmp <span class="operator">=</span> <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"cmp"</span><span class="punctuation">)</span>
-            cmp<span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">snippet</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">expand</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">(</span>args<span class="punctuation">)</span>
-                        <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"luasnip"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">lsp_expand</span><span class="punctuation">(</span>args<span class="operator">.</span><span class="property">body</span><span class="punctuation">)</span>
-                    <span class="keyword">end</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">mapping</span> <span class="operator">=</span> cmp<span class="operator">.</span><span class="property">mapping</span><span class="operator">.</span><span class="function">preset</span><span class="operator">.</span><span class="property">insert</span><span class="punctuation">({</span>
-                    <span class="punctuation">[</span><span class="string">"&lt;C-Space&gt;"</span><span class="punctuation">]</span> <span class="operator">=</span> cmp<span class="operator">.</span><span class="property">mapping</span><span class="operator">.</span><span class="function">complete</span><span class="punctuation">()</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"&lt;CR&gt;"</span><span class="punctuation">]</span> <span class="operator">=</span> cmp<span class="operator">.</span><span class="property">mapping</span><span class="operator">.</span><span class="function">confirm</span><span class="punctuation">({</span> <span class="property">select</span> <span class="operator">=</span> <span class="boolean">true</span> <span class="punctuation">})</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"&lt;Tab&gt;"</span><span class="punctuation">]</span> <span class="operator">=</span> cmp<span class="operator">.</span><span class="property">mapping</span><span class="operator">.</span><span class="function">select_next_item</span><span class="punctuation">()</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"&lt;S-Tab&gt;"</span><span class="punctuation">]</span> <span class="operator">=</span> cmp<span class="operator">.</span><span class="property">mapping</span><span class="operator">.</span><span class="function">select_prev_item</span><span class="punctuation">()</span><span class="punctuation">,</span>
-                    <span class="punctuation">[</span><span class="string">"&lt;C-e&gt;"</span><span class="punctuation">]</span> <span class="operator">=</span> cmp<span class="operator">.</span><span class="property">mapping</span><span class="operator">.</span><span class="function">abort</span><span class="punctuation">()</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">)</span><span class="punctuation">,</span>
-                <span class="property">sources</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="punctuation">{</span> <span class="property">name</span> <span class="operator">=</span> <span class="string">"nvim_lsp"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="punctuation">{</span> <span class="property">name</span> <span class="operator">=</span> <span class="string">"path"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="punctuation">{</span> <span class="property">name</span> <span class="operator">=</span> <span class="string">"buffer"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">window</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">completion</span> <span class="operator">=</span> cmp<span class="operator">.</span><span class="property">config</span><span class="operator">.</span><span class="property">window</span><span class="operator">.</span><span class="function">bordered</span><span class="punctuation">({</span>
-                        <span class="property">border</span> <span class="operator">=</span> <span class="string">"rounded"</span><span class="punctuation">,</span>
-                        <span class="property">winhighlight</span> <span class="operator">=</span> <span class="string">"Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None"</span><span class="punctuation">,</span>
-                        <span class="property">max_height</span> <span class="operator">=</span> <span class="number">8</span><span class="punctuation">,</span>
-                    <span class="punctuation">})</span><span class="punctuation">,</span>
-                    <span class="property">documentation</span> <span class="operator">=</span> cmp<span class="operator">.</span><span class="property">config</span><span class="operator">.</span><span class="property">window</span><span class="operator">.</span><span class="function">bordered</span><span class="punctuation">({</span>
-                        <span class="property">border</span> <span class="operator">=</span> <span class="string">"rounded"</span><span class="punctuation">,</span>
-                        <span class="property">winhighlight</span> <span class="operator">=</span> <span class="string">"Normal:NormalFloat,FloatBorder:FloatBorder"</span><span class="punctuation">,</span>
-                        <span class="property">max_height</span> <span class="operator">=</span> <span class="number">10</span><span class="punctuation">,</span>
-                        <span class="property">max_width</span> <span class="operator">=</span> <span class="number">50</span><span class="punctuation">,</span>
-                    <span class="punctuation">})</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">formatting</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">fields</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"abbr"</span><span class="punctuation">,</span> <span class="string">"kind"</span><span class="punctuation">,</span> <span class="string">"menu"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">format</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">(</span>entry<span class="punctuation">,</span> vim_item<span class="punctuation">)</span>
-                        vim_item<span class="operator">.</span><span class="property">menu</span> <span class="operator">=</span> <span class="punctuation">({</span>
-                            <span class="property">nvim_lsp</span> <span class="operator">=</span> <span class="string">"[LSP]"</span><span class="punctuation">,</span>
-                            <span class="property">buffer</span> <span class="operator">=</span> <span class="string">"[Buf]"</span><span class="punctuation">,</span>
-                            <span class="property">path</span> <span class="operator">=</span> <span class="string">"[Path]"</span><span class="punctuation">,</span>
-                        <span class="punctuation">})[</span>entry<span class="operator">.</span><span class="property">source</span><span class="operator">.</span><span class="property">name</span><span class="punctuation">]</span>
-                        <span class="keyword">return</span> vim_item
-                    <span class="keyword">end</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+            alpha.setup(dashboard.opts)
+        end,
+    },
 
-    <span class="punctuation">{</span>
-        <span class="string">"nvim-treesitter/nvim-treesitter"</span><span class="punctuation">,</span>
-        <span class="property">branch</span> <span class="operator">=</span> <span class="string">"main"</span><span class="punctuation">,</span>
-        <span class="property">lazy</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-        <span class="property">build</span> <span class="operator">=</span> <span class="string">":TSUpdate"</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"nvim-treesitter"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">highlight</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">enable</span> <span class="operator">=</span> <span class="boolean">true</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">api</span><span class="operator">.</span><span class="function">nvim_create_autocmd</span><span class="punctuation">(</span><span class="string">"FileType"</span><span class="punctuation">,</span> <span class="punctuation">{</span>
-                <span class="property">pattern</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"python"</span><span class="punctuation">,</span> <span class="string">"cs"</span><span class="punctuation">,</span> <span class="string">"json"</span><span class="punctuation">,</span> <span class="string">"lua"</span><span class="punctuation">,</span> <span class="string">"vim"</span><span class="punctuation">,</span> <span class="string">"bash"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">callback</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-                    <span class="keyword">if</span> <span class="builtin">vim</span><span class="operator">.</span><span class="property">treesitter</span><span class="operator">.</span><span class="property">language</span><span class="operator">.</span><span class="function">add</span><span class="punctuation">(</span><span class="builtin">vim</span><span class="operator">.</span><span class="property">bo</span><span class="operator">.</span><span class="property">filetype</span><span class="punctuation">)</span> <span class="keyword">then</span>
-                        <span class="builtin">vim</span><span class="operator">.</span><span class="property">treesitter</span><span class="operator">.</span><span class="function">start</span><span class="punctuation">()</span>
-                    <span class="keyword">end</span>
-                <span class="keyword">end</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+    -- Colorscheme
+    {
+        "sainnhe/gruvbox-material",
+        lazy = false,
+        priority = 1000,
+        config = function()
+            vim.g.gruvbox_material_background = "hard"
+            vim.g.gruvbox_material_foreground = "material"
+            vim.g.gruvbox_material_enable_italic = true
+            vim.g.gruvbox_material_transparent_background = 0
+            vim.g.gruvbox_material_float_style = "dim"
+            vim.g.gruvbox_material_colors_override = {
+                bg0 = { BG, "234" },
+                bg1 = { "#1a1a1a", "235" },
+                bg2 = { "#202020", "235" },
+                bg3 = { "#272727", "236" },
+                bg4 = { "#2e2e2e", "237" },
+                bg5 = { "#353535", "237" },
+                bg_statusline1 = { BG, "234" },
+                bg_statusline2 = { BG, "234" },
+                bg_statusline3 = { BG, "234" },
+            }
+            vim.cmd("colorscheme gruvbox-material")
+        end,
+    },
 
-    <span class="punctuation">{</span>
-        <span class="string">"nvim-lualine/lualine.nvim"</span><span class="punctuation">,</span>
-        <span class="property">dependencies</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"nvim-tree/nvim-web-devicons"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"lualine"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">options</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">theme</span> <span class="operator">=</span> <span class="string">"gruvbox-material"</span><span class="punctuation">,</span>
-                    <span class="property">globalstatus</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">section_separators</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">left</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span> <span class="property">right</span> <span class="operator">=</span> <span class="string">""</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">component_separators</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">left</span> <span class="operator">=</span> <span class="string">""</span><span class="punctuation">,</span> <span class="property">right</span> <span class="operator">=</span> <span class="string">""</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">icons_enabled</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="property">sections</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">lualine_a</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"mode"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">lualine_b</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="punctuation">{</span> <span class="string">"branch"</span><span class="punctuation">,</span> <span class="property">icon</span> <span class="operator">=</span> <span class="string">""</span> <span class="punctuation">}</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">lualine_c</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                        <span class="punctuation">{</span>
-                            <span class="string">"filename"</span><span class="punctuation">,</span>
-                            <span class="property">path</span> <span class="operator">=</span> <span class="number">1</span><span class="punctuation">,</span>
-                            <span class="property">symbols</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">modified</span> <span class="operator">=</span> <span class="string">"~"</span><span class="punctuation">,</span> <span class="property">readonly</span> <span class="operator">=</span> <span class="string">"🔒"</span><span class="punctuation">,</span> <span class="property">unnamed</span> <span class="operator">=</span> <span class="string">"[No Name]"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                        <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">lualine_x</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"encoding"</span><span class="punctuation">,</span> <span class="string">"fileformat"</span><span class="punctuation">,</span> <span class="string">"filetype"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">lualine_y</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"progress"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">lualine_z</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"location"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+    -- Notifications
+    {
+        "rcarriga/nvim-notify",
+        opts = {
+            stages = "fade_in_slide_out",
+            background_colour = "#000000",
+            render = "compact",
+            timeout = 2500,
+        },
+    },
 
-    <span class="punctuation">{</span>
-        <span class="string">"akinsho/bufferline.nvim"</span><span class="punctuation">,</span>
-        <span class="property">version</span> <span class="operator">=</span> <span class="string">"*"</span><span class="punctuation">,</span>
-        <span class="property">dependencies</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">"nvim-tree/nvim-web-devicons"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"bufferline"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">options</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">mode</span> <span class="operator">=</span> <span class="string">"buffers"</span><span class="punctuation">,</span>
-                    <span class="property">style_preset</span> <span class="operator">=</span> <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"bufferline"</span><span class="punctuation">)</span><span class="operator">.</span><span class="property">style_preset</span><span class="operator">.</span><span class="property">default</span><span class="punctuation">,</span>
-                    <span class="property">themable</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">diagnostics</span> <span class="operator">=</span> <span class="string">"nvim_lsp"</span><span class="punctuation">,</span>
-                    <span class="property">separator_style</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="string">""</span><span class="punctuation">,</span> <span class="string">""</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">indicator</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">style</span> <span class="operator">=</span> <span class="string">"none"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">show_buffer_close_icons</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">show_close_icon</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-                    <span class="property">close_icon</span> <span class="operator">=</span> <span class="string">"󰅖"</span><span class="punctuation">,</span>
-                    <span class="property">buffer_close_icon</span> <span class="operator">=</span> <span class="string">"󰅖"</span><span class="punctuation">,</span>
-                    <span class="property">modified_icon</span> <span class="operator">=</span> <span class="string">"~"</span><span class="punctuation">,</span>
-                    <span class="property">enforce_regular_tabs</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-                    <span class="property">always_show_bufferline</span> <span class="operator">=</span> <span class="boolean">true</span><span class="punctuation">,</span>
-                    <span class="property">offsets</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                        <span class="punctuation">{</span>
-                            <span class="property">filetype</span> <span class="operator">=</span> <span class="string">"neo-tree"</span><span class="punctuation">,</span>
-                            <span class="property">text</span> <span class="operator">=</span> <span class="string">"EXPLORER"</span><span class="punctuation">,</span>
-                            <span class="property">text_align</span> <span class="operator">=</span> <span class="string">"left"</span><span class="punctuation">,</span>
-                            <span class="property">separator</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-                        <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
+    -- Command line, messages, LSP UI
+    {
+        "folke/noice.nvim",
+        event = "VeryLazy",
+        dependencies = {
+            "MunifTanjim/nui.nvim",
+            "rcarriga/nvim-notify",
+        },
+        opts = {
+            lsp = {
+                progress = { enabled = true },
+                override = {
+                    ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+                    ["vim.lsp.util.stylize_markdown"] = true,
+                    ["cmp.entry.get_documentation"] = true,
+                },
+            },
+            presets = {
+                bottom_search = true,
+                command_palette = true,
+                long_message_to_split = true,
+                inc_rename = false,
+                lsp_doc_border = true,
+            },
+            routes = {
+                {
+                    filter = { event = "lsp", kind = "progress", find = "pyright" },
+                    opts = { skip = true },
+                },
+                {
+                    filter = { event = "msg_show", find = "pyright" },
+                    opts = { skip = true },
+                },
+                {
+                    filter = { event = "notify", find = "No information available" },
+                    opts = { skip = true },
+                },
+            },
+        },
+    },
 
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"n"</span><span class="punctuation">,</span> <span class="string">"&lt;Tab&gt;"</span><span class="punctuation">,</span> <span class="string">"&lt;cmd&gt;BufferLineCycleNext&lt;CR&gt;"</span><span class="punctuation">,</span> <span class="punctuation">{</span> <span class="property">desc</span> <span class="operator">=</span> <span class="string">"Next Buffer"</span> <span class="punctuation">}</span><span class="punctuation">)</span>
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"n"</span><span class="punctuation">,</span> <span class="string">"&lt;S-Tab&gt;"</span><span class="punctuation">,</span> <span class="string">"&lt;cmd&gt;BufferLineCyclePrev&lt;CR&gt;"</span><span class="punctuation">,</span> <span class="punctuation">{</span> <span class="property">desc</span> <span class="operator">=</span> <span class="string">"Prev Buffer"</span> <span class="punctuation">}</span><span class="punctuation">)</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+    -- Input / select UI
+    { "stevearc/dressing.nvim", event = "VeryLazy", opts = {} },
 
-    <span class="punctuation">{</span>
-        <span class="string">"lewis6991/gitsigns.nvim"</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"gitsigns"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">signs</span> <span class="operator">=</span> <span class="punctuation">{</span>
-                    <span class="property">add</span>          <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">text</span> <span class="operator">=</span> <span class="string">"+"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">change</span>       <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">text</span> <span class="operator">=</span> <span class="string">"~"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">delete</span>       <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">text</span> <span class="operator">=</span> <span class="string">"-"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">topdelete</span>    <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">text</span> <span class="operator">=</span> <span class="string">"-"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">changedelete</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">text</span> <span class="operator">=</span> <span class="string">"~"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                    <span class="property">untracked</span>    <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">text</span> <span class="operator">=</span> <span class="string">"+"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-                <span class="punctuation">}</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+    -- Breadcrumbs
+    {
+        "Bekaboo/dropbar.nvim",
+        event = { "BufReadPost", "BufNewFile" },
+    },
 
-    <span class="punctuation">{</span>
-        <span class="string">"folke/which-key.nvim"</span><span class="punctuation">,</span>
-        <span class="property">event</span> <span class="operator">=</span> <span class="string">"VeryLazy"</span><span class="punctuation">,</span>
-        <span class="property">opts</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">preset</span> <span class="operator">=</span> <span class="string">"modern"</span> <span class="punctuation">}</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+    -- LSP UI
+    {
+        "nvimdev/lspsaga.nvim",
+        lazy = false,
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-tree/nvim-web-devicons",
+        },
+        config = function()
+            require("lspsaga").setup({
+                ui = { border = "rounded" },
+                hover = {
+                    max_width = 0.6,
+                    open_link = "gx",
+                },
+                diagnostic = {
+                    show_code_action = true,
+                    border_follow = true,
+                },
+            })
+            vim.keymap.set("n", "K", "&lt;cmd&gt;Lspsaga hover_doc&lt;CR&gt;", { silent = true })
+            vim.keymap.set("n", "&lt;leader&gt;ca", "&lt;cmd&gt;Lspsaga code_action&lt;CR&gt;", { desc = "Code Action" })
+            vim.keymap.set("n", "&lt;leader&gt;rn", "&lt;cmd&gt;Lspsaga rename&lt;CR&gt;", { desc = "Rename" })
+            vim.keymap.set("n", "gd", "&lt;cmd&gt;Lspsaga goto_definition&lt;CR&gt;", { desc = "Go to Definition" })
+            vim.keymap.set("n", "gr", "&lt;cmd&gt;Lspsaga finder&lt;CR&gt;", { desc = "References" })
+        end,
+    },
 
-    <span class="punctuation">{</span>
-        <span class="string">"akinsho/toggleterm.nvim"</span><span class="punctuation">,</span>
-        <span class="property">version</span> <span class="operator">=</span> <span class="string">"*"</span><span class="punctuation">,</span>
-        <span class="property">config</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-            <span class="keyword">local</span> powershell <span class="operator">=</span> <span class="builtin">vim</span><span class="operator">.</span><span class="property">fn</span><span class="operator">.</span><span class="function">executable</span><span class="punctuation">(</span><span class="string">"pwsh"</span><span class="punctuation">)</span> <span class="operator">==</span> <span class="number">1</span> <span class="keyword">and</span> <span class="string">"pwsh"</span> <span class="keyword">or</span> <span class="string">"powershell.exe"</span>
+    -- Inline diagnostics
+    {
+        "rachartier/tiny-inline-diagnostic.nvim",
+        event = "VeryLazy",
+        priority = 1000,
+        config = function()
+            require("tiny-inline-diagnostic").setup({ preset = "modern" })
+        end,
+    },
 
-            <span class="keyword">require</span><span class="punctuation">(</span><span class="string">"toggleterm"</span><span class="punctuation">)</span><span class="operator">.</span><span class="function">setup</span><span class="punctuation">({</span>
-                <span class="property">size</span> <span class="operator">=</span> <span class="number">15</span><span class="punctuation">,</span>
-                <span class="property">open_mapping</span> <span class="operator">=</span> <span class="string">[[&lt;C-\&gt;]]</span><span class="punctuation">,</span>
-                <span class="property">direction</span> <span class="operator">=</span> <span class="string">"horizontal"</span><span class="punctuation">,</span>
-                <span class="property">shell</span> <span class="operator">=</span> powershell<span class="punctuation">,</span>
-                <span class="property">dir</span> <span class="operator">=</span> <span class="string">"git_dir"</span><span class="punctuation">,</span>
-                <span class="property">close_on_exit</span> <span class="operator">=</span> <span class="boolean">false</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
+    -- Indent guides
+    {
+        "lukas-reineke/indent-blankline.nvim",
+        main = "ibl",
+        event = { "BufReadPost", "BufNewFile" },
+        opts = {
+            indent = {
+                char = "│",
+                tab_char = "│",
+            },
+            scope = {
+                enabled = true,
+                show_start = false,
+                show_end = false,
+            },
+            exclude = {
+                filetypes = {
+                    "help", "alpha", "dashboard", "neo-tree",
+                    "Trouble", "lazy", "mason",
+                },
+            },
+        },
+    },
 
-            <span class="builtin">vim</span><span class="operator">.</span><span class="property">api</span><span class="operator">.</span><span class="function">nvim_create_autocmd</span><span class="punctuation">(</span><span class="string">"TermOpen"</span><span class="punctuation">,</span> <span class="punctuation">{</span>
-                <span class="property">pattern</span> <span class="operator">=</span> <span class="string">"term://*toggleterm#*"</span><span class="punctuation">,</span>
-                <span class="property">callback</span> <span class="operator">=</span> <span class="keyword">function</span><span class="punctuation">()</span>
-                    <span class="keyword">local</span> opts <span class="operator">=</span> <span class="punctuation">{</span> <span class="property">buffer</span> <span class="operator">=</span> <span class="number">0</span> <span class="punctuation">}</span>
-                    <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"t"</span><span class="punctuation">,</span> <span class="string">"&lt;C-h&gt;"</span><span class="punctuation">,</span> <span class="string">[[&lt;Cmd&gt;wincmd h&lt;CR&gt;]]</span><span class="punctuation">,</span> opts<span class="punctuation">)</span>
-                    <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"t"</span><span class="punctuation">,</span> <span class="string">"&lt;C-j&gt;"</span><span class="punctuation">,</span> <span class="string">[[&lt;Cmd&gt;wincmd j&lt;CR&gt;]]</span><span class="punctuation">,</span> opts<span class="punctuation">)</span>
-                    <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"t"</span><span class="punctuation">,</span> <span class="string">"&lt;C-k&gt;"</span><span class="punctuation">,</span> <span class="string">[[&lt;Cmd&gt;wincmd k&lt;CR&gt;]]</span><span class="punctuation">,</span> opts<span class="punctuation">)</span>
-                    <span class="builtin">vim</span><span class="operator">.</span><span class="property">keymap</span><span class="operator">.</span><span class="function">set</span><span class="punctuation">(</span><span class="string">"t"</span><span class="punctuation">,</span> <span class="string">"&lt;C-l&gt;"</span><span class="punctuation">,</span> <span class="string">[[&lt;Cmd&gt;wincmd l&lt;CR&gt;]]</span><span class="punctuation">,</span> opts<span class="punctuation">)</span>
-                <span class="keyword">end</span><span class="punctuation">,</span>
-            <span class="punctuation">})</span>
-        <span class="keyword">end</span><span class="punctuation">,</span>
-    <span class="punctuation">}</span><span class="punctuation">,</span>
+    -- Rainbow brackets, word highlight
+    { "HiPhish/rainbow-delimiters.nvim", event = { "BufReadPost", "BufNewFile" } },
+    { "RRethy/vim-illuminate", event = "VeryLazy" },
 
-<span class="punctuation">})</span></code></pre>
+    -- Animations
+    { "sphamba/smear-cursor.nvim", event = "VeryLazy", opts = {} },
+    { "karb94/neoscroll.nvim", event = "VeryLazy", opts = {} },
+
+    -- File explorer
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "MunifTanjim/nui.nvim",
+            "nvim-tree/nvim-web-devicons",
+        },
+        config = function()
+            require("neo-tree").setup({
+                close_if_last_window = true,
+                popup_border_style = "rounded",
+                enable_git_status = true,
+                enable_diagnostics = true,
+                filesystem = {
+                    follow_current_file = { enabled = true },
+                    hijack_netrw_behavior = "open_default",
+                    use_libuv_file_watcher = true,
+                    filtered_items = {
+                        visible = false,
+                        hide_dotfiles = false,
+                        hide_gitignored = true,
+                    },
+                },
+                window = {
+                    position = "left",
+                    width = 35,
+                    mappings = {
+                        ["&lt;space&gt;"] = "toggle_node",
+                        ["&lt;cr&gt;"] = "open",
+                        ["o"] = "open",
+                        ["v"] = "open_vsplit",
+                        ["s"] = "open_split",
+                        ["t"] = "open_tabnew",
+                        ["a"] = "add",
+                        ["d"] = "delete",
+                        ["r"] = "rename",
+                        ["q"] = "close_window",
+                    },
+                },
+                default_component_configs = {
+                    indent = {
+                        with_expanders = true,
+                        expander_collapsed = "󰅂",
+                        expander_expanded = "󰅁",
+                    },
+                    icon = {
+                        folder_closed = "󰉋",
+                        folder_open = "󰝰",
+                        folder_empty = "󰉖",
+                    },
+                    git_status = {
+                        symbols = {
+                            added = "+",
+                            modified = "~",
+                            deleted = "-",
+                            renamed = "➜",
+                            untracked = "+",
+                            ignored = "◌",
+                            unstaged = "~",
+                            staged = "+",
+                            conflict = "⚡",
+                        },
+                    },
+                },
+            })
+            vim.keymap.set("n", "&lt;leader&gt;e", "&lt;cmd&gt;Neotree toggle&lt;CR&gt;", { desc = "Toggle Explorer" })
+        end,
+    },
+
+    -- Discord presence
+    {
+        "vyfor/cord.nvim",
+        event = "VeryLazy",
+        opts = {
+            user_workspace_symbols = false,
+            log_level = "error",
+            editor = {
+                client = "neovim",
+                tooltip = "Neovim",
+            },
+            display = {
+                theme = "default",
+                flavor = "dark",
+                show_time = true,
+            },
+            text = {
+                editing = function(opts)
+                    return "Editing " .. (opts.filename or "file")
+                end,
+                viewing = function(opts)
+                    return "Viewing " .. (opts.filename or "file")
+                end,
+                workspace = function(opts)
+                    return "In workspace " .. (opts.workspace or "workspace")
+                end,
+            },
+            buttons = {
+                {
+                    label = "Neovim Editor",
+                    url = "https://neovim.io",
+                },
+            },
+        },
+    },
+
+    -- Fuzzy finder
+    {
+        "nvim-telescope/telescope.nvim",
+        branch = "0.1.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            {
+                "nvim-telescope/telescope-fzf-native.nvim",
+                build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+                cond = function()
+                    return vim.fn.executable("cmake") == 1
+                end,
+            },
+        },
+        config = function()
+            local builtin = require("telescope.builtin")
+            require("telescope").setup({
+                defaults = {
+                    layout_strategy = "horizontal",
+                    layout_config = { preview_width = 0.55 },
+                    sorting_strategy = "ascending",
+                    border = true,
+                    winblend = 10,
+                    prompt_prefix = "  ",
+                    selection_caret = " ",
+                },
+            })
+            pcall(require("telescope").load_extension, "fzf")
+            vim.keymap.set("n", "&lt;leader&gt;ff", builtin.find_files, { desc = "Find Files" })
+            vim.keymap.set("n", "&lt;leader&gt;fg", builtin.live_grep, { desc = "Live Grep" })
+            vim.keymap.set("n", "&lt;leader&gt;fb", builtin.buffers, { desc = "Find Buffers" })
+            vim.keymap.set("n", "&lt;leader&gt;fh", builtin.help_tags, { desc = "Help Tags" })
+            vim.keymap.set("n", "&lt;leader&gt;fr", builtin.oldfiles, { desc = "Recent Files" })
+        end,
+    },
+
+    -- LSP (Neovim 0.11+ API)
+    {
+        "williamboman/mason-lspconfig.nvim",
+        dependencies = {
+            "williamboman/mason.nvim",
+            "neovim/nvim-lspconfig",
+            "hrsh7th/cmp-nvim-lsp",
+        },
+        config = function()
+            require("mason").setup({ ui = { border = "rounded" } })
+
+            local capabilities = require("cmp_nvim_lsp").default_capabilities()
+            vim.lsp.config("*", { capabilities = capabilities })
+            vim.lsp.config("ruff", {
+                on_attach = function(client)
+                    client.server_capabilities.hoverProvider = false
+                end,
+            vim.lsp.config("pyright", {
+                settings = {
+                    pyright = { disableOrganizeImports = true },
+                    python = {
+                        analysis = {
+                            typeCheckingMode = "basic",
+                            autoSearchPaths = true,
+                            useLibraryCodeForTypes = true,
+                            diagnosticSeverityOverrides = {
+                                reportGeneralTypeIssues = "none",
+                                reportOptionalSubscript = "none",
+                                reportOptionalMemberAccess = "none",
+                            },
+                        },
+                    },
+                },
+            })
+
+            require("mason-lspconfig").setup({
+                ensure_installed = { "pyright", "ruff", "jsonls", "omnisharp" },
+                automatic_enable = true,
+            })
+        end,
+    },
+
+    -- Completion
+    {
+        "hrsh7th/nvim-cmp",
+        event = "InsertEnter",
+        dependencies = {
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-path",
+            "L3MON4D3/LuaSnip",
+            "saadparwaiz1/cmp_luasnip",
+        },
+        config = function()
+            local cmp = require("cmp")
+            cmp.setup({
+                snippet = {
+                    expand = function(args)
+                        require("luasnip").lsp_expand(args.body)
+                    end,
+                },
+                mapping = cmp.mapping.preset.insert({
+                    ["&lt;C-Space&gt;"] = cmp.mapping.complete(),
+                    ["&lt;CR&gt;"] = cmp.mapping.confirm({ select = true }),
+                    ["&lt;Tab&gt;"] = cmp.mapping.select_next_item(),
+                    ["&lt;S-Tab&gt;"] = cmp.mapping.select_prev_item(),
+                    ["&lt;C-e&gt;"] = cmp.mapping.abort(),
+                }),
+                sources = {
+                    { name = "nvim_lsp" },
+                    { name = "luasnip" },
+                    { name = "path" },
+                    { name = "buffer" },
+                },
+                window = {
+                    completion = cmp.config.window.bordered({
+                        border = "rounded",
+                        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+                        max_height = 8,
+                    }),
+                    documentation = cmp.config.window.bordered({
+                        border = "rounded",
+                        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder",
+                        max_height = 10,
+                        max_width = 50,
+                    }),
+                },
+                formatting = {
+                    fields = { "abbr", "kind", "menu" },
+                    format = function(entry, vim_item)
+                        vim_item.menu = ({
+                            nvim_lsp = "[LSP]",
+                            luasnip = "[Snip]",
+                            buffer = "[Buf]",
+                            path = "[Path]",
+                        })[entry.source.name]
+                        return vim_item
+                    end,
+                },
+            })
+
+            local ok, cmp_autopairs = pcall(require, "nvim-autopairs.completion.cmp")
+            if ok then
+                cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+            end
+        end,
+    },
+
+    -- Treesitter (main branch)
+    {
+        "nvim-treesitter/nvim-treesitter",
+        branch = "main",
+        lazy = false,
+        build = ":TSUpdate",
+        config = function()
+            require("nvim-treesitter").install({
+                "python", "c_sharp", "json", "lua", "vim", "vimdoc",
+                "bash", "markdown", "markdown_inline",
+            })
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = { "python", "cs", "json", "lua", "vim", "sh", "bash", "markdown" },
+                callback = function()
+                    pcall(vim.treesitter.start)
+                end,
+            })
+        end,
+    },
+
+    -- Statusline
+    {
+        "nvim-lualine/lualine.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            local theme = require("lualine.themes.gruvbox-material")
+            for _, mode in pairs(theme) do
+                for _, section in ipairs({ "b", "c", "x", "y" }) do
+                    if mode[section] then
+                        mode[section].bg = BG
+                    end
+                end
+            end
+            require("lualine").setup({
+                options = {
+                    theme = theme,
+                    globalstatus = true,
+                    section_separators = { left = "", right = "" },
+                    component_separators = { left = "", right = "" },
+                    icons_enabled = true,
+                },
+                sections = {
+                    lualine_a = { "mode" },
+                    lualine_b = { { "branch", icon = "" } },
+                    lualine_c = {
+                        {
+                            "filename",
+                            path = 1,
+                            symbols = { modified = "~", readonly = "", unnamed = "[No Name]" },
+                        },
+                    },
+                    lualine_x = { "encoding", "fileformat", "filetype" },
+                    lualine_y = { "progress" },
+                    lualine_z = { "location" },
+                },
+            })
+        end,
+    },
+
+    -- Bufferline
+    {
+        "akinsho/bufferline.nvim",
+        version = "*",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            require("bufferline").setup({
+                options = {
+                    mode = "buffers",
+                    style_preset = require("bufferline").style_preset.default,
+                    themable = true,
+                    diagnostics = "nvim_lsp",
+                    separator_style = { "", "" },
+                    indicator = { style = "none" },
+                    show_buffer_close_icons = true,
+                    show_close_icon = false,
+                    close_icon = "󰅖",
+                    buffer_close_icon = "󰅖",
+                    modified_icon = "~",
+                    enforce_regular_tabs = false,
+                    always_show_bufferline = true,
+                    offsets = {
+                        {
+                            filetype = "neo-tree",
+                            text = "EXPLORER",
+                            text_align = "left",
+                            separator = false,
+                        },
+                    },
+                },
+            })
+            vim.keymap.set("n", "&lt;Tab&gt;", "&lt;cmd&gt;BufferLineCycleNext&lt;CR&gt;", { desc = "Next Buffer" })
+            vim.keymap.set("n", "&lt;S-Tab&gt;", "&lt;cmd&gt;BufferLineCyclePrev&lt;CR&gt;", { desc = "Prev Buffer" })
+        end,
+    },
+
+    -- Git
+    {
+        "lewis6991/gitsigns.nvim",
+        config = function()
+            require("gitsigns").setup({
+                signs = {
+                    add = { text = "▎" },
+                    change = { text = "▎" },
+                    delete = { text = "▁" },
+                    topdelete = { text = "▔" },
+                    changedelete = { text = "▎" },
+                    untracked = { text = "▎" },
+                },
+            })
+        end,
+    },
+
+    -- Keymap hints
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        opts = { preset = "modern" },
+    },
+
+    -- Terminal
+    {
+        "akinsho/toggleterm.nvim",
+        version = "*",
+        config = function()
+            local powershell = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell.exe"
+            require("toggleterm").setup({
+                size = 15,
+                open_mapping = [[&lt;C-\&gt;]],
+                direction = "horizontal",
+                shell = powershell,
+                dir = "git_dir",
+                close_on_exit = false,
+            })
+            vim.api.nvim_create_autocmd("TermOpen", {
+                pattern = "term://*toggleterm#*",
+                callback = function()
+                    local opts = { buffer = 0 }
+                    vim.keymap.set("t", "&lt;C-h&gt;", [[&lt;Cmd&gt;wincmd h&lt;CR&gt;]], opts)
+                    vim.keymap.set("t", "&lt;C-j&gt;", [[&lt;Cmd&gt;wincmd j&lt;CR&gt;]], opts)
+                    vim.keymap.set("t", "&lt;C-k&gt;", [[&lt;Cmd&gt;wincmd k&lt;CR&gt;]], opts)
+                    vim.keymap.set("t", "&lt;C-l&gt;", [[&lt;Cmd&gt;wincmd l&lt;CR&gt;]], opts)
+                end,
+            })
+        end,
+    },
+
+    -- Editing helpers
+    { "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
+    { "numToStr/Comment.nvim", event = "VeryLazy", opts = {} },
+    { "kylechui/nvim-surround", event = "VeryLazy", opts = {} },
+    {
+        "folke/flash.nvim",
+        event = "VeryLazy",
+        opts = {},
+        keys = {
+            { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+            { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+        },
+    },
+    {
+        "folke/todo-comments.nvim",
+        event = "VeryLazy",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = {},
+    },
+    { "folke/trouble.nvim", cmd = "Trouble", opts = {} },
+    { "folke/persistence.nvim", event = "BufReadPre", opts = {} },
+
+    -- Formatting
+    {
+        "stevearc/conform.nvim",
+        event = "BufWritePre",
+        opts = {
+            formatters_by_ft = {
+                python = { "ruff_format" },
+                lua = { "stylua" },
+                json = { "prettier" },
+            },
+            format_on_save = {
+                timeout_ms = 500,
+                lsp_format = "fallback",
+            },
+        },
+    },
+
+    -- Python virtualenv selector
+    {
+        "linux-cultist/venv-selector.nvim",
+        branch = "main",
+        ft = "python",
+        cmd = "VenvSelect",
+        dependencies = {
+            "neovim/nvim-lspconfig",
+            "nvim-telescope/telescope.nvim",
+            "mfussenegger/nvim-dap-python",
+        },
+        opts = {},
+    },
+
+    -- Git diff view
+    {
+        "sindrets/diffview.nvim",
+        cmd = { "DiffviewOpen", "DiffviewFileHistory", "DiffviewClose" },
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = {},
+    },
+
+}){% endverbatim %}</code></pre>
 </div>
 {% endblock %}
+
