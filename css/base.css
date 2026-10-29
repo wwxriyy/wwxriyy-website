@@ -38,7 +38,7 @@ body::before {
   inset: -24px;
   z-index: -1;
   background: #0b0f10 url('../assets/images/background-image.jpg') center / cover no-repeat;
-  filter: blur(7px) brightness(0.9) saturate(1.1);
+  filter: blur(18px) brightness(0.9) saturate(1.1);
   pointer-events: none;
 }
 
@@ -59,6 +59,11 @@ body::before {
   opacity: 1;
 }
 
+/* already seen in this session: no fade between pages */
+#bgWater.instant {
+  transition: none;
+}
+
 .editor-container {
   position: relative;
   width: 98vw;
@@ -69,8 +74,8 @@ body::before {
   background: rgba(9, 13, 15, 0.14);
 
   border-radius: 14px;
-  border: 1px solid rgba(255, 236, 214, 0.12);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 236, 214, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
   display: flex;
   flex-direction: column;
@@ -611,7 +616,7 @@ body::before {
     width: 84%;
     max-width: 300px;
     background: rgba(11, 15, 17, 0.9);
-    border-right: 1px solid rgba(255, 236, 214, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 24px 0 60px rgba(0, 0, 0, 0.65);
     padding: 18px 14px;
     transition: transform 0.28s ease;
@@ -891,7 +896,7 @@ body::before {
 .tabs-header,
 .breadcrumbs,
 .status-bar {
-  border-color: rgba(255, 236, 214, 0.08);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .window-header { background: rgba(9, 13, 15, 0.32); }
@@ -907,29 +912,17 @@ body::before {
   backdrop-filter: blur(28px) saturate(135%);
 }
 
-.tab.active {
-  background: linear-gradient(180deg, rgba(242, 166, 90, 0.2) 0%, rgba(242, 166, 90, 0.03) 100%);
-  box-shadow: inset 0 -1px 0 rgba(242, 166, 90, 0.4);
-}
-
-.menu-toggle span,
-.notify-dot,
-.notify-progress {
-  background-color: #f2a65a;
-}
-
-.status-mode    { background-color: #f2a65a; }
-.status-percent { background-color: #7fc8c0; }
-
-.file-tree ul::before,
-.file-tree ul li::before {
-  background: rgba(242, 166, 90, 0.22);
+/* One accent for the whole editor: blue -> lavender */
+.status-mode,
+.status-percent {
+  background: linear-gradient(135deg, #7aa2f7, #bb9af7);
+  color: #15161e;
 }
 
 .file-item.active a,
 .file-item a:hover,
 .tab:hover {
-  background-color: rgba(255, 236, 214, 0.08);
+  background-color: rgba(122, 162, 247, 0.10);
 }
 
 .notify {
@@ -937,7 +930,7 @@ body::before {
 }
 
 ::selection {
-  background: rgba(242, 166, 90, 0.3);
+  background: rgba(122, 162, 247, 0.3);
 }
 
 .editor-workspace {
@@ -1020,6 +1013,6 @@ body::before {
 @media (max-width: 768px) {
   body::before {
     background-image: url('../assets/images/background-image-mobile.jpg');
-    filter: blur(5px) brightness(0.9) saturate(1.1);
+    filter: blur(12px) brightness(0.9) saturate(1.1);
   }
 }

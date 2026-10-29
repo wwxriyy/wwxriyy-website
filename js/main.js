@@ -15,12 +15,27 @@
   const phone = window.matchMedia("(max-width: 768px)").matches;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // The scene is blurred anyway: render small and let the browser upscale it.
-  const SCALE = phone ? 0.4 : 0.55;
+  const SCALE = phone ? 0.4 : 0.5;     // the picture is already soft, so a small canvas is enough
   const FPS = phone ? 24 : 30;
-  const BLUR_BIAS = phone ? 2.2 : 3.0; // mip level offset: a smooth, cheap blur
-  const TEXTURE_SIZE = phone ? [1024, 512] : [2048, 1024];
-  const LOOP = 125.6637; // 2*PI/0.05: every wave term wraps seamlessly
+  const BLUR_WIDTH = phone ? 192 : 320; // width of the tiny intermediate image: smaller = blurrier
+  const UP_STEPS = 2;                   // smooth 2x upscales back up
+  const LOOP = 125.6637;                // 2*PI/0.05: every wave term wraps seamlessly
+
+  // Keep the water phase across page loads, so navigating does not restart the animation.
+  let t0 = Date.now();
+  let warm = false;
+  try {
+    const saved = Number(sessionStorage.getItem("waterT0"));
+    if (saved > 0) {
+      t0 = saved;
+      warm = true;
+    } else {
+      sessionStorage.setItem("waterT0", String(t0));
+    }
+  } catch (error) {
+    warm = false;
+  }
+  if (warm) canvas.classList.add("instant");
 
   const vertexSource = `
     attribute vec2 a_pos;
@@ -30,6 +45,7 @@
       gl_Position = vec4(a_pos, 0.0, 1.0);
     }`;
 
+  // The texture is blurred BEFORE the waves move it, so the water stays soft, behind the glass.
   const fragmentSource = `
     #ifdef GL_FRAGMENT_PRECISION_HIGH
     precision highp float;
@@ -40,19 +56,19 @@
     uniform vec2 u_res;
     uniform vec2 u_img;
     uniform float u_time;
-    uniform float u_bias;
     uniform float u_water;
     varying vec2 v_uv;
 
     vec2 ripple(vec2 p, float t) {
       float d = p.y - u_water;
-      float mask = smoothstep(0.0, 0.03, d);
+      float mask = smoothstep(0.0, 0.035, d);
       float depth = clamp(d / (1.0 - u_water), 0.0, 1.0);
-      float z = 1.0 / (d + 0.06);
-      float wave = sin(z * 5.0 + t * 0.9 + sin(p.x * 7.0 + t * 0.25) * 1.6);
-      wave += 0.5 * sin(z * 11.0 - t * 1.3 + p.x * 12.0);
-      float amp = mask * (0.0010 + 0.0060 * depth);
+      float z = 1.0 / (d + 0.08);
+      float wave = sin(z * 3.2 + t * 0.9 + sin(p.x * 6.0 + t * 0.25) * 1.5);
+      wave += 0.45 * sin(z * 5.0 - t * 1.3 + p.x * 7.0);
+      float amp = mask * (0.0010 + 0.0065 * depth);
       p.x += wave * amp;
+      p.y += sin(p.x * 8.0 + z * 1.4 + t * 0.7) * amp * 0.4;
       return p;
     }
 
@@ -62,13 +78,13 @@
       vec2 s = sr > ir ? vec2(1.0, ir / sr) : vec2(sr / ir, 1.0);
       vec2 p = ripple((v_uv - 0.5) * s + 0.5, u_time);
 
-      vec2 o = (vec2(0.75) / u_res) * s;
-      vec3 c = texture2D(u_tex, p, u_bias).rgb * 0.4;
-      c += (texture2D(u_tex, p + o, u_bias).rgb + texture2D(u_tex, p - o, u_bias).rgb
-          + texture2D(u_tex, p + vec2(o.x, -o.y), u_bias).rgb + texture2D(u_tex, p + vec2(-o.x, o.y), u_bias).rgb) * 0.15;
-
+      vec3 c = texture2D(u_tex, p).rgb;
       float vignette = smoothstep(1.15, 0.35, length(v_uv - 0.5));
-      c *= (0.86 + 0.14 * vignette);
+      c *= 0.86 + 0.14 * vignette;
+
+      // tiny static dither: no banding in the dark smooth gradients
+      float n = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
+      c += (n - 0.5) * (1.5 / 255.0);
       gl_FragColor = vec4(c, 1.0);
     }`;
 
@@ -101,7 +117,6 @@
   const uRes = uniform("u_res");
   const uImg = uniform("u_img");
   const uTime = uniform("u_time");
-  const uBias = uniform("u_bias");
   const uWater = uniform("u_water");
 
   let ready = false;
@@ -109,6 +124,49 @@
   let lastFrame = 0;
   let viewW = 0;
   let viewH = 0;
+
+  // Progressive down-scaling then smooth up-scaling: a clean blur without blocks or grids.
+  function buildBlurredSource(image) {
+    const ratio = image.naturalHeight / image.naturalWidth;
+    const make = (w, h) => {
+      const c = document.createElement("canvas");
+      c.width = w;
+      c.height = h;
+      const x = c.getContext("2d");
+      x.imageSmoothingEnabled = true;
+      x.imageSmoothingQuality = "high";
+      return [c, x];
+    };
+
+    let source = image;
+    let w = image.naturalWidth;
+    while (w / 2 > BLUR_WIDTH) {
+      w = Math.round(w / 2);
+      const [c, x] = make(w, Math.round(w * ratio));
+      x.drawImage(source, 0, 0, c.width, c.height);
+      source = c;
+    }
+
+    const [small, sx] = make(BLUR_WIDTH, Math.round(BLUR_WIDTH * ratio));
+    sx.drawImage(source, 0, 0, small.width, small.height);
+    source = small;
+
+    for (let i = 0; i < UP_STEPS; i += 1) {
+      const [c, x] = make(source.width * 2, source.height * 2);
+      x.drawImage(source, 0, 0, c.width, c.height);
+      source = c;
+    }
+
+    const [out, ox] = make(source.width, source.height);
+    if (typeof ox.filter === "string") {
+      const pad = 12; // overscan so the blur does not darken the edges
+      ox.filter = `blur(${phone ? 3 : 4}px)`;
+      ox.drawImage(source, -pad, -pad, out.width + pad * 2, out.height + pad * 2);
+    } else {
+      ox.drawImage(source, 0, 0);
+    }
+    return out;
+  }
 
   function resize(force) {
     const w = window.innerWidth;
@@ -121,11 +179,11 @@
     canvas.height = Math.max(2, Math.round(h * SCALE));
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.uniform2f(uRes, canvas.width, canvas.height);
-    if (ready) draw(performance.now());
+    if (ready) draw();
   }
 
-  function draw(now) {
-    gl.uniform1f(uTime, reduceMotion ? 7.0 : (now / 1000) % LOOP);
+  function draw() {
+    gl.uniform1f(uTime, reduceMotion ? 7.0 : ((Date.now() - t0) / 1000) % LOOP);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 
@@ -133,7 +191,7 @@
     rafId = requestAnimationFrame(frame);
     if (now - lastFrame < 1000 / FPS) return;
     lastFrame = now;
-    draw(now);
+    draw();
   }
 
   function start() {
@@ -149,30 +207,20 @@
   const image = new Image();
   image.decoding = "async";
   image.onload = () => {
-    // Pre-scale to a power-of-two texture so mipmaps remove shimmering on the moving water.
-    const source = document.createElement("canvas");
-    source.width = TEXTURE_SIZE[0];
-    source.height = TEXTURE_SIZE[1];
-    const sctx = source.getContext("2d");
-    sctx.imageSmoothingQuality = "high";
-    sctx.drawImage(image, 0, 0, source.width, source.height);
-
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, source);
-    gl.generateMipmap(gl.TEXTURE_2D);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, buildBlurredSource(image));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.uniform1i(uniform("u_tex"), 0);
     gl.uniform2f(uImg, image.naturalWidth, image.naturalHeight);
     gl.uniform1f(uWater, 0.675); // where the shore meets the lake in the photo
-    gl.uniform1f(uBias, BLUR_BIAS);
 
     ready = true;
     resize(true);
-    draw(performance.now());
+    draw();
     canvas.classList.add("ready");
     start();
   };
@@ -196,6 +244,22 @@
   });
 })();
 /* ===== end water background ===== */
+
+/* Clicking the link of the page that is already open must not reload it. */
+function initSamePageLinks() {
+  const normalize = (path) => path.replace(/\/+$/, "") || "/";
+  const current = normalize(window.location.pathname);
+
+  document.querySelectorAll("a.tab, .file-item a").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      if (link.origin === window.location.origin && normalize(link.pathname) === current) {
+        event.preventDefault();
+      }
+    });
+  });
+}
+
 
 
 
@@ -657,5 +721,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initNotify();
   initSidebarDrawer();
   initTabClosers();
+  initSamePageLinks();
   initCodeLineInteraction();
 });

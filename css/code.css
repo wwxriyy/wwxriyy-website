@@ -46,7 +46,7 @@
 }
 
 .line-numbers span.current {
-  color: #ff9e64;
+  color: #7aa2f7;
   font-weight: bold;
 }
 
@@ -93,7 +93,7 @@
 }
 
 .code-line-span.active-line {
-  background-color: rgba(255, 236, 214, 0.07);
+  background-color: rgba(122, 162, 247, 0.08);
 }
 
 .code-line-span.active-line::after {
